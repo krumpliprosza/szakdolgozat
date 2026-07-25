@@ -7,6 +7,8 @@ import type { ThemeProviderProps } from "next-themes"
 import * as React from "react"
 import { LuMoon, LuSun } from "react-icons/lu"
 
+// Leiras: A Chakra UI sotet/vilagos temak kezelesehez szukseges elemeket tartalmazza.
+
 export interface ColorModeProviderProps extends ThemeProviderProps {}
 
 export function ColorModeProvider(props: ColorModeProviderProps) {

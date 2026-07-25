@@ -5,6 +5,9 @@ import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-lea
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
+// Leiras: A Leaflet terkepes komponens: kattintasra koordinatat valaszt, sajat helyzetem gomb, hibakezeles geolokacional.
+
+// A Leaflet alapertelmezett jelolo ikonjanak lecserelese
 delete (L.Icon.Default.prototype as any)._getIconUrl
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
@@ -12,6 +15,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 })
 
+// Segedvaltozo a szelesseg/hosszusag tarolasara
 type LatLon = { lat: number; lon: number }
 
 interface LocationPickerProps {
@@ -42,12 +46,14 @@ const RecenterOnLocate = ({ target }: { target: LatLon | null }) => {
   return null
 }
 
+// Terkepes helyszinvalaszto komponens
 export const LocationPicker = ({
   onChange,
   selected,
   initialCenter = { lat: 47.1625, lon: 19.5033 }, // Alapertelmezetten Magyarorszag
   initialZoom = 7,
 }: LocationPickerProps) => {
+
   const [coords, setCoords] = useState<LatLon | null>(selected ?? null)
   const [locating, setLocating] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -61,6 +67,7 @@ export const LocationPicker = ({
     }
   }, [selected])
 
+  // Lila jelolo ikon
   const purpleIcon = L.divIcon({
     className: 'custom-marker',
     html: `
@@ -79,6 +86,7 @@ export const LocationPicker = ({
     popupAnchor: [0, -42],
   })
 
+  // Uj koordinata beallitasa
   const setLocation = (lat: number, lon: number) => {
     const next = { lat, lon }
     setCoords(next)
@@ -86,39 +94,42 @@ export const LocationPicker = ({
     onChange(next)
   }
 
+  // Sajat pozicio lekerdezese
   const handleUseMyLocation = () => {
-  if (!navigator.geolocation) {
-    setError('A böngésződ nem támogatja a helymeghatározást.')
-    return
+    if (!navigator.geolocation) {
+      setError('A böngésződ nem támogatja a helymeghatározást.')
+      return
+    }
+    setLocating(true)
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLocation(position.coords.latitude, position.coords.longitude)
+        setLocating(false)
+      },
+      (err) => {
+        let message = 'Ismeretlen hiba történt a helymeghatározás során.'
+
+        switch (err.code) {
+          case err.PERMISSION_DENIED:
+            message = 'A helymeghatározási kísérlet el lett utasítva. Engedélyezd az eszközöd/böngésződ beállításaiban, majd próbáld újra.'
+            break
+          case err.POSITION_UNAVAILABLE:
+            message = 'A jelenlegi pozíció nem elérhető.'
+            break
+          case err.TIMEOUT:
+            message = 'A helymeghatározás túl sokáig tartott, kérlek, próbáld újra.'
+            break
+        }
+
+        setError(message)
+        setLocating(false)
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    )
   }
-  setLocating(true)
 
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      setLocation(position.coords.latitude, position.coords.longitude)
-      setLocating(false)
-    },
-    (err) => {
-      let message = 'Ismeretlen hiba történt a helymeghatározás során.'
-
-      switch (err.code) {
-        case err.PERMISSION_DENIED:
-          message = 'A helymeghatározási kísérlet el lett utasítva. Engedélyezd az eszközöd/böngésződ beállításaiban, majd próbáld újra.'
-          break
-        case err.POSITION_UNAVAILABLE:
-          message = 'A jelenlegi pozíció nem elérhető.'
-          break
-        case err.TIMEOUT:
-          message = 'A helymeghatározás túl sokáig tartott, kérlek, próbáld újra.'
-          break
-      }
-
-      setError(message)
-      setLocating(false)
-    },
-    { enableHighAccuracy: true, timeout: 10000 }
-  )
-}
+  // Terkep meretezese
   const mapHeight = useBreakpointValue({base: '450px'}) ?? '450px'
   return (
     <Box>
@@ -133,8 +144,8 @@ export const LocationPicker = ({
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <ClickHandler onPick={setLocation} />
-          <RecenterOnLocate target={coords} />
+          <ClickHandler onPick={setLocation} /> { /* Kattintasok vizsgalata */ }
+          <RecenterOnLocate target={coords} /> { /* A terkep igazitasa ugy, hogy a marker kozepre legyen allitva */ }
           {coords && <Marker position={[coords.lat, coords.lon]} icon={purpleIcon} />}
         </MapContainer>
 
@@ -151,8 +162,9 @@ export const LocationPicker = ({
           </Button>
         </Tooltip>
       </HStack>
-      {error && (
-        <Text fontSize="sm" color="red.500" mb={2}>
+      
+      {error && ( 
+        <Text fontSize="sm" color="red.500" mb={2}> { /* Hibakezeles */ }
           {error}
         </Text>
       )}
