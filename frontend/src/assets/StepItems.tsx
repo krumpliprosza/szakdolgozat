@@ -6,24 +6,40 @@ import {
   LuHousePlus,
   LuHousePlug,
 } from "react-icons/lu"
+import type { WizardData } from '../assets/WizardDataContext'
 
-// Leiras: A lepesek statikus adatai (ikonok, cimek) es a gombfeliratokat visszaado fuggvenyek.
+// Leiras: A lepesek statikus adatai (ikonok, cimek), a gombfeliratokat visszaado fuggvenyek es az adatok ellenorzesenek leirasa.
 
 export const items = [
   {
     icon: <LuMapPin />,
     iconcomplete: <LuMapPinCheck />,
     title: "Helyszín kiválasztása",
+    // Helyszin ellenorzese
+    getErrorMessage: (data: WizardData): string | null => {
+      if (data.location === null) {
+        return "Válassz ki egy helyszínt a térképen, vagy add meg a koordinátákat kézzel!"
+      }
+      return null
+    },
   },
   {
     icon: <LuPlug />,
     iconcomplete: <LuPlugZap />,
     title: "Napelemrendszer paraméterezése",
+    getErrorMessage: (_data: WizardData): string | null => {
+      // TODO: e.g. if (!_data.systemParams) return "Add meg a rendszer teljesítményét!"
+      return null
+    },
   },
   {
     icon: <LuHousePlus />,
     iconcomplete: <LuHousePlug />,
     title: "Fogyasztási profil megadása",
+    getErrorMessage: (_data: WizardData): string | null => {
+      // TODO: e.g. if (!_data.consumptionProfile) return "Válassz fogyasztási profilt!"
+      return null
+    },
   },
 ]
 

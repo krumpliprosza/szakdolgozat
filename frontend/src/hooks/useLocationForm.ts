@@ -27,6 +27,8 @@ export function useLocationForm() {
     const lon = parseFloat(draftLon)
     if (isValidLat(lat) && isValidLon(lon)) {
       setLocation({ lat, lon })
+    } else {
+      setLocation(null)
     }
   }
   const commitLon = (value: string) => {
@@ -35,6 +37,8 @@ export function useLocationForm() {
     const lat = parseFloat(draftLat)
     if (isValidLat(lat) && isValidLon(lon)) {
       setLocation({ lat, lon })
+    } else {
+      setLocation(null)
     }
   }
 

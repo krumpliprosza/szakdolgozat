@@ -10,6 +10,8 @@ export const SecondStep = () => {
     <AnimatedPage>
       <Heading mb={4}>Második lépés</Heading>
       <Text>Állítsd be a kívánt rendszer paramétereit!</Text>
+
+      
     </AnimatedPage>
   )
 }

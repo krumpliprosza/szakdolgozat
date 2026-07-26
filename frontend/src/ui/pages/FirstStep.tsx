@@ -1,5 +1,7 @@
 import { Box, VStack, HStack, Text, Mark, Editable, Heading, IconButton } from '@chakra-ui/react'
 import { LuCheck, LuPencilLine, LuX } from "react-icons/lu"
+import { useEffect } from 'react'
+import { useWizardData } from '../../assets/WizardDataContext'
 import { usePageTitle } from '../../hooks/usePageTitle'
 import { useLocationForm } from '../../hooks/useLocationForm'
 import { AnimatedPage } from '../../components/AnimatedPage'
@@ -11,7 +13,12 @@ export const FirstStep = () => {
   usePageTitle("Helyszín kiválasztása")
 
   const { location, setLocation, draftLat, draftLon, commitLat, commitLon } = useLocationForm()
+  const { setData } = useWizardData()
 
+  useEffect(() => {
+    setData({ location })
+  }, [location])
+  
   return (
     <AnimatedPage>
       <Heading mb={4}>Első lépés</Heading>
