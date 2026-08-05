@@ -6,7 +6,7 @@ export const AnimatedPage = (props: BoxProps) => (
   <Box
     data-state="open"
     _open={{
-      animation: "fade-in 300ms ease-out",
+      animation: "fade-in 400ms ease-out",
     }}
     {...props}
   />

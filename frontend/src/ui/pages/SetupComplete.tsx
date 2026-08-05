@@ -9,7 +9,7 @@ export const SetupComplete = () => {
   return (
     <AnimatedPage>
       <Heading mb={4}>Szimuláció indítása</Heading>
-      <Text>Minden lépés sikeresen teljesítve, a szimuláció indításra kész!</Text>
+      <Text mb={4}>Minden lépés sikeresen teljesítve, a szimuláció indításra kész!</Text>
     </AnimatedPage>
   )
 }
