@@ -5,7 +5,7 @@ const config = defineConfig({
         semanticTokens: {
             colors: {
                 bg: {
-                    value: { _light: "#F9F3FF", _dark: "#0E0616" },
+                    value: { _light: "#F1F9E9", _dark: "#0E0616" },
                 },
                 purple: {
                     border: {

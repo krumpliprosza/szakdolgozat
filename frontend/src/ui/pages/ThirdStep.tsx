@@ -20,9 +20,9 @@ const ChoiceMenu = ({
     <Text mb={4}>Állítsd össze háztartásod fogyasztási profilját!</Text>
 
     <Center>
-      <Stack direction={{ base: "column", md: "row" }} gap="10">
+      <Stack direction={{ base: "column", md: "row" }} gap="10" align="stretch" w="full" maxW="1800px">
 
-        <Card.Root overflow="hidden" pt={2}>
+        <Card.Root overflow="hidden" pt={2} borderColor="purple.border" borderWidth="2px" flex="1">
           <Box
             backgroundImage="url(/thirdstep_1_light.svg)"
             _dark={{ backgroundImage: "url(/thirdstep_1_dark.svg)" }}
@@ -43,7 +43,7 @@ const ChoiceMenu = ({
           </Card.Footer>
         </Card.Root>
 
-        <Card.Root overflow="hidden" pt={2}>
+        <Card.Root overflow="hidden" pt={2} borderColor="purple.border" borderWidth="2px" flex="1">
           <Box
             backgroundImage="url(/thirdstep_2_light.svg)"
             _dark={{ backgroundImage: "url(/thirdstep_2_dark.svg)" }}
@@ -52,7 +52,7 @@ const ChoiceMenu = ({
             aspectRatio="5/3"
             role="img"
             aria-label="Saját fogyasztási profil összeállítása"
-          /> {/* Az ebben a kepben szereplo haztartasi eszkozok ikonjait az icons8.com biztositja. */}
+          />
           <Card.Body gap="2">
             <Card.Title>Saját fogyasztási profil összeállítása</Card.Title>
             <Card.Description>
