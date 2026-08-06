@@ -1,4 +1,4 @@
-import { Button, Card, Image, Heading, Text, Stack, Center } from '@chakra-ui/react'
+import { Button, Card, Box, Heading, Text, Stack, Center } from '@chakra-ui/react'
 import { useState } from 'react'
 import { usePageTitle } from '../../hooks/usePageTitle'
 import { AnimatedPage } from '../../components/AnimatedPage'
@@ -23,7 +23,15 @@ const ChoiceMenu = ({
       <Stack direction={{ base: "column", md: "row" }} gap="10">
 
         <Card.Root overflow="hidden" pt={2}>
-          <Image src="thirdstep_1.png" alt="Előre meghatározott fogyasztási profil kiválasztása"/>
+          <Box
+            backgroundImage="url(/thirdstep_1_light.svg)"
+            _dark={{ backgroundImage: "url(/thirdstep_1_dark.svg)" }}
+            backgroundSize="cover"
+            backgroundPosition="center"
+            aspectRatio="5/3"
+            role="img"
+            aria-label="Saját fogyasztási profil összeállítása"
+          />
           <Card.Body gap="2">
             <Card.Title>Előre meghatározott fogyasztási profil kiválasztása</Card.Title>
             <Card.Description>
@@ -36,7 +44,15 @@ const ChoiceMenu = ({
         </Card.Root>
 
         <Card.Root overflow="hidden" pt={2}>
-          <Image src="thirdstep_2.png" alt="Saját fogyasztási profil összeállítása"/>
+          <Box
+            backgroundImage="url(/thirdstep_2_light.svg)"
+            _dark={{ backgroundImage: "url(/thirdstep_2_dark.svg)" }}
+            backgroundSize="cover"
+            backgroundPosition="center"
+            aspectRatio="5/3"
+            role="img"
+            aria-label="Saját fogyasztási profil összeállítása"
+          /> {/* Az ebben a kepben szereplo haztartasi eszkozok ikonjait az icons8.com biztositja. */}
           <Card.Body gap="2">
             <Card.Title>Saját fogyasztási profil összeállítása</Card.Title>
             <Card.Description>

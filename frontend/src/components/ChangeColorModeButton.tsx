@@ -5,7 +5,18 @@ import { ColorModeButton } from "./color-mode"
 
 export const ChangeColorModeButton = () => {
   return (
-    <Box bg="bg.panel" borderRadius="md" position="fixed" bottom={2} right={{ base: 2, sm: 4 }} zIndex={1000}>
+    <Box
+      bg="bg"
+      borderWidth="0px"
+      borderColor="colorPalette.border"
+      colorPalette="purple"
+      borderRadius="md"
+      p={1}
+      position="fixed"
+      bottom={2}
+      right={{ base: 2, sm: 4 }}
+      zIndex={1000}
+    >
       <ColorModeButton />
     </Box>
   )

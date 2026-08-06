@@ -9,31 +9,32 @@ export const PrevNextButtons = () => {
   const navigate = useNavigate()
 
   return (
-    <ButtonGroup size="sm" variant="outline" bottom={2} left={{ base: 2, sm: 4 }} position="fixed" zIndex="1000">
-      { /* Elozo lepes gombok */}
-      {value === 0 ? (
-        <Box bg="bg.panel">
+    <Box
+      bg="bg"
+      borderRadius="md"
+      p={1}
+      bottom={2}
+      left={{ base: 2, sm: 4 }}
+      position="fixed"
+      zIndex="1000"
+    >
+      <ButtonGroup size="sm" variant="outline">
+        {value === 0 ? (
           <Button onClick={() => navigate("/")}>{getPrevButtonLabel(value)}</Button>
-        </Box>
-      ) : (
-        <Steps.PrevTrigger asChild>
-          <Box bg="bg.panel">
+        ) : (
+          <Steps.PrevTrigger asChild>
             <Button>{getPrevButtonLabel(value)}</Button>
-          </Box>
-        </Steps.PrevTrigger>
-      )}
-      { /* Kovetkezo lepes gombok */}
-      {value !== 3 ? (
-        <Steps.NextTrigger asChild>
-          <Box bg="bg.panel">
+          </Steps.PrevTrigger>
+        )}
+
+        {value !== 3 ? (
+          <Steps.NextTrigger asChild>
             <Button>{getNextButtonLabel(value)}</Button>
-          </Box>
-        </Steps.NextTrigger>
-      ) : (
-        <Box bg="bg.panel">
+          </Steps.NextTrigger>
+        ) : (
           <Button onClick={() => navigate("/")}>{getNextButtonLabel(value)}</Button>
-        </Box>
-      )}
-    </ButtonGroup>
+        )}
+      </ButtonGroup>
+    </Box>
   )
 }
