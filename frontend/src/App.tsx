@@ -1,5 +1,3 @@
-"use client"
-
 import { Navigate, Routes, Route } from 'react-router-dom'
 import { WizardLayout } from './ui/layouts/WizardLayout'
 import { WelcomePage } from './ui/pages/WelcomePage'
