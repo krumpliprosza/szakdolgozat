@@ -5,6 +5,29 @@ import { AnimatedPage } from '../../components/AnimatedPage'
 
 // Leiras: A kezdolap: cim, leiras, gomb az elso lepeshez navigalashoz.
 
+let isLoaded = false;
+
+const PictureLoader = () => {
+  if (!isLoaded) {
+    const pictures = [
+      { fileName: '/secondstep_1_dark.svg' },
+      { fileName: '/secondstep_1_light.svg' },
+      { fileName: '/secondstep_2_dark.svg' },
+      { fileName: '/secondstep_2_light.svg' },
+      { fileName: '/thirdstep_1_dark.svg' },
+      { fileName: '/thirdstep_1_light.svg' },
+      { fileName: '/thirdstep_2_dark.svg' },
+      { fileName: '/thirdstep_2_light.svg' },
+    ]
+    pictures.forEach((picture) => {
+      const img = new Image();
+      img.src = picture.fileName;
+    });
+    isLoaded = true;
+  }
+  return null;
+}
+
 export const WelcomePage = () => {
   usePageTitle("Kezdőlap")
   const navigate = useNavigate()
@@ -18,6 +41,7 @@ export const WelcomePage = () => {
         <Button colorPalette="purple" variant="outline" size="lg" onClick={() => navigate("/first-step")}>
           Új szimuláció készítése
         </Button>
+        <PictureLoader />
       </AnimatedPage>
     </Center>
   )
