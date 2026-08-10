@@ -1,32 +1,189 @@
-import { Accordion, Button, Card, Box, Heading, Text, Stack, Center, SimpleGrid, VStack } from '@chakra-ui/react'
+import { Accordion, Badge, Button, Card, Box, Heading, Text, Stack, Center, SimpleGrid, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { usePageTitle } from '../../hooks/usePageTitle'
 import { AnimatedPage } from '../../components/AnimatedPage'
-import { useWizardData, type TrackingType, type SapmMountType } from '../../assets/WizardDataContext'
+import { useWizardData, type TrackingType, type SapmMountType, type SystemParams, type SystemParamsMode } from '../../assets/WizardDataContext'
 import { useSystemParamsForm } from '../../hooks/useSystemParamsForm'
 import { NumField, SelectField, SwitchField } from '../../components/FormFields'
 
 // Leiras: Napelemrendszer parameterezese (a felhasznalo valaszthat, hogy elore meghatarozott rendszert valaszt vagy sajat rendszert parameterez).
 
-type SecondStepView = 'valasztosmenu' | 'eloremeghatarozottrendszer' | 'sajatrendszer'
 export const currentYear = new Date().getFullYear()
 
+// Elore definialt rendszerek
+interface PredefinedSystem {
+  id: string
+  title: string
+  description: string
+  params: SystemParams
+}
+
+const predefinedSystems: PredefinedSystem[] = [
+  {
+    id: 'rendszer1',
+    title: 'Kompakt otthoni rendszer',
+    description: 'Kisebb, tetőre szerelt rendszer családi házakhoz, mérsékelt fogyasztás mellett. Akkumulátor nélkül, alacsony kezdeti beruházási költséggel.',
+    params: {
+      orientation: {
+        trackingType: 'fixed',
+        surfaceTiltDeg: 35,
+        surfaceAzimuthDeg: 180,
+        axisTiltDeg: 0,
+        axisAzimuthDeg: 180,
+        maxTrackingAngleDeg: 60,
+        groundCoverageRatio: 0.35,
+      },
+      module: {
+        pStcW: 3000,
+        gammaPdc: -0.0035,
+        sapmMountType: 'close_mount_glass_glass',
+        isBifacial: false,
+        bifaciality: 0.8,
+        iamB0: 0.05,
+      },
+      inverter: {
+        pAcNomW: 3000,
+        inverterEfficiencyNom: 0.95,
+      },
+      losses: {
+        lResistance: 0.02,
+        lMismatch: 0.02,
+        installYear: currentYear,
+        annualDegradationRate: 0.005,
+        soilingMaxLoss: 0.05,
+        lShadeConstant: 0,
+      },
+      albedo: {
+        groundAlbedo: 0.2,
+      },
+      battery: {
+        capacityKwh: 0,
+        soc0: 0,
+        socMin: 0,
+        socMax: 1,
+        pChargeMaxKw: 0,
+        pDischargeMaxKw: 0,
+        etaCharge: 0.97,
+        etaDischarge: 0.97,
+      },
+    },
+  },
+  {
+    id: 'rendszer2',
+    title: 'Családi házas rendszer akkumulátorral',
+    description: 'Közepes méretű, fix tájolású rendszer, energiatárolóval kiegészítve a nagyobb önfogyasztási arány elérése érdekében. A legtöbb családi ház igényét jól lefedi.',
+    params: {
+      orientation: {
+        trackingType: 'fixed',
+        surfaceTiltDeg: 35,
+        surfaceAzimuthDeg: 180,
+        axisTiltDeg: 0,
+        axisAzimuthDeg: 180,
+        maxTrackingAngleDeg: 60,
+        groundCoverageRatio: 0.35,
+      },
+      module: {
+        pStcW: 5000,
+        gammaPdc: -0.004,
+        sapmMountType: 'open_rack_glass_glass',
+        isBifacial: false,
+        bifaciality: 0.8,
+        iamB0: 0.05,
+      },
+      inverter: {
+        pAcNomW: 5000,
+        inverterEfficiencyNom: 0.96,
+      },
+      losses: {
+        lResistance: 0.02,
+        lMismatch: 0.02,
+        installYear: currentYear,
+        annualDegradationRate: 0.005,
+        soilingMaxLoss: 0.06,
+        lShadeConstant: 0,
+      },
+      albedo: {
+        groundAlbedo: 0.2,
+      },
+      battery: {
+        capacityKwh: 10,
+        soc0: 0.5,
+        socMin: 0.1,
+        socMax: 0.9,
+        pChargeMaxKw: 3,
+        pDischargeMaxKw: 3,
+        etaCharge: 0.97,
+        etaDischarge: 0.97,
+      },
+    },
+  },
+  {
+    id: 'rendszer3',
+    title: 'Nagyteljesítményű, napkövető rendszer',
+    description: 'Egytengelyes napkövetéssel és kétoldalas (bifaciális) modulokkal szerelt, nagyobb teljesítményű rendszer, nagy akkumulátoros kapacitással. Magasabb hozam, nagyobb terület- és beruházási igény mellett.',
+    params: {
+      orientation: {
+        trackingType: 'single_axis',
+        surfaceTiltDeg: 35,
+        surfaceAzimuthDeg: 180,
+        axisTiltDeg: 0,
+        axisAzimuthDeg: 180,
+        maxTrackingAngleDeg: 60,
+        groundCoverageRatio: 0.35,
+      },
+      module: {
+        pStcW: 8000,
+        gammaPdc: -0.0038,
+        sapmMountType: 'open_rack_glass_glass',
+        isBifacial: true,
+        bifaciality: 0.85,
+        iamB0: 0.017,
+      },
+      inverter: {
+        pAcNomW: 8000,
+        inverterEfficiencyNom: 0.97,
+      },
+      losses: {
+        lResistance: 0.02,
+        lMismatch: 0.02,
+        installYear: currentYear,
+        annualDegradationRate: 0.004,
+        soilingMaxLoss: 0.06,
+        lShadeConstant: 0,
+      },
+      albedo: {
+        groundAlbedo: 0.2,
+      },
+      battery: {
+        capacityKwh: 15,
+        soc0: 0.5,
+        socMin: 0.1,
+        socMax: 0.9,
+        pChargeMaxKw: 5,
+        pDischargeMaxKw: 5,
+        etaCharge: 0.97,
+        etaDischarge: 0.97,
+      },
+    },
+  },
+]
+
+type SecondStepView = 'valasztosmenu' | 'eloremeghatarozottrendszer' | 'sajatrendszer'
+
 // Kivalaszthato lehetosegek a masodik lepesben: elore meghatarozott rendszer vagy sajat rendszer parameterezese
-const ChoiceMenu = ({
-  onSelectPredefined,
-  onSelectCustom,
-}: {
-  onSelectPredefined: () => void
-  onSelectCustom: () => void
-}) => (
+const ChoiceMenu = ({ onSelectPredefined, onSelectCustom, selectedMode, }: { onSelectPredefined: () => void; onSelectCustom: () => void; selectedMode: SystemParamsMode }) => (
   <>
     <Heading mb={4}>Második lépés</Heading>
     <Text mb={4}>Állítsd be a kívánt napelemrendszer paramétereit!</Text>
-
     <Center>
       <Stack direction={{ base: "column", md: "row" }} gap="10" align="stretch" w="full" maxW="1800px">
 
-        <Card.Root overflow="hidden" pt={2} borderColor="purple.border" borderWidth="2px">
+        <Card.Root
+          overflow="hidden"
+          pt={2}
+          borderColor={selectedMode === 'predefined' ? "purple.solid" : "purple.border"}
+          borderWidth="2px"
+        >
           <Box
             backgroundImage="url(/secondstep_1_light.svg)"
             _dark={{ backgroundImage: "url(/secondstep_1_dark.svg)" }}
@@ -37,17 +194,31 @@ const ChoiceMenu = ({
             aria-label="Saját fogyasztási profil összeállítása"
           />
           <Card.Body gap="2">
-            <Card.Title>Előre meghatározott rendszer kiválasztása</Card.Title>
+            <Card.Title>
+              Előre meghatározott rendszer kiválasztása
+              {selectedMode === 'predefined' && <Badge ml={2} colorPalette="purple">Kiválasztva</Badge>}
+            </Card.Title>
             <Card.Description>
               Ennél a lehetőségnél kész, előre beállított napelemrendszerek állnak rendelkezésre. Ez a megoldás ideális azoknak, akik gyorsan, a technikai részletek aprólékos megadása nélkül szeretnének haladni.
             </Card.Description>
           </Card.Body>
           <Card.Footer>
-            <Button variant="outline" onClick={onSelectPredefined}>Kiválasztás</Button>
+            <Button
+              variant={selectedMode === 'predefined' ? "solid" : "outline"}
+              colorPalette={selectedMode === 'predefined' ? "purple" : undefined}
+              onClick={onSelectPredefined}
+            >
+              Kiválasztás
+            </Button>
           </Card.Footer>
         </Card.Root>
 
-        <Card.Root overflow="hidden" pt={2} borderColor="purple.border" borderWidth="2px">
+        <Card.Root
+          overflow="hidden"
+          pt={2}
+          borderColor={selectedMode === 'custom' ? "purple.solid" : "purple.border"}
+          borderWidth="2px"
+        >
           <Box
             backgroundImage="url(/secondstep_2_light.svg)"
             _dark={{ backgroundImage: "url(/secondstep_2_dark.svg)" }}
@@ -58,13 +229,22 @@ const ChoiceMenu = ({
             aria-label="Saját fogyasztási profil összeállítása"
           />
           <Card.Body gap="2">
-            <Card.Title>Saját rendszer paraméterezése</Card.Title>
+            <Card.Title>
+              Saját rendszer paraméterezése
+              {selectedMode === 'custom' && <Badge ml={2} colorPalette="purple">Kiválasztva</Badge>}
+            </Card.Title>
             <Card.Description>
               Ez az alternatíva lehetőséget ad egy teljesen egyedi specifikációkkal rendelkező rendszer beállítására. Ez azok számára hasznos, akik a maximális pontosság érdekében maguk szabályoznák a modellt.
             </Card.Description>
           </Card.Body>
           <Card.Footer>
-            <Button variant="outline" onClick={onSelectCustom}>Kiválasztás</Button>
+            <Button
+              variant={selectedMode === 'custom' ? "solid" : "outline"}
+              colorPalette={selectedMode === 'custom' ? "purple" : undefined}
+              onClick={onSelectCustom}
+            >
+              Kiválasztás
+            </Button>
           </Card.Footer>
         </Card.Root>
 
@@ -74,26 +254,88 @@ const ChoiceMenu = ({
 )
 
 // Elore meghatarozott rendszer valasztasahoz tartozo menu
-const PredefinedSystemMenu = ({ onBack }: { onBack: () => void }) => (
-  <>
-    <Button variant="outline" mb={4} onClick={onBack}>Vissza</Button>
-    <Heading mb={4}>Előre meghatározott rendszer kiválasztása</Heading>
-    <Text mb={4}>
-      Válassz a meglévő napelemrendszerek közül!
-      {/* TODO: az elore beallitott napelemrendszerek listajanak megjelenitese */}
-    </Text>
-  </>
-)
+const PredefinedSystemMenu = ({ onBack, onSelect, form, }: { onBack: () => void; onSelect: () => void; form: ReturnType<typeof useSystemParamsForm> }) => {
+  const { patchOrientation, patchModule, patchInverter, patchLosses, patchAlbedo, patchBattery } = form
+
+  // Az adott elore definialt rendszer parametereinek atvetele kivalasztas eseten, majd visszalepes a valasztomenube
+  const selectSystem = (system: PredefinedSystem) => {
+    patchOrientation(system.params.orientation)
+    patchModule(system.params.module)
+    patchInverter(system.params.inverter)
+    patchLosses(system.params.losses)
+    patchAlbedo(system.params.albedo)
+    patchBattery(system.params.battery)
+    onSelect()
+    onBack()
+  }
+
+  return (
+    <>
+      <Button variant="outline" mb={4} onClick={onBack}>Vissza</Button>
+      <Heading mb={4}>Előre meghatározott rendszer kiválasztása</Heading>
+      <Text mb={4}>
+        Válassz a meglévő napelemrendszerek közül! A kiválasztott rendszer paraméterei automatikusan
+        kitöltésre kerülnek, ezeket a "Saját rendszer paraméterezése" nézetben bármikor módosíthatod.
+      </Text>
+
+      <Center>
+        <Stack direction={{ base: "column", md: "row" }} gap="10" align="stretch" w="full" maxW="1800px">
+
+          {predefinedSystems.map((system) => {
+            return (
+              <Card.Root
+                key={system.id}
+                overflow="hidden"
+                borderColor="purple.border"
+                borderWidth="2px"
+              >
+                <Card.Body gap="2">
+                  <Card.Title>
+                    {system.title}
+                  </Card.Title>
+                  <Card.Description>
+                    {system.description}
+                  </Card.Description>
+                </Card.Body>
+                <Card.Footer>
+                  <Button
+                    variant="outline"
+                    colorPalette="purple"
+                    onClick={() => selectSystem(system)}
+                  >
+                    Kiválasztás
+                  </Button>
+                </Card.Footer>
+              </Card.Root>
+            )
+          })}
+
+        </Stack>
+      </Center>
+
+    </>
+  )
+}
 
 // Sajat rendszer parameterezesehez tartozo menu
-const CustomSystemMenu = ({
-  onBack,
-  form,
-}: {
-  onBack: () => void
-  form: ReturnType<typeof useSystemParamsForm>
-}) => {
-  const { params, patchOrientation, patchModule, patchInverter, patchLosses, patchAlbedo, patchBattery } = form
+const CustomSystemMenu = ({ onBack, onChange, form, }: { onBack: () => void; onChange: () => void; form: ReturnType<typeof useSystemParamsForm> }) => {
+  const {
+    params,
+    patchOrientation: patchOrientationRaw,
+    patchModule: patchModuleRaw,
+    patchInverter: patchInverterRaw,
+    patchLosses: patchLossesRaw,
+    patchAlbedo: patchAlbedoRaw,
+    patchBattery: patchBatteryRaw,
+  } = form
+
+  // A parameterek modositasa mindig "sajat rendszer" allapotot jelol a valasztomenuben
+  const patchOrientation: typeof patchOrientationRaw = (p) => { onChange(); patchOrientationRaw(p) }
+  const patchModule: typeof patchModuleRaw = (p) => { onChange(); patchModuleRaw(p) }
+  const patchInverter: typeof patchInverterRaw = (p) => { onChange(); patchInverterRaw(p) }
+  const patchLosses: typeof patchLossesRaw = (p) => { onChange(); patchLossesRaw(p) }
+  const patchAlbedo: typeof patchAlbedoRaw = (p) => { onChange(); patchAlbedoRaw(p) }
+  const patchBattery: typeof patchBatteryRaw = (p) => { onChange(); patchBatteryRaw(p) }
 
   return (
     <>
@@ -183,7 +425,7 @@ const CustomSystemMenu = ({
                     value={params.orientation.groundCoverageRatio}
                     onChange={(v) => v !== null && patchOrientation({ groundCoverageRatio: v })}
                     min={0.05} max={0.95} step={0.01}
-                    helperText="0 és 1 között, pl. 0.35"
+                    helperText="0.05 és 0.95 között"
                   />
                 )}
               </VStack>
@@ -498,13 +740,22 @@ export const SecondStep = () => {
         <ChoiceMenu
           onSelectPredefined={() => setView('eloremeghatarozottrendszer')}
           onSelectCustom={() => setView('sajatrendszer')}
+          selectedMode={data.systemParamsMode}
         />
       )}
       {view === 'eloremeghatarozottrendszer' && (
-        <PredefinedSystemMenu onBack={() => setView('valasztosmenu')} />
+        <PredefinedSystemMenu
+          onBack={() => setView('valasztosmenu')}
+          onSelect={() => setData({ systemParamsMode: 'predefined' })}
+          form={form}
+        />
       )}
       {view === 'sajatrendszer' && (
-        <CustomSystemMenu onBack={() => setView('valasztosmenu')} form={form} />
+        <CustomSystemMenu
+          onBack={() => setView('valasztosmenu')}
+          onChange={() => setData({ systemParamsMode: 'custom' })}
+          form={form}
+        />
       )}
     </AnimatedPage>
   )

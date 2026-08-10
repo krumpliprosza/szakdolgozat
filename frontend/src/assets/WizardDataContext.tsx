@@ -4,11 +4,7 @@ const currentYear = new Date().getFullYear()
 
 export type TrackingType = 'fixed' | 'single_axis' | 'dual_axis'
 
-export type SapmMountType =
-  | 'open_rack_glass_glass'
-  | 'close_mount_glass_glass'
-  | 'open_rack_glass_polymer'
-  | 'insulated_back_glass_polymer'
+export type SapmMountType = 'open_rack_glass_glass' | 'close_mount_glass_glass' | 'open_rack_glass_polymer' | 'insulated_back_glass_polymer'
 
 export interface SystemParams {
   orientation: {
@@ -100,9 +96,12 @@ export const defaultSystemParams: SystemParams = {
   },
 }
 
+export type SystemParamsMode = 'predefined' | 'custom' | null
+
 export interface WizardData {
   location: { lat: number; lon: number } | null
   systemParams: SystemParams | null
+  systemParamsMode: SystemParamsMode
   // TODO: consumptionProfile hozzaadasa
 }
 
@@ -114,7 +113,7 @@ interface WizardDataContextValue {
 const WizardDataContext = createContext<WizardDataContextValue | null>(null)
 
 export const WizardDataProvider = ({ children }: { children: ReactNode }) => {
-  const [data, setDataState] = useState<WizardData>({ location: null, systemParams: null })
+  const [data, setDataState] = useState<WizardData>({ location: null, systemParams: null, systemParamsMode: null })
 
   const setData = (patch: Partial<WizardData>) =>
     setDataState((prev) => ({ ...prev, ...patch }))

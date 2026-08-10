@@ -27,8 +27,10 @@ export const items = [
     icon: <LuPlug />,
     iconcomplete: <LuPlugZap />,
     title: "Napelemrendszer paraméterezése",
-    getErrorMessage: (_data: WizardData): string | null => {
-      // TODO: e.g. if (!_data.systemParams) return "Add meg a rendszer teljesítményét!"
+    getErrorMessage: (data: WizardData): string | null => {
+      if (data.systemParamsMode === null) {
+        return "Válassz egy előre meghatározott rendszert, vagy paraméterezd a sajátodat!"
+      }
       return null
     },
   },
