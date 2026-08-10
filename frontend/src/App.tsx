@@ -11,7 +11,6 @@ import { SetupComplete } from './ui/pages/SetupComplete'
   - Hibakezeles (404 not found stb.)
   Step:
   - isStepValid hasznalata (kesobb, a lepesek logikajanak elkeszitese utan)
-  - szimulacio adataihoz memoria, es kezdolapon a legutolso szimulacio adatait legyen lehetseges betolteni
 
 */
 

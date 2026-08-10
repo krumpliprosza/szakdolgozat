@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { usePageTitle } from '../../hooks/usePageTitle'
 import { AnimatedPage } from '../../components/AnimatedPage'
 
-// Leiras: A kezdolap: cim, leiras, gomb az elso lepeshez navigalashoz.
+// Leiras: A kezdolap: cim, leiras, gomb az elso lepesre navigalashoz.
 
 let isLoaded = false;
 
