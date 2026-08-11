@@ -29,7 +29,7 @@ export const items = [
     title: "Napelemrendszer paraméterezése",
     getErrorMessage: (data: WizardData): string | null => {
       if (data.systemParamsMode === null) {
-        return "Válassz egy előre meghatározott rendszert, vagy paraméterezd a sajátodat!"
+        return "Válassz egy előre meghatározott rendszert, vagy végezd el a sajátod paraméterezését!"
       }
       return null
     },

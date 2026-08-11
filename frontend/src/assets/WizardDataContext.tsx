@@ -102,6 +102,7 @@ export interface WizardData {
   location: { lat: number; lon: number } | null
   systemParams: SystemParams | null
   systemParamsMode: SystemParamsMode
+  selectedPredefinedSystemId: string | null
   // TODO: consumptionProfile hozzaadasa
 }
 
@@ -113,7 +114,7 @@ interface WizardDataContextValue {
 const WizardDataContext = createContext<WizardDataContextValue | null>(null)
 
 export const WizardDataProvider = ({ children }: { children: ReactNode }) => {
-  const [data, setDataState] = useState<WizardData>({ location: null, systemParams: null, systemParamsMode: null })
+  const [data, setDataState] = useState<WizardData>({ location: null, systemParams: null, systemParamsMode: null, selectedPredefinedSystemId: null })
 
   const setData = (patch: Partial<WizardData>) =>
     setDataState((prev) => ({ ...prev, ...patch }))

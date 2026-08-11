@@ -195,8 +195,7 @@ const ChoiceMenu = ({ onSelectPredefined, onSelectCustom, selectedMode, }: { onS
           />
           <Card.Body gap="2">
             <Card.Title>
-              Előre meghatározott rendszer kiválasztása
-              {selectedMode === 'predefined' && <Badge ml={2} colorPalette="purple">Kiválasztva</Badge>}
+              Előre meghatározott rendszer kiválasztása {selectedMode === 'predefined' && <Badge ml={2} colorPalette="purple">Kiválasztva</Badge>}
             </Card.Title>
             <Card.Description>
               Ennél a lehetőségnél kész, előre beállított napelemrendszerek állnak rendelkezésre. Ez a megoldás ideális azoknak, akik gyorsan, a technikai részletek aprólékos megadása nélkül szeretnének haladni.
@@ -208,7 +207,7 @@ const ChoiceMenu = ({ onSelectPredefined, onSelectCustom, selectedMode, }: { onS
               colorPalette={selectedMode === 'predefined' ? "purple" : undefined}
               onClick={onSelectPredefined}
             >
-              Kiválasztás
+              {selectedMode === 'predefined' ? "Módosítás" : "Kiválasztás"}
             </Button>
           </Card.Footer>
         </Card.Root>
@@ -230,8 +229,7 @@ const ChoiceMenu = ({ onSelectPredefined, onSelectCustom, selectedMode, }: { onS
           />
           <Card.Body gap="2">
             <Card.Title>
-              Saját rendszer paraméterezése
-              {selectedMode === 'custom' && <Badge ml={2} colorPalette="purple">Kiválasztva</Badge>}
+              Saját rendszer paraméterezése {selectedMode === 'custom' && <Badge ml={2} colorPalette="purple">Kiválasztva</Badge>}
             </Card.Title>
             <Card.Description>
               Ez az alternatíva lehetőséget ad egy teljesen egyedi specifikációkkal rendelkező rendszer beállítására. Ez azok számára hasznos, akik a maximális pontosság érdekében maguk szabályoznák a modellt.
@@ -243,7 +241,7 @@ const ChoiceMenu = ({ onSelectPredefined, onSelectCustom, selectedMode, }: { onS
               colorPalette={selectedMode === 'custom' ? "purple" : undefined}
               onClick={onSelectCustom}
             >
-              Kiválasztás
+              {selectedMode === 'custom' ? "Módosítás" : "Kiválasztás"}
             </Button>
           </Card.Footer>
         </Card.Root>
@@ -254,10 +252,9 @@ const ChoiceMenu = ({ onSelectPredefined, onSelectCustom, selectedMode, }: { onS
 )
 
 // Elore meghatarozott rendszer valasztasahoz tartozo menu
-const PredefinedSystemMenu = ({ onBack, onSelect, form, }: { onBack: () => void; onSelect: () => void; form: ReturnType<typeof useSystemParamsForm> }) => {
+const PredefinedSystemMenu = ({ onBack, onSelect, selectedId, form, }: { onBack: () => void; onSelect: (id: string) => void; selectedId: string | null; form: ReturnType<typeof useSystemParamsForm> }) => {
   const { patchOrientation, patchModule, patchInverter, patchLosses, patchAlbedo, patchBattery } = form
 
-  // Az adott elore definialt rendszer parametereinek atvetele kivalasztas eseten, majd visszalepes a valasztomenube
   const selectSystem = (system: PredefinedSystem) => {
     patchOrientation(system.params.orientation)
     patchModule(system.params.module)
@@ -265,7 +262,7 @@ const PredefinedSystemMenu = ({ onBack, onSelect, form, }: { onBack: () => void;
     patchLosses(system.params.losses)
     patchAlbedo(system.params.albedo)
     patchBattery(system.params.battery)
-    onSelect()
+    onSelect(system.id)
     onBack()
   }
 
@@ -282,11 +279,12 @@ const PredefinedSystemMenu = ({ onBack, onSelect, form, }: { onBack: () => void;
         <Stack direction={{ base: "column", md: "row" }} gap="10" align="stretch" w="full" maxW="1800px">
 
           {predefinedSystems.map((system) => {
+            const isSelected = selectedId === system.id
             return (
               <Card.Root
                 key={system.id}
                 overflow="hidden"
-                borderColor="purple.border"
+                borderColor={isSelected ? "purple.solid" : "purple.border"}
                 borderWidth="2px"
               >
                 <Card.Body gap="2">
@@ -299,11 +297,11 @@ const PredefinedSystemMenu = ({ onBack, onSelect, form, }: { onBack: () => void;
                 </Card.Body>
                 <Card.Footer>
                   <Button
-                    variant="outline"
+                    variant={isSelected ? "solid" : "outline"}
                     colorPalette="purple"
                     onClick={() => selectSystem(system)}
                   >
-                    Kiválasztás
+                    {isSelected ? "Kiválasztva" : "Kiválasztás"}
                   </Button>
                 </Card.Footer>
               </Card.Root>
@@ -318,7 +316,7 @@ const PredefinedSystemMenu = ({ onBack, onSelect, form, }: { onBack: () => void;
 }
 
 // Sajat rendszer parameterezesehez tartozo menu
-const CustomSystemMenu = ({ onBack, onChange, form, }: { onBack: () => void; onChange: () => void; form: ReturnType<typeof useSystemParamsForm> }) => {
+const CustomSystemMenu = ({ onBack, onChange, currentMode, form, }: { onBack: () => void; onChange: () => void; currentMode: SystemParamsMode; form: ReturnType<typeof useSystemParamsForm> }) => {
   const {
     params,
     patchOrientation: patchOrientationRaw,
@@ -329,13 +327,18 @@ const CustomSystemMenu = ({ onBack, onChange, form, }: { onBack: () => void; onC
     patchBattery: patchBatteryRaw,
   } = form
 
-  // A parameterek modositasa mindig "sajat rendszer" allapotot jelol a valasztomenuben
   const patchOrientation: typeof patchOrientationRaw = (p) => { onChange(); patchOrientationRaw(p) }
   const patchModule: typeof patchModuleRaw = (p) => { onChange(); patchModuleRaw(p) }
   const patchInverter: typeof patchInverterRaw = (p) => { onChange(); patchInverterRaw(p) }
   const patchLosses: typeof patchLossesRaw = (p) => { onChange(); patchLossesRaw(p) }
   const patchAlbedo: typeof patchAlbedoRaw = (p) => { onChange(); patchAlbedoRaw(p) }
   const patchBattery: typeof patchBatteryRaw = (p) => { onChange(); patchBatteryRaw(p) }
+
+  useEffect(() => {
+    if (currentMode === null) {
+      onChange()
+    }
+  }, [])
 
   return (
     <>
@@ -746,14 +749,16 @@ export const SecondStep = () => {
       {view === 'eloremeghatarozottrendszer' && (
         <PredefinedSystemMenu
           onBack={() => setView('valasztosmenu')}
-          onSelect={() => setData({ systemParamsMode: 'predefined' })}
+          onSelect={(id) => setData({ systemParamsMode: 'predefined', selectedPredefinedSystemId: id })}
+          selectedId={data.selectedPredefinedSystemId}
           form={form}
         />
       )}
       {view === 'sajatrendszer' && (
         <CustomSystemMenu
           onBack={() => setView('valasztosmenu')}
-          onChange={() => setData({ systemParamsMode: 'custom' })}
+          onChange={() => setData({ systemParamsMode: 'custom', selectedPredefinedSystemId: null })}
+          currentMode={data.systemParamsMode}
           form={form}
         />
       )}
