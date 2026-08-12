@@ -1,7 +1,8 @@
-import { Button, Card, Box, Heading, Text, Stack, Center } from '@chakra-ui/react'
+import { Button, Heading, Text, Stack, Center } from '@chakra-ui/react'
 import { useState } from 'react'
 import { usePageTitle } from '../../hooks/usePageTitle'
 import { AnimatedPage } from '../../components/AnimatedPage'
+import { OptionCard } from '../../components/OptionCard'
 
 // Leiras: Fogyasztasi profil megadasa (a felhasznalo valaszthat, hogy elore meghatarozott fogyasztasi profilt valaszt vagy az alapoktol allitja ossze).
 
@@ -22,47 +23,31 @@ const ChoiceMenu = ({
     <Center>
       <Stack direction={{ base: "column", md: "row" }} gap="10" align="stretch" w="full" maxW="1800px">
 
-        <Card.Root overflow="hidden" pt={2} borderColor="purple.border" borderWidth="2px" flex="1">
-          <Box
-            backgroundImage="url(/thirdstep_1_light.svg)"
-            _dark={{ backgroundImage: "url(/thirdstep_1_dark.svg)" }}
-            backgroundSize="cover"
-            backgroundPosition="center"
-            aspectRatio="5/3"
-            role="img"
-            aria-label="Saját fogyasztási profil összeállítása"
-          />
-          <Card.Body gap="2">
-            <Card.Title>Előre meghatározott fogyasztási profil kiválasztása</Card.Title>
-            <Card.Description>
-              Itt a már előre elkészített felhasználási sablonok egyikének alkalmazására nyílik mód. Ez a funkció rendkívül praktikus, ha valaki elkerülné a háztartási berendezések egyenkénti számba vételét.
-            </Card.Description>
-          </Card.Body>
-          <Card.Footer>
-            <Button variant="outline" onClick={onSelectPredefined}>Kiválasztás</Button>
-          </Card.Footer>
-        </Card.Root>
+        <OptionCard
+          flex="1"
+          image={{
+            light: '/thirdstep_1_light.svg',
+            dark: '/thirdstep_1_dark.svg',
+            ariaLabel: 'Saját fogyasztási profil összeállítása',
+          }}
+          title="Előre meghatározott fogyasztási profil kiválasztása"
+          description="Itt a már előre elkészített felhasználási sablonok egyikének alkalmazására nyílik mód. Ez a funkció rendkívül praktikus, ha valaki elkerülné a háztartási berendezések egyenkénti számba vételét."
+          buttonLabel="Kiválasztás"
+          onSelect={onSelectPredefined}
+        />
 
-        <Card.Root overflow="hidden" pt={2} borderColor="purple.border" borderWidth="2px" flex="1">
-          <Box
-            backgroundImage="url(/thirdstep_2_light.svg)"
-            _dark={{ backgroundImage: "url(/thirdstep_2_dark.svg)" }}
-            backgroundSize="cover"
-            backgroundPosition="center"
-            aspectRatio="5/3"
-            role="img"
-            aria-label="Saját fogyasztási profil összeállítása"
-          />
-          <Card.Body gap="2">
-            <Card.Title>Saját fogyasztási profil összeállítása</Card.Title>
-            <Card.Description>
-              Ezen a ponton az energiaigények modelljét lehet teljesen egyénileg, az alapoktól felépíteni. Ez egy hasznos funkció mindazoknak, akik a lehető legpontosabban akarják rögzíteni otthonuk áramfogyasztását.
-            </Card.Description>
-          </Card.Body>
-          <Card.Footer>
-            <Button variant="outline" onClick={onSelectCustom}>Kiválasztás</Button>
-          </Card.Footer>
-        </Card.Root>
+        <OptionCard
+          flex="1"
+          image={{
+            light: '/thirdstep_2_light.svg',
+            dark: '/thirdstep_2_dark.svg',
+            ariaLabel: 'Saját fogyasztási profil összeállítása',
+          }}
+          title="Saját fogyasztási profil összeállítása"
+          description="Ezen a ponton az energiaigények modelljét lehet teljesen egyénileg, az alapoktól felépíteni. Ez egy hasznos funkció mindazoknak, akik a lehető legpontosabban akarják rögzíteni otthonuk áramfogyasztását."
+          buttonLabel="Kiválasztás"
+          onSelect={onSelectCustom}
+        />
 
       </Stack>
     </Center>

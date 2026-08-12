@@ -1,7 +1,7 @@
 import { Steps } from '@chakra-ui/react'
 import { items } from './StepItems'
 
-// Leiras: 
+// Leiras: A lepesekben talalhato felso sav.
 
 export const StepsList = () => {
   return (

@@ -1,28 +1,26 @@
-import { useState } from 'react'
-import { defaultSystemParams, type SystemParams } from '../assets/WizardDataContext'
+import { useState, type Dispatch, type SetStateAction } from 'react'
+import { defaultSystemParams, type SystemParams } from '../steps/WizardDataContext'
 
 // Leiras: a Sajat rendszer parameterezese urlap allapotat kezeli.
+
+// Segedelem: egy szekcio frissiteset vegzi
+function makeSectionPatcher<K extends keyof SystemParams>(
+  setParams: Dispatch<SetStateAction<SystemParams>>,
+  key: K
+) {
+  return (patch: Partial<SystemParams[K]>) =>
+    setParams((prev) => ({ ...prev, [key]: { ...prev[key], ...patch } }))
+}
 
 export function useSystemParamsForm(initial?: SystemParams | null) {
   const [params, setParams] = useState<SystemParams>(initial ?? defaultSystemParams)
 
-  const patchOrientation = (patch: Partial<SystemParams['orientation']>) =>
-    setParams((prev) => ({ ...prev, orientation: { ...prev.orientation, ...patch } }))
-
-  const patchModule = (patch: Partial<SystemParams['module']>) =>
-    setParams((prev) => ({ ...prev, module: { ...prev.module, ...patch } }))
-
-  const patchInverter = (patch: Partial<SystemParams['inverter']>) =>
-    setParams((prev) => ({ ...prev, inverter: { ...prev.inverter, ...patch } }))
-
-  const patchLosses = (patch: Partial<SystemParams['losses']>) =>
-    setParams((prev) => ({ ...prev, losses: { ...prev.losses, ...patch } }))
-
-  const patchAlbedo = (patch: Partial<SystemParams['albedo']>) =>
-    setParams((prev) => ({ ...prev, albedo: { ...prev.albedo, ...patch } }))
-
-  const patchBattery = (patch: Partial<SystemParams['battery']>) =>
-    setParams((prev) => ({ ...prev, battery: { ...prev.battery, ...patch } }))
+  const patchOrientation = makeSectionPatcher(setParams, 'orientation')
+  const patchModule = makeSectionPatcher(setParams, 'module')
+  const patchInverter = makeSectionPatcher(setParams, 'inverter')
+  const patchLosses = makeSectionPatcher(setParams, 'losses')
+  const patchAlbedo = makeSectionPatcher(setParams, 'albedo')
+  const patchBattery = makeSectionPatcher(setParams, 'battery')
 
   const resetToDefaults = () => setParams(defaultSystemParams)
 

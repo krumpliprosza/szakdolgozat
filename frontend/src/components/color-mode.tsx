@@ -9,6 +9,7 @@ import { LuMoon, LuSun } from "react-icons/lu"
 
 export interface ColorModeProviderProps extends ThemeProviderProps {}
 
+// Az egesz alkalmazast korbeveszi, hogy mindenhol elerheto legyen a sotet es vilagos tema
 export function ColorModeProvider(props: ColorModeProviderProps) {
   return (
     <ThemeProvider attribute="class" disableTransitionOnChange {...props} />
@@ -23,6 +24,7 @@ export interface UseColorModeReturn {
   toggleColorMode: () => void
 }
 
+// Ezzel kerdezheto le es valthato a tema
 export function useColorMode(): UseColorModeReturn {
   const { resolvedTheme, setTheme, forcedTheme } = useTheme()
   const colorMode = forcedTheme || resolvedTheme
@@ -36,11 +38,13 @@ export function useColorMode(): UseColorModeReturn {
   }
 }
 
+// Segedelem: az adott temanak megfeleloen valasztja ki a szukseges szint
 export function useColorModeValue<T>(light: T, dark: T) {
   const { colorMode } = useColorMode()
   return colorMode === "dark" ? dark : light
 }
 
+// A temavalto gomb ikonjat adja vissza
 export function ColorModeIcon() {
   const { colorMode } = useColorMode()
   return colorMode === "dark" ? <LuMoon /> : <LuSun />
@@ -48,6 +52,7 @@ export function ColorModeIcon() {
 
 interface ColorModeButtonProps extends Omit<IconButtonProps, "aria-label"> {}
 
+// A temavalto gomb
 export const ColorModeButton = React.forwardRef<
   HTMLButtonElement,
   ColorModeButtonProps
@@ -75,6 +80,7 @@ export const ColorModeButton = React.forwardRef<
   )
 })
 
+// Az ebbe csomagolt tartalom mindenkepp vilagos temaju
 export const LightMode = React.forwardRef<HTMLSpanElement, SpanProps>(
   function LightMode(props, ref) {
     return (
@@ -91,6 +97,7 @@ export const LightMode = React.forwardRef<HTMLSpanElement, SpanProps>(
   },
 )
 
+// Az ebbe csomagolt tartalom mindenkepp sotet temaju
 export const DarkMode = React.forwardRef<HTMLSpanElement, SpanProps>(
   function DarkMode(props, ref) {
     return (

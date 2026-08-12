@@ -6,6 +6,8 @@ import { system } from './theme'
 import { ColorModeProvider } from "./components/color-mode.tsx"
 import { BrowserRouter } from 'react-router-dom'
 
+// Leiras: A weboldal belepesi pontja.
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>

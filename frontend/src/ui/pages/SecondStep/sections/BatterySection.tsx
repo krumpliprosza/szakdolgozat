@@ -1,0 +1,101 @@
+import { Accordion, Heading, SimpleGrid, VStack } from '@chakra-ui/react'
+import { NumField } from '../../../../components/FormFields'
+import type { SystemParams } from '../../../../steps/WizardDataContext'
+
+// A Sajat rendszer parameterezese lapon az akkumulator parametereinek beallitasat teszi lehetove.
+
+interface BatterySectionProps {
+  params: SystemParams['battery']
+  onPatch: (patch: Partial<SystemParams['battery']>) => void
+}
+
+export const BatterySection = ({ params, onPatch }: BatterySectionProps) => (
+  <Accordion.Item value="battery">
+    <Accordion.ItemTrigger>
+      <Heading size="md" flex="1" textAlign="left">Akkumulátor</Heading>
+      <Accordion.ItemIndicator />
+    </Accordion.ItemTrigger>
+    <Accordion.ItemContent>
+      <Accordion.ItemBody>
+        <VStack align="stretch" gap={4}>
+
+          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+            <NumField
+              label="Kapacitás"
+              info="Az akkumulátor névleges energiatároló kapacitása."
+              value={params.capacityKwh}
+              onChange={(v) => v !== null && onPatch({ capacityKwh: v })}
+              min={0} step={0.5}
+              helperText="kilowattóra (kWh)"
+            />
+            <NumField
+              label="Kezdeti töltöttség"
+              info="A töltöttségi szint, amivel a szimuláció indul."
+              value={params.soc0}
+              onChange={(v) => v !== null && onPatch({ soc0: v })}
+              min={0} max={1} step={0.05}
+              helperText="0 és 1 között, pl. 0.5 = 50%"
+            />
+          </SimpleGrid>
+
+          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+            <NumField
+              label="Minimális töltöttségi szint"
+              info="Az akkumulátor élettartamának védelme érdekében ez alá nem engedi a modell a töltöttséget kisütni."
+              value={params.socMin}
+              onChange={(v) => v !== null && onPatch({ socMin: v })}
+              min={0} max={1} step={0.05}
+              helperText="0 és 1 között, pl. 0.1 = 10%"
+            />
+            <NumField
+              label="Maximális töltöttségi szint"
+              info="Az akkumulátor élettartamának védelme érdekében ez fölé nem tölt a modell."
+              value={params.socMax}
+              onChange={(v) => v !== null && onPatch({ socMax: v })}
+              min={0} max={1} step={0.05}
+              helperText="0 és 1 között, pl. 0.9 = 90%"
+            />
+          </SimpleGrid>
+
+          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+            <NumField
+              label="Maximális töltési teljesítmény"
+              info="Az akkumulátor/töltésvezérlő által megengedett legnagyobb töltési teljesítmény."
+              value={params.pChargeMaxKw}
+              onChange={(v) => v !== null && onPatch({ pChargeMaxKw: v })}
+              min={0} step={0.1}
+              helperText="kilowatt (kW)"
+            />
+            <NumField
+              label="Maximális kisütési teljesítmény"
+              info="Az akkumulátor/inverter által megengedett legnagyobb kisütési teljesítmény."
+              value={params.pDischargeMaxKw}
+              onChange={(v) => v !== null && onPatch({ pDischargeMaxKw: v })}
+              min={0} step={0.1}
+              helperText="kilowatt (kW)"
+            />
+          </SimpleGrid>
+
+          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+            <NumField
+              label="Töltési hatásfok"
+              info="A töltés közben fellépő veszteség miatt a betáplált energiának csak ekkora része kerül ténylegesen tárolásra."
+              value={params.etaCharge}
+              onChange={(v) => v !== null && onPatch({ etaCharge: v })}
+              min={0.5} max={1} step={0.01}
+              helperText="0 és 1 között, pl. 0.97 = 97%"
+            />
+            <NumField
+              label="Kisütési hatásfok"
+              info="A kisütés közben fellépő veszteség miatt a tárolt energiának csak ekkora része jut vissza a rendszerbe."
+              value={params.etaDischarge}
+              onChange={(v) => v !== null && onPatch({ etaDischarge: v })}
+              min={0.5} max={1} step={0.01}
+              helperText="0 és 1 között, pl. 0.97 = 97%"
+            />
+          </SimpleGrid>
+        </VStack>
+      </Accordion.ItemBody>
+    </Accordion.ItemContent>
+  </Accordion.Item>
+)

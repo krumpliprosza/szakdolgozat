@@ -1,15 +1,16 @@
 import { Steps, Stack, Box, useStepsContext } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { StepsList } from '../assets/StepsList'
-import { StepRouteSync } from '../assets/StepRouteSync'
-import { PrevNextButtons } from '../assets/PrevNextButtons'
+import { StepsList } from '../steps/StepsList'
+import { StepRouteSync } from '../steps/StepRouteSync'
+import { PrevNextButtons } from '../steps/PrevNextButtons'
 import { ChangeColorModeButton } from '../components/ChangeColorModeButton'
-import { items } from '../assets/StepItems'
-import { WizardDataProvider, useWizardData, type WizardData } from '../assets/WizardDataContext'
+import { items } from '../steps/StepItems'
+import { WizardDataProvider, useWizardData, type WizardData } from '../steps/WizardDataContext'
 
 // Leiras: Az egesz varazslo vaza: osszefogja a StepsList, StepRouteSync, Outlet, PrevNextButtons, ChangeColorModeButton elemeket.
 
+// A hibauzenet kijavitasa eseten automatikusan eltavolitja a hibat
 const ErrorAutoClear = ({
   error,
   setError,
@@ -30,6 +31,7 @@ const ErrorAutoClear = ({
   return null
 }
 
+// A lepes vegrehajtasat vegzi: ellenoriz es hibat kezel
 const StepInner = () => {
   const { data } = useWizardData()
   const [error, setError] = useState<string | null>(null)
@@ -42,6 +44,7 @@ const StepInner = () => {
       linear
       isStepValid={(index) => items[index]?.getErrorMessage(data) == null}
       onStepChange={() => setError(null)}
+      // Hibasan kitoltott lepes eseten hibauzenetet dob
       onStepInvalid={(details) => {
         const message = items[details.step]?.getErrorMessage(data)
         setError(message ?? `A(z) ${details.step + 1}. lépés nincs kitöltve.`)
@@ -68,6 +71,7 @@ const StepInner = () => {
   )
 }
 
+// A varazslo adatait atadja a StepInner-nek
 export const Step = () => (
   <Stack align="flex-start">
     <WizardDataProvider>

@@ -9,8 +9,6 @@ import { SetupComplete } from './ui/pages/SetupComplete'
 /* TODO lista
 
   - Hibakezeles (404 not found stb.)
-  Step:
-  - isStepValid hasznalata (kesobb, a lepesek logikajanak elkeszitese utan)
 
 */
 

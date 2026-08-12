@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, type ReactNode } from 'react'
 
-const currentYear = new Date().getFullYear()
+// Leiras: A szimulaciohoz szukseges adatok adatait es tipusait gyujti ossze.
+
+export const currentYear = new Date().getFullYear()
 
 export type TrackingType = 'fixed' | 'single_axis' | 'dual_axis'
 
@@ -113,6 +115,7 @@ interface WizardDataContextValue {
 
 const WizardDataContext = createContext<WizardDataContextValue | null>(null)
 
+// A varazslo adatait biztositja minden lepesben
 export const WizardDataProvider = ({ children }: { children: ReactNode }) => {
   const [data, setDataState] = useState<WizardData>({ location: null, systemParams: null, systemParamsMode: null, selectedPredefinedSystemId: null })
 
@@ -126,6 +129,7 @@ export const WizardDataProvider = ({ children }: { children: ReactNode }) => {
   )
 }
 
+// Segedelem: a WizardDataContext egyszerubb elereset biztositja
 export const useWizardData = () => {
   const ctx = useContext(WizardDataContext)
   if (!ctx) throw new Error('Hiba')

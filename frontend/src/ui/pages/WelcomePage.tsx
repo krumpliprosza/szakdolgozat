@@ -1,36 +1,44 @@
 import { Center, Heading, Text, Button } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 import { usePageTitle } from '../../hooks/usePageTitle'
 import { AnimatedPage } from '../../components/AnimatedPage'
 
 // Leiras: A kezdolap: cim, leiras, gomb az elso lepesre navigalashoz.
 
-let isLoaded = false;
+let preloaded = false
 
-const PictureLoader = () => {
-  if (!isLoaded) {
-    const pictures = [
-      { fileName: '/secondstep_1_dark.svg' },
-      { fileName: '/secondstep_1_light.svg' },
-      { fileName: '/secondstep_2_dark.svg' },
-      { fileName: '/secondstep_2_light.svg' },
-      { fileName: '/thirdstep_1_dark.svg' },
-      { fileName: '/thirdstep_1_light.svg' },
-      { fileName: '/thirdstep_2_dark.svg' },
-      { fileName: '/thirdstep_2_light.svg' },
-    ]
-    pictures.forEach((picture) => {
-      const img = new Image();
-      img.src = picture.fileName;
-    });
-    isLoaded = true;
+// A varazslo kesobbi lepeseiben szukseges kepeket tolti be a hatterben
+const preloadWizardImages = () => {
+  if (preloaded) {
+    return
   }
-  return null;
+  const fileNames = [
+    '/secondstep_1_dark.svg',
+    '/secondstep_1_light.svg',
+    '/secondstep_2_dark.svg',
+    '/secondstep_2_light.svg',
+    '/thirdstep_1_dark.svg',
+    '/thirdstep_1_light.svg',
+    '/thirdstep_2_dark.svg',
+    '/thirdstep_2_light.svg',
+  ]
+  fileNames.forEach((fileName) => {
+    const img = new Image()
+    img.src = fileName
+  })
+  preloaded = true
 }
 
 export const WelcomePage = () => {
   usePageTitle("Kezdőlap")
   const navigate = useNavigate()
+
+  // A kezdolap inditasakor kezdodik el a kepek elozetes betoltese
+  useEffect(() => {
+    preloadWizardImages()
+  }, [])
+
   return (
     <Center h="100vh">
       <AnimatedPage textAlign="center">
@@ -41,7 +49,6 @@ export const WelcomePage = () => {
         <Button colorPalette="purple" variant="outline" size="lg" onClick={() => navigate("/first-step")}>
           Új szimuláció készítése
         </Button>
-        <PictureLoader />
       </AnimatedPage>
     </Center>
   )
