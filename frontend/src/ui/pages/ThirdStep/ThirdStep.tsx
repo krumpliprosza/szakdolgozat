@@ -1,8 +1,8 @@
 import { Button, Heading, Text, Stack, Center } from '@chakra-ui/react'
 import { useState } from 'react'
-import { usePageTitle } from '../../hooks/usePageTitle'
-import { AnimatedPage } from '../../components/AnimatedPage'
-import { OptionCard } from '../../components/OptionCard'
+import { usePageTitle } from '../../../hooks/usePageTitle'
+import { AnimatedPage } from '../../../components/AnimatedPage'
+import { OptionCard } from '../../../components/OptionCard'
 
 // Leiras: Fogyasztasi profil megadasa (a felhasznalo valaszthat, hogy elore meghatarozott fogyasztasi profilt valaszt vagy az alapoktol allitja ossze).
 

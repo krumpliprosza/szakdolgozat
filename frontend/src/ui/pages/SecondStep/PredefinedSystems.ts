@@ -13,7 +13,7 @@ export const predefinedSystems: PredefinedSystem[] = [
   {
     id: 'rendszer1',
     title: 'Kompakt otthoni rendszer',
-    description: 'Kisebb, tetőre szerelt rendszer családi házakhoz, mérsékelt fogyasztás mellett. Akkumulátor nélkül, alacsony kezdeti beruházási költséggel.',
+    description: 'Kisebb, tetőre szerelt rendszer családi házakhoz, mérsékelt fogyasztás mellett. Kis akkumulátorral rendelkezik, alacsony kezdeti beruházási költségű.',
     params: {
       orientation: {
         trackingType: 'fixed',
@@ -48,12 +48,12 @@ export const predefinedSystems: PredefinedSystem[] = [
         groundAlbedo: 0.2,
       },
       battery: {
-        capacityKwh: 0,
-        soc0: 0,
-        socMin: 0,
-        socMax: 1,
-        pChargeMaxKw: 0,
-        pDischargeMaxKw: 0,
+        capacityKwh: 7,
+        soc0: 0.5,
+        socMin: 0.1,
+        socMax: 0.9,
+        pChargeMaxKw: 2,
+        pDischargeMaxKw: 2,
         etaCharge: 0.97,
         etaDischarge: 0.97,
       },
@@ -62,7 +62,7 @@ export const predefinedSystems: PredefinedSystem[] = [
   {
     id: 'rendszer2',
     title: 'Családi házas rendszer akkumulátorral',
-    description: 'Közepes méretű, fix tájolású rendszer, energiatárolóval kiegészítve a nagyobb önfogyasztási arány elérése érdekében. A legtöbb családi ház igényét jól lefedi.',
+    description: 'Közepes méretű, fix tájolású rendszer, közepes akkumulátorral kiegészítve a nagyobb önfogyasztási arány elérése érdekében. A legtöbb családi ház igényét jól lefedi.',
     params: {
       orientation: {
         trackingType: 'fixed',
@@ -97,7 +97,7 @@ export const predefinedSystems: PredefinedSystem[] = [
         groundAlbedo: 0.2,
       },
       battery: {
-        capacityKwh: 10,
+        capacityKwh: 12,
         soc0: 0.5,
         socMin: 0.1,
         socMax: 0.9,

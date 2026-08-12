@@ -3,12 +3,13 @@ import { WizardLayout } from './ui/layouts/WizardLayout'
 import { WelcomePage } from './ui/pages/WelcomePage'
 import { FirstStep } from './ui/pages/FirstStep'
 import { SecondStep } from './ui/pages/SecondStep'
-import { ThirdStep } from './ui/pages/ThirdStep'
+import { ThirdStep } from './ui/pages/ThirdStep/ThirdStep'
 import { SetupComplete } from './ui/pages/SetupComplete'
 
 /* TODO lista
 
   - Hibakezeles (404 not found stb.)
+  - NREL SAM adatbazisbol modulok es inverterek betoltese?
 
 */
 
