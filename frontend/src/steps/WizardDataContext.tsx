@@ -3,11 +3,12 @@ import { createContext, useContext, useState, type ReactNode } from 'react'
 // Leiras: A szimulaciohoz szukseges adatok adatait es tipusait gyujti ossze.
 
 export const currentYear = new Date().getFullYear()
-
 export type TrackingType = 'fixed' | 'single_axis' | 'dual_axis'
-
 export type SapmMountType = 'open_rack_glass_glass' | 'close_mount_glass_glass' | 'open_rack_glass_polymer' | 'insulated_back_glass_polymer'
+export type SystemParamsMode = 'predefined' | 'custom' | null
+export type ConsumptionProfileMode = 'predefined' | 'custom' | null
 
+// Napelemrendszer parameterei
 export interface SystemParams {
   orientation: {
     trackingType: TrackingType
@@ -98,14 +99,35 @@ export const defaultSystemParams: SystemParams = {
   },
 }
 
-export type SystemParamsMode = 'predefined' | 'custom' | null
+// Felhasznalasi idotartam
+export interface ConsumptionUsagePeriod {
+  id: string
+  wholeYear: boolean
+  startDate: string
+  endDate: string
+  wholeDay: boolean
+  startTime: string
+  endTime: string
+}
 
+// A fogyasztas egy adott eleme
+export interface ConsumptionItem {
+  id: string
+  name: string
+  count: number
+  consumptionW: number
+  usagePeriods: ConsumptionUsagePeriod[]
+}
+
+// A teljes szimulacio bemeneti adatai
 export interface WizardData {
   location: { lat: number; lon: number } | null
   systemParams: SystemParams | null
   systemParamsMode: SystemParamsMode
   selectedPredefinedSystemId: string | null
-  // TODO: consumptionProfile hozzaadasa
+  consumptionProfileMode: ConsumptionProfileMode
+  selectedPredefinedProfileId: string | null
+  consumptionItems: ConsumptionItem[] | null
 }
 
 interface WizardDataContextValue {
@@ -117,7 +139,15 @@ const WizardDataContext = createContext<WizardDataContextValue | null>(null)
 
 // A varazslo adatait biztositja minden lepesben
 export const WizardDataProvider = ({ children }: { children: ReactNode }) => {
-  const [data, setDataState] = useState<WizardData>({ location: null, systemParams: null, systemParamsMode: null, selectedPredefinedSystemId: null })
+  const [data, setDataState] = useState<WizardData>({ 
+    location: null, 
+    systemParams: null, 
+    systemParamsMode: null, 
+    selectedPredefinedSystemId: null, 
+    consumptionProfileMode: null, 
+    selectedPredefinedProfileId: null, 
+    consumptionItems: [], 
+  })
 
   const setData = (patch: Partial<WizardData>) =>
     setDataState((prev) => ({ ...prev, ...patch }))

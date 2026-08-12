@@ -41,7 +41,9 @@ export const items = [
     title: "Fogyasztási profil megadása",
     // Fogyasztasi profil ellenorzese
     getErrorMessage: (_data: WizardData): string | null => {
-      // TODO: e.g. if (!_data.consumptionProfile) return "Válassz fogyasztási profilt!"
+      if (_data.consumptionProfileMode === null) {
+        return "Válassz egy előre meghatározott fogyasztási profilt, vagy állítsd össze a sajátodat!"
+      }
       return null
     },
   },

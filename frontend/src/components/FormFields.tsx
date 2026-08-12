@@ -1,5 +1,5 @@
-import { Field, HStack, NumberInput, Portal, Select, Switch, Text, createListCollection } from '@chakra-ui/react'
-import { LuInfo } from 'react-icons/lu'
+import { Field, HStack, IconButton, Input, NumberInput, Portal, Select, Switch, Text, createListCollection } from '@chakra-ui/react'
+import { LuInfo, LuMinus, LuPlus } from 'react-icons/lu'
 import { Tooltip } from './Tooltip'
 
 // Leiras: ujrafelhasznalhato urlap mezok.
@@ -16,6 +16,16 @@ interface NumFieldProps {
   placeholder?: string
 }
 
+interface CounterFieldProps {
+  label: string
+  info: string
+  value: number
+  onChange: (value: number) => void
+  min?: number
+  max?: number
+  step?: number
+}
+
 interface Option {
   label: string
   value: string
@@ -27,6 +37,23 @@ interface SelectFieldProps {
   value: string
   onChange: (value: string) => void
   options: Option[]
+}
+
+interface TextFieldProps {
+  label: string
+  info: string
+  value: string
+  onChange: (value: string) => void
+  placeholder?: string
+  invalid?: boolean
+  errorText?: string
+}
+
+interface SwitchFieldProps {
+  label: string
+  info: string
+  checked: boolean
+  onChange: (checked: boolean) => void
 }
 
 const InfoIcon = ({ info }: { info: string }) => (
@@ -80,6 +107,37 @@ export const NumField = ({
   </Field.Root>
 )
 
+// Darabszam bemenet
+export const CounterField = ({ label, info, value, onChange, min = 0, max, step = 1 }: CounterFieldProps) => (
+  <Field.Root>
+    <FieldLabelWithInfo label={label} info={info} />
+    <NumberInput.Root
+      value={String(value)}
+      onValueChange={(details) => {
+        if (!Number.isNaN(details.valueAsNumber)) onChange(details.valueAsNumber)
+      }}
+      min={min}
+      max={max}
+      step={step}
+      w="full"
+    >
+      <HStack gap={2}>
+        <NumberInput.DecrementTrigger asChild>
+          <IconButton variant="outline" size="sm" aria-label="Csökkentés">
+            <LuMinus />
+          </IconButton>
+        </NumberInput.DecrementTrigger>
+        <NumberInput.Input textAlign="center" />
+        <NumberInput.IncrementTrigger asChild>
+          <IconButton variant="outline" size="sm" aria-label="Növelés">
+            <LuPlus />
+          </IconButton>
+        </NumberInput.IncrementTrigger>
+      </HStack>
+    </NumberInput.Root>
+  </Field.Root>
+)
+
 // Opciovalasztos mezo
 export const SelectField = ({ label, info, value, onChange, options }: SelectFieldProps) => {
   const collection = createListCollection({ items: options })
@@ -118,12 +176,14 @@ export const SelectField = ({ label, info, value, onChange, options }: SelectFie
   )
 }
 
-interface SwitchFieldProps {
-  label: string
-  info: string
-  checked: boolean
-  onChange: (checked: boolean) => void
-}
+// Szoveg bemenet
+export const TextField = ({ label, info, value, onChange, placeholder, invalid, errorText}: TextFieldProps) => (
+  <Field.Root invalid={invalid}>
+    <FieldLabelWithInfo label={label} info={info}/>
+    <Input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} />
+    {invalid && errorText && <Field.ErrorText>{errorText}</Field.ErrorText>}
+  </Field.Root>
+)
 
 // Kapcsologomb
 export const SwitchField = ({ label, info, checked, onChange }: SwitchFieldProps) => (
