@@ -1,5 +1,6 @@
 import { Accordion, Heading, SimpleGrid, VStack } from '@chakra-ui/react'
 import { NumField, SelectField, SwitchField } from '../../../../components/FormFields'
+import { isModulePowerValid } from '../../../../hooks/useSystemParamsForm'
 import type { SapmMountType, SystemParams } from '../../../../steps/WizardDataContext'
 
 // A Sajat rendszer parameterezese lapon a napelemmodul parametereinek beallitasat teszi lehetove.
@@ -26,6 +27,8 @@ export const ModuleSection = ({ params, onPatch }: ModuleSectionProps) => (
               onChange={(v) => v !== null && onPatch({ pStcW: v })}
               min={0} step={50}
               helperText="watt (W)"
+              invalid={ !isModulePowerValid(params) }
+              errorText='A névleges DC teljesítmény csak pozitív értéket vehet fel!'
             />
             <NumField
               label="Hőmérsékleti együttható"

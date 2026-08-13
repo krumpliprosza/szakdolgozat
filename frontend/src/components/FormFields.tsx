@@ -1,5 +1,5 @@
-import { Field, HStack, IconButton, Input, NumberInput, Portal, Select, Switch, Text, createListCollection } from '@chakra-ui/react'
-import { LuInfo, LuMinus, LuPlus } from 'react-icons/lu'
+import { Field, HStack, IconButton, Input, NumberInput, Portal, Select, Switch, Text, createListCollection, DatePicker } from '@chakra-ui/react'
+import { LuInfo, LuMinus, LuPlus, LuCalendar } from 'react-icons/lu'
 import { Tooltip } from './Tooltip'
 
 // Leiras: ujrafelhasznalhato urlap mezok.
@@ -14,6 +14,8 @@ interface NumFieldProps {
   step?: number
   helperText?: string
   placeholder?: string
+  invalid?: boolean
+  errorText?: string
 }
 
 interface CounterFieldProps {
@@ -56,6 +58,12 @@ interface SwitchFieldProps {
   onChange: (checked: boolean) => void
 }
 
+interface DateFieldProps {
+  label: string
+  minimum: string
+  maximum: string
+}
+
 const InfoIcon = ({ info }: { info: string }) => (
   <Tooltip content={info} showArrow contentProps={{ maxW: '260px', css: { "--tooltip-bg": "#9333EA", "color": "#FFFFFF", "justify-content": "center" } }} interactive>
     <Text as="span" display="inline-flex" alignItems="center" color="fg.muted" cursor="help">
@@ -73,18 +81,8 @@ const FieldLabelWithInfo = ({ label, info }: { label: string; info: string }) =>
 )
 
 // Szam bemenet
-export const NumField = ({
-  label,
-  info,
-  value,
-  onChange,
-  min,
-  max,
-  step = 1,
-  helperText,
-  placeholder,
-}: NumFieldProps) => (
-  <Field.Root>
+export const NumField = ({ label, info, value, onChange, min, max, step = 1, helperText, placeholder, invalid, errorText }: NumFieldProps) => (
+  <Field.Root invalid={invalid}>
     <FieldLabelWithInfo label={label} info={info} />
     <NumberInput.Root
       value={value === null ? '' : String(value)}
@@ -104,6 +102,7 @@ export const NumField = ({
       <NumberInput.Input placeholder={placeholder} />
     </NumberInput.Root>
     {helperText && <Field.HelperText>{helperText}</Field.HelperText>}
+    {invalid && errorText && <Field.ErrorText>{errorText}</Field.ErrorText>}
   </Field.Root>
 )
 
@@ -202,4 +201,38 @@ export const SwitchField = ({ label, info, checked, onChange }: SwitchFieldProps
       <FieldLabelWithInfo label={label} info={info} />
     </HStack>
   </Field.Root>
+)
+
+// Datumok kivalasztasa
+export const DateField = ({ label, minimum, maximum }: DateFieldProps) => (
+  <DatePicker.Root selectionMode="range" locale="hu-HU">
+    <DatePicker.Label>{ label }</DatePicker.Label>
+    <DatePicker.Control>
+      <DatePicker.Input index={0} />
+      <DatePicker.Input index={1} />
+      <DatePicker.IndicatorGroup>
+        <DatePicker.Trigger>
+          <LuCalendar />
+        </DatePicker.Trigger>
+      </DatePicker.IndicatorGroup>
+    </DatePicker.Control>
+    <Portal>
+      <DatePicker.Positioner>
+        <DatePicker.Content>
+          <DatePicker.View view="day">
+            <DatePicker.Header />
+            <DatePicker.DayTable />
+          </DatePicker.View>
+          <DatePicker.View view="month">
+            <DatePicker.Header />
+            <DatePicker.MonthTable />
+          </DatePicker.View>
+          <DatePicker.View view="year">
+            <DatePicker.Header />
+            <DatePicker.YearTable />
+          </DatePicker.View>
+        </DatePicker.Content>
+      </DatePicker.Positioner>
+    </Portal>
+  </DatePicker.Root>
 )

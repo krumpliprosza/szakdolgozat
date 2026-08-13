@@ -1,5 +1,6 @@
 import { Accordion, Heading, SimpleGrid } from '@chakra-ui/react'
 import { NumField } from '../../../../components/FormFields'
+import { isInverterPowerValid } from '../../../../hooks/useSystemParamsForm'
 import type { SystemParams } from '../../../../steps/WizardDataContext'
 
 // A Sajat rendszer parameterezese lapon az inverter parametereinek beallitasat teszi lehetove.
@@ -25,6 +26,8 @@ export const InverterSection = ({ params, onPatch }: InverterSectionProps) => (
             onChange={(v) => v !== null && onPatch({ pAcNomW: v })}
             min={0} step={50}
             helperText="watt (W)"
+            invalid={ !isInverterPowerValid(params) }
+            errorText='A névleges AC teljesítmény csak pozitív értéket vehet fel!'
           />
           <NumField
             label="Névleges hatásfok"

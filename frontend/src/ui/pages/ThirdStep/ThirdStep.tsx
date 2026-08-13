@@ -17,11 +17,11 @@ export const ThirdStep = () => {
 
   const [view, setView] = useState<ThirdStepView>('valasztosmenu')
   const { data, setData } = useWizardData()
-  const form = useConsumptionProfileForm(data.consumptionItems)
+  const form = useConsumptionProfileForm(data.HouseholdItems)
 
   // A felvett fogyasztokat atmasolja a varazslo adatai koze
   useEffect(() => {
-    setData({ consumptionItems: form.items })
+    setData({ HouseholdItems: form.items })
   }, [form.items])
 
   return (

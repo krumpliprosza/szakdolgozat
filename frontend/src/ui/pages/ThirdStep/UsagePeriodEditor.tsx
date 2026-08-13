@@ -1,7 +1,8 @@
 import { Box, Field, HStack, IconButton, Input, SimpleGrid, Text } from '@chakra-ui/react'
 import { LuTrash2 } from 'react-icons/lu'
-import { SwitchField } from '../../../components/FormFields'
+import { SwitchField, DateField } from '../../../components/FormFields'
 import { getAllowedUsageDateRange } from '../../../components/DateRange'
+import { isUsagePeriodDateRangeValid, isUsagePeriodTimeRangeValid } from '../../../hooks/useConsumptionProfileForm'
 import type { ConsumptionUsagePeriod } from '../../../steps/WizardDataContext'
 
 // Leiras: Egy fogyasztasi tetelhez tartozo egy hasznalati idotartam szerkesztese.
@@ -34,32 +35,13 @@ export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEdi
             onChange={(checked) => onChange({ wholeYear: checked })}
           />
           {!period.wholeYear && (
-            <HStack mt={2} gap={2} align="flex-end">
-              <Field.Root>
-                <Field.Label>Ettől</Field.Label>
-                <Input
-                  type="date"
-                  min={minDate}
-                  max={maxDate}
-                  value={period.startDate}
-                  onChange={(e) => e.target.value && onChange({ startDate: e.target.value })}
-                />
-              </Field.Root>
-              <Field.Root>
-                <Field.Label>Eddig</Field.Label>
-                <Input
-                  type="date"
-                  min={minDate}
-                  max={maxDate}
-                  value={period.endDate}
-                  onChange={(e) => e.target.value && onChange({ endDate: e.target.value })}
-                />
-              </Field.Root>
-            </HStack>
+            <DateField label="Dátum kiválasztása" minimum={minDate} maximum={maxDate}></DateField>
           )}
-        </Box>
-
-        <Box>
+          {(!isUsagePeriodDateRangeValid(period) && !period.wholeYear) && (
+            <Field.Root invalid mt={1}>
+              <Field.ErrorText>Ennél a felhasználási időtartamnál a kezdési dátum későbbre van állítva, mint a befejezési dátum!</Field.ErrorText>
+            </Field.Root>
+          )}
           <SwitchField
             label="Egész nap"
             info="Ha be van kapcsolva, a fogyasztó a nap minden percében üzemel."
@@ -68,7 +50,7 @@ export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEdi
           />
           {!period.wholeDay && (
             <HStack mt={2} gap={2} align="flex-end">
-              <Field.Root>
+              <Field.Root invalid={ !isUsagePeriodTimeRangeValid(period) }>
                 <Field.Label>Ettől</Field.Label>
                 <Input
                   type="time"
@@ -76,7 +58,7 @@ export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEdi
                   onChange={(e) => e.target.value && onChange({ startTime: e.target.value })}
                 />
               </Field.Root>
-              <Field.Root>
+              <Field.Root invalid={ !isUsagePeriodTimeRangeValid(period) }>
                 <Field.Label>Eddig</Field.Label>
                 <Input
                   type="time"
@@ -85,6 +67,11 @@ export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEdi
                 />
               </Field.Root>
             </HStack>
+          )}
+          {(!isUsagePeriodTimeRangeValid(period) && !period.wholeDay) && (
+            <Field.Root invalid mt={1}>
+              <Field.ErrorText>Ennél a felhasználási időtartamnál a kezdési időnek legalább 15 perccel korábbinak kell lennie, mint a befejezési időnek!</Field.ErrorText>
+            </Field.Root>
           )}
         </Box>
       </SimpleGrid>

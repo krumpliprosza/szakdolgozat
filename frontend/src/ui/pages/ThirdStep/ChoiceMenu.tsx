@@ -13,11 +13,8 @@ export interface ChoiceMenuProps {
 export const ChoiceMenu = ({
   onSelectPredefined,
   onSelectCustom,
-}: {
-  onSelectPredefined: () => void
-  onSelectCustom: () => void
-  selectedMode: ConsumptionProfileMode
-}) => (
+  selectedMode,
+}: ChoiceMenuProps) => (
   <>
     <Heading mb={4}>Harmadik lépés</Heading>
     <Text mb={4}>Állítsd össze háztartásod fogyasztási profilját!</Text>
@@ -34,7 +31,8 @@ export const ChoiceMenu = ({
           }}
           title="Előre meghatározott fogyasztási profil kiválasztása"
           description="Itt a már előre elkészített felhasználási sablonok egyikének alkalmazására nyílik mód. Ez a funkció rendkívül praktikus, ha valaki elkerülné a háztartási berendezések egyenkénti számba vételét."
-          buttonLabel="Kiválasztás"
+          selected={selectedMode === 'predefined'}
+          buttonLabel={selectedMode === 'predefined' ? 'Módosítás' : 'Kiválasztás'}
           onSelect={onSelectPredefined}
         />
 
@@ -47,7 +45,8 @@ export const ChoiceMenu = ({
           }}
           title="Saját fogyasztási profil összeállítása"
           description="Ezen a ponton az energiaigények modelljét lehet teljesen egyénileg, az alapoktól felépíteni. Ez egy hasznos funkció mindazoknak, akik a lehető legpontosabban akarják rögzíteni otthonuk áramfogyasztását."
-          buttonLabel="Kiválasztás"
+          selected={selectedMode === 'custom'}
+          buttonLabel={selectedMode === 'custom' ? 'Módosítás' : 'Kiválasztás'}
           onSelect={onSelectCustom}
         />
 

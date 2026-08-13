@@ -2,15 +2,15 @@ import { Button, Card, HStack, SimpleGrid, Text, VStack } from '@chakra-ui/react
 import { LuPlus, LuTrash2 } from 'react-icons/lu'
 import { CounterField, NumField, TextField } from '../../../components/FormFields'
 import { UsagePeriodEditor } from './UsagePeriodEditor'
-import type { ConsumptionItem, ConsumptionUsagePeriod } from '../../../steps/WizardDataContext'
+import type { HouseholdItem, ConsumptionUsagePeriod } from '../../../steps/WizardDataContext'
 import { MAX_USAGE_PERIODS } from '../../../hooks/useConsumptionProfileForm'
 
 // Leiras: Egy fogyasztasi tetel kartyaja.
 
 interface HouseholdItemCardProps {
-  item: ConsumptionItem
+  item: HouseholdItem
   nameInvalid: boolean
-  onUpdate: (patch: Partial<Omit<ConsumptionItem, 'id' | 'usagePeriods'>>) => void
+  onUpdate: (patch: Partial<Omit<HouseholdItem, 'id' | 'usagePeriods'>>) => void
   onRemove: () => void
   onAddUsagePeriod: () => void
   onUpdateUsagePeriod: (periodId: string, patch: Partial<ConsumptionUsagePeriod>) => void
@@ -32,7 +32,7 @@ export const HouseholdItemCard = ({
       <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
         <TextField
           label="Név"
-          info="A fogyasztó egyedi elnevezése."
+          info="A fogyasztó elnevezése."
           value={item.name}
           onChange={(v) => onUpdate({ name: v })}
           placeholder="pl. Hűtőszekrény"
@@ -41,7 +41,7 @@ export const HouseholdItemCard = ({
         />
         <CounterField
           label="Darabszám"
-          info="Az ilyen típusú eszközök száma a háztartásban."
+          info="Az eszközök száma a háztartásban."
           value={item.count}
           onChange={(v) => onUpdate({ count: v })}
           min={1}

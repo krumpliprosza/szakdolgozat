@@ -111,7 +111,7 @@ export interface ConsumptionUsagePeriod {
 }
 
 // A fogyasztas egy adott eleme
-export interface ConsumptionItem {
+export interface HouseholdItem {
   id: string
   name: string
   count: number
@@ -127,7 +127,7 @@ export interface WizardData {
   selectedPredefinedSystemId: string | null
   consumptionProfileMode: ConsumptionProfileMode
   selectedPredefinedProfileId: string | null
-  consumptionItems: ConsumptionItem[] | null
+  HouseholdItems: HouseholdItem[] | null
 }
 
 interface WizardDataContextValue {
@@ -146,7 +146,7 @@ export const WizardDataProvider = ({ children }: { children: ReactNode }) => {
     selectedPredefinedSystemId: null, 
     consumptionProfileMode: null, 
     selectedPredefinedProfileId: null, 
-    consumptionItems: [], 
+    HouseholdItems: [], 
   })
 
   const setData = (patch: Partial<WizardData>) =>

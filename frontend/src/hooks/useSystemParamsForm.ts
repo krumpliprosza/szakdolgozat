@@ -3,6 +3,27 @@ import { defaultSystemParams, type SystemParams } from '../steps/WizardDataConte
 
 // Leiras: a Sajat rendszer parameterezese urlap allapotat kezeli.
 
+// A modul nevleges DC teljesitmenye nem lehet nulla
+export const isModulePowerValid = (module: SystemParams['module']): boolean => {
+  return module.pStcW !== 0
+}
+
+// Az inverter nevleges AC teljesitmenye nem lehet nulla
+export const isInverterPowerValid = (inverter: SystemParams['inverter']): boolean => {
+  return inverter.pAcNomW !== 0
+}
+
+// A Sajat rendszer parameterezese urlap hibakezelese
+export const getSystemParamsError = (params: SystemParams): string | null => {
+  if (!isModulePowerValid(params.module)) {
+    return 'A modul névleges DC teljesítménye csak pozitív értéket vehet fel!'
+  }
+  if (!isInverterPowerValid(params.inverter)) {
+    return 'Az inverter névleges AC teljesítménye csak pozitív értéket vehet fel!'
+  }
+  return null
+}
+
 // Segedelem: egy szekcio frissiteset vegzi
 function makeSectionPatcher<K extends keyof SystemParams>(
   setParams: Dispatch<SetStateAction<SystemParams>>,

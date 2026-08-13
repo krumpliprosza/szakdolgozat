@@ -6,6 +6,8 @@ import {
   LuHousePlus,
   LuHousePlug,
 } from "react-icons/lu"
+import { getHouseholdItemsError } from "../hooks/useConsumptionProfileForm"
+import { getSystemParamsError } from "../hooks/useSystemParamsForm"
 import type { WizardData } from './WizardDataContext'
 
 // Leiras: A lepesek statikus adatai (ikonok, cimek), a gombfeliratokat visszaado fuggvenyek es az adatok ellenorzesenek leirasa.
@@ -32,6 +34,9 @@ export const items = [
       if (data.systemParamsMode === null) {
         return "Válassz egy előre meghatározott rendszert, vagy végezd el a sajátod paraméterezését!"
       }
+      if (data.systemParamsMode === 'custom' && data.systemParams) {
+        return getSystemParamsError(data.systemParams)
+      }
       return null
     },
   },
@@ -40,9 +45,12 @@ export const items = [
     iconcomplete: <LuHousePlug />,
     title: "Fogyasztási profil megadása",
     // Fogyasztasi profil ellenorzese
-    getErrorMessage: (_data: WizardData): string | null => {
-      if (_data.consumptionProfileMode === null) {
+    getErrorMessage: (data: WizardData): string | null => {
+      if (data.consumptionProfileMode === null) {
         return "Válassz egy előre meghatározott fogyasztási profilt, vagy állítsd össze a sajátodat!"
+      }
+      if (data.consumptionProfileMode === 'custom') {
+        return getHouseholdItemsError(data.HouseholdItems)
       }
       return null
     },
