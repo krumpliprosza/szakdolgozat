@@ -1,4 +1,4 @@
-import { Field, HStack, IconButton, Input, NumberInput, Portal, Select, Switch, Text, createListCollection, DatePicker } from '@chakra-ui/react'
+import { Field, HStack, IconButton, Input, NumberInput, Portal, Select, Switch, Text, createListCollection, DatePicker, parseDate } from '@chakra-ui/react'
 import { LuInfo, LuMinus, LuPlus, LuCalendar } from 'react-icons/lu'
 import { Tooltip } from './Tooltip'
 
@@ -62,6 +62,11 @@ interface DateFieldProps {
   label: string
   minimum: string
   maximum: string
+  startDate: string
+  endDate: string
+  onChange: (range: { startDate: string; endDate: string }) => void 
+  invalid?: boolean
+  errorText?: string
 }
 
 const InfoIcon = ({ info }: { info: string }) => (
@@ -159,8 +164,17 @@ export const SelectField = ({ label, info, value, onChange, options }: SelectFie
           </Select.IndicatorGroup>
         </Select.Control>
         <Portal>
-          <Select.Positioner>
-            <Select.Content>
+          <Select.Positioner boxShadow="lg" borderRadius="lg">
+            <Select.Content
+              zIndex="max" 
+              boxShadow="none" 
+              bg="bg.panel" 
+              borderRadius="lg"
+              borderColor="border"
+              _open={{
+                borderWidth: "1px",
+                p: 1,
+              }}>
               {options.map((opt) => (
                 <Select.Item item={opt} key={opt.value}>
                   {opt.label}
@@ -179,7 +193,11 @@ export const SelectField = ({ label, info, value, onChange, options }: SelectFie
 export const TextField = ({ label, info, value, onChange, placeholder, invalid, errorText}: TextFieldProps) => (
   <Field.Root invalid={invalid}>
     <FieldLabelWithInfo label={label} info={info}/>
-    <Input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} />
+    <Input 
+      value={value} 
+      onChange={(e) => onChange(e.target.value)} 
+      placeholder={placeholder}
+    />
     {invalid && errorText && <Field.ErrorText>{errorText}</Field.ErrorText>}
   </Field.Root>
 )
@@ -204,35 +222,92 @@ export const SwitchField = ({ label, info, checked, onChange }: SwitchFieldProps
 )
 
 // Datumok kivalasztasa
-export const DateField = ({ label, minimum, maximum }: DateFieldProps) => (
-  <DatePicker.Root selectionMode="range" locale="hu-HU">
+export const DateField = ({ label, minimum, maximum, startDate, endDate, onChange, invalid, errorText }: DateFieldProps) => (
+  <DatePicker.Root 
+    selectionMode="range" 
+    locale="hu-HU" 
+    invalid={invalid} 
+    colorPalette="purple"
+    min={parseDate(minimum)} 
+    max={parseDate(maximum)}
+    value={[startDate, endDate].filter(Boolean).map((date) => parseDate(date))}
+    onValueChange={(values) => {
+      const [start, end] = values.value
+      const StartDate = start ? start.toString() : ''
+      const EndDate = end ? end.toString() : ''
+      onChange({ startDate: StartDate, endDate: EndDate })
+    }}
+  >
     <DatePicker.Label>{ label }</DatePicker.Label>
-    <DatePicker.Control>
+    <DatePicker.Control gap={2}>
       <DatePicker.Input index={0} />
       <DatePicker.Input index={1} />
       <DatePicker.IndicatorGroup>
         <DatePicker.Trigger>
-          <LuCalendar />
+          <IconButton variant="ghost" size="sm">
+            <LuCalendar />
+          </IconButton>
         </DatePicker.Trigger>
       </DatePicker.IndicatorGroup>
     </DatePicker.Control>
     <Portal>
       <DatePicker.Positioner>
-        <DatePicker.Content>
+        <DatePicker.Content
+          bg="bg.panel" 
+          borderWidth="1px"
+          borderColor="border"
+          borderRadius="lg"
+          boxShadow="lg"
+          p={3}
+        >
           <DatePicker.View view="day">
             <DatePicker.Header />
-            <DatePicker.DayTable />
+            <DatePicker.DayTable
+              css={{
+                '& [data-range-start]': {
+                  bg: 'purple.solid',
+                  color: 'white',
+                },
+                '& [data-range-end]': {
+                  bg: 'purple.solid',
+                  color: 'white',
+                },
+              }}
+            />
           </DatePicker.View>
           <DatePicker.View view="month">
             <DatePicker.Header />
-            <DatePicker.MonthTable />
+            <DatePicker.MonthTable
+              css={{
+                '& [data-range-start]': {
+                  bg: 'purple.solid',
+                  color: 'white',
+                },
+                '& [data-range-end]': {
+                  bg: 'purple.solid',
+                  color: 'white',
+                },
+              }}
+            />
           </DatePicker.View>
           <DatePicker.View view="year">
             <DatePicker.Header />
-            <DatePicker.YearTable />
+            <DatePicker.YearTable
+              css={{
+                '& [data-range-start]': {
+                  bg: 'purple.solid',
+                  color: 'white',
+                },
+                '& [data-range-end]': {
+                  bg: 'purple.solid',
+                  color: 'white',
+                },
+              }}
+            />
           </DatePicker.View>
         </DatePicker.Content>
       </DatePicker.Positioner>
     </Portal>
+    {invalid && errorText && <Field.ErrorText>{errorText}</Field.ErrorText>}
   </DatePicker.Root>
 )

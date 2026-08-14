@@ -9,7 +9,6 @@ import { MAX_USAGE_PERIODS } from '../../../hooks/useConsumptionProfileForm'
 
 interface HouseholdItemCardProps {
   item: HouseholdItem
-  nameInvalid: boolean
   onUpdate: (patch: Partial<Omit<HouseholdItem, 'id' | 'usagePeriods'>>) => void
   onRemove: () => void
   onAddUsagePeriod: () => void
@@ -19,7 +18,6 @@ interface HouseholdItemCardProps {
 
 export const HouseholdItemCard = ({
   item,
-  nameInvalid,
   onUpdate,
   onRemove,
   onAddUsagePeriod,
@@ -36,8 +34,8 @@ export const HouseholdItemCard = ({
           value={item.name}
           onChange={(v) => onUpdate({ name: v })}
           placeholder="pl. Hűtőszekrény"
-          invalid={nameInvalid}
-          errorText="Ez a név már foglalt!"
+          invalid={item.name === ''}
+          errorText="Adj nevet ennek a fogyasztónak!"
         />
         <CounterField
           label="Darabszám"
@@ -55,6 +53,8 @@ export const HouseholdItemCard = ({
           min={0}
           step={25}
           helperText="watt (W)"
+          invalid={item.consumptionW === 0}
+          errorText="Ezen elemtípus fogyasztása csak pozitív szám lehet!"
         />
       </SimpleGrid>
 

@@ -17,8 +17,8 @@ export const timeToMinutes = (time: string): number => {
 }
 
 // Datumok ellenorzese
-export const isUsagePeriodDateRangeValid = (period: ConsumptionUsagePeriod): boolean => {
-  return period.wholeYear || (period.startDate <= period.endDate)
+export const isUsagePeriodDateRangeFilled = (period: ConsumptionUsagePeriod): boolean => {
+  return period.wholeYear || (period.startDate !== '' && period.endDate !== '')
 }
 
 // Idotartamok ellenorzese
@@ -38,8 +38,8 @@ export const getHouseholdItemError = (item: HouseholdItem): string | null => {
     return `A(z) "${item.name}" elemhez nem tartozik felhasználási idő!`
   }
   for (const period of item.usagePeriods) {
-    if (!isUsagePeriodDateRangeValid(period)) {
-      return `A(z) "${item.name}" elem egyik felhasználási időtartama esetén a kezdési dátum későbbre van állítva, mint a befejezési dátum!`
+    if (!isUsagePeriodDateRangeFilled(period)) {
+      return `A(z) "${item.name}" elem egyik felhasználási időtartama esetén a kezdési dátum vagy a befejezési dátum üresen lett hagyva!`
     }
     if (!isUsagePeriodTimeRangeValid(period)) {
       return `A(z) "${item.name}" elem egyik felhasználási időtartama esetén a kezdési időnek legalább 15 perccel korábbinak kell lennie, mint a befejezési időnek!`

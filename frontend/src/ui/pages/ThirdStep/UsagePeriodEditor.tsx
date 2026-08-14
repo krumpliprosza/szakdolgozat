@@ -2,7 +2,7 @@ import { Box, Field, HStack, IconButton, Input, SimpleGrid, Text } from '@chakra
 import { LuTrash2 } from 'react-icons/lu'
 import { SwitchField, DateField } from '../../../components/FormFields'
 import { getAllowedUsageDateRange } from '../../../components/DateRange'
-import { isUsagePeriodDateRangeValid, isUsagePeriodTimeRangeValid } from '../../../hooks/useConsumptionProfileForm'
+import { isUsagePeriodDateRangeFilled, isUsagePeriodTimeRangeValid } from '../../../hooks/useConsumptionProfileForm'
 import type { ConsumptionUsagePeriod } from '../../../steps/WizardDataContext'
 
 // Leiras: Egy fogyasztasi tetelhez tartozo egy hasznalati idotartam szerkesztese.
@@ -35,13 +35,24 @@ export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEdi
             onChange={(checked) => onChange({ wholeYear: checked })}
           />
           {!period.wholeYear && (
-            <DateField label="Dátum kiválasztása" minimum={minDate} maximum={maxDate}></DateField>
+            <HStack mt={2} gap={2} align="flex-start">
+              <DateField 
+                label="Dátum kiválasztása" 
+                minimum={minDate} 
+                maximum={maxDate} 
+                startDate={period.startDate} 
+                endDate={period.endDate}
+                onChange={({startDate, endDate}) => onChange({startDate, endDate})}
+              ></DateField>
+            </HStack>
           )}
-          {(!isUsagePeriodDateRangeValid(period) && !period.wholeYear) && (
+          {(!isUsagePeriodDateRangeFilled(period)) && (
             <Field.Root invalid mt={1}>
-              <Field.ErrorText>Ennél a felhasználási időtartamnál a kezdési dátum későbbre van állítva, mint a befejezési dátum!</Field.ErrorText>
+              <Field.ErrorText>Ennél a felhasználási időtartamnál a kezdési dátum vagy a befejezési dátum üresen lett hagyva!</Field.ErrorText>
             </Field.Root>
           )}
+        </Box>
+        <Box>
           <SwitchField
             label="Egész nap"
             info="Ha be van kapcsolva, a fogyasztó a nap minden percében üzemel."
@@ -68,7 +79,7 @@ export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEdi
               </Field.Root>
             </HStack>
           )}
-          {(!isUsagePeriodTimeRangeValid(period) && !period.wholeDay) && (
+          {(!isUsagePeriodTimeRangeValid(period)) && (
             <Field.Root invalid mt={1}>
               <Field.ErrorText>Ennél a felhasználási időtartamnál a kezdési időnek legalább 15 perccel korábbinak kell lennie, mint a befejezési időnek!</Field.ErrorText>
             </Field.Root>

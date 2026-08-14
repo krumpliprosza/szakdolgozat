@@ -6,13 +6,8 @@ import { AnimatedPage } from '../../components/AnimatedPage'
 
 // Leiras: A kezdolap: cim, leiras, gomb az elso lepesre navigalashoz.
 
-let preloaded = false
-
 // A varazslo kesobbi lepeseiben szukseges kepeket tolti be a hatterben
 const preloadWizardImages = () => {
-  if (preloaded) {
-    return
-  }
   const fileNames = [
     '/secondstep_1_dark.svg',
     '/secondstep_1_light.svg',
@@ -27,7 +22,6 @@ const preloadWizardImages = () => {
     const img = new Image()
     img.src = fileName
   })
-  preloaded = true
 }
 
 export const WelcomePage = () => {

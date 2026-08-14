@@ -38,13 +38,13 @@ export const FirstStep = () => {
           value={draftLat}
           onCommit={commitLat}
           placeholder="pl. 47.1625"
-          unitLabel="(szélesség)"
+          unitLabel="szélesség (±90°)"
         />
         <CoordinateEditable
           value={draftLon}
           onCommit={commitLon}
           placeholder="pl. 19.5033"
-          unitLabel="(hosszúság)"
+          unitLabel="hosszúság (±180°)"
         />
       </VStack>
     </AnimatedPage>
