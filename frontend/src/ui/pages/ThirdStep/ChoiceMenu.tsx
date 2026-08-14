@@ -17,7 +17,7 @@ export const ChoiceMenu = ({
 }: ChoiceMenuProps) => (
   <>
     <Heading mb={4}>Harmadik lépés</Heading>
-    <Text mb={4}>Állítsd össze háztartásod fogyasztási profilját!</Text>
+    <Text mb={4} color="fg.muted">Állítsd össze háztartásod fogyasztási profilját!</Text>
 
     <Center>
       <Stack direction={{ base: "column", md: "row" }} gap="10" align="stretch" w="full" maxW="1800px">

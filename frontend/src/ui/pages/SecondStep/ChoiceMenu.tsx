@@ -13,7 +13,8 @@ interface ChoiceMenuProps {
 export const ChoiceMenu = ({ onSelectPredefined, onSelectCustom, selectedMode }: ChoiceMenuProps) => (
   <>
     <Heading mb={4}>Második lépés</Heading>
-    <Text mb={4}>Állítsd be a kívánt napelemrendszer paramétereit!</Text>
+    <Text mb={4} color="fg.muted">Állítsd be a kívánt napelemrendszer paramétereit!</Text>
+    
     <Center>
       <Stack direction={{ base: "column", md: "row" }} gap="10" align="stretch" w="full" maxW="1800px">
 

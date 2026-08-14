@@ -36,11 +36,11 @@ export const WelcomePage = () => {
   return (
     <Center h="100vh">
       <AnimatedPage textAlign="center">
-        <Heading size="4xl" mb={4}>Napelemrendszer szimulátor</Heading>
-        <Text fontSize="lg" color="fg.muted" mb={8}>
+        <Heading size="4xl" m={2} mb={2}>Napelemrendszer szimulátor</Heading>
+        <Text fontSize="lg" color="fg.muted" m={2} mb={6}>
           Kattints a következő gombra, hogy a szimuláció paramétereit megadhasd!
         </Text>
-        <Button colorPalette="purple" variant="outline" size="lg" onClick={() => navigate("/first-step")}>
+        <Button colorPalette="purple" variant="outline" size="lg" onClick={() => navigate("/first-step")} m={2}>
           Új szimuláció készítése
         </Button>
       </AnimatedPage>

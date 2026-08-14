@@ -19,18 +19,17 @@ export const CustomProfileMenu = ({ onBack, form }: CustomProfileMenuProps) => {
     addUsagePeriod,
     updateUsagePeriod,
     removeUsagePeriod,
-    isNameTaken,
   } = form
 
   return (
     <>
       <Button variant="outline" mb={4} onClick={onBack}>Vissza</Button>
-      <Heading mb={2}>Saját fogyasztási profil összeállítása</Heading>
-      <Text mb={6} color="fg.muted">
+      <Heading mb={4}>Saját fogyasztási profil összeállítása</Heading>
+      <Text mb={4} color="fg.muted">
         Add hozzá háztartásod fogyasztóit típusonként!
       </Text>
 
-      <Button variant="outline" mb={6} onClick={addItem} alignSelf="flex-start">
+      <Button variant="outline" mb={4} onClick={addItem} alignSelf="flex-start">
         <LuPlus /> Új fogyasztó hozzáadása
       </Button>
 
@@ -42,7 +41,6 @@ export const CustomProfileMenu = ({ onBack, form }: CustomProfileMenuProps) => {
             <HouseholdItemCard
               key={item.id}
               item={item}
-              nameInvalid={isNameTaken(item.id, item.name)}
               onUpdate={(patch) => updateItem(item.id, patch)}
               onRemove={() => removeItem(item.id)}
               onAddUsagePeriod={() => addUsagePeriod(item.id)}

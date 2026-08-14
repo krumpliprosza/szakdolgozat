@@ -31,7 +31,7 @@ export const PredefinedSystemMenu = ({ onBack, onSelect, selectedId, form }: Pre
     <>
       <Button variant="outline" mb={4} onClick={onBack}>Vissza</Button>
       <Heading mb={4}>Előre meghatározott rendszer kiválasztása</Heading>
-      <Text mb={4}>
+      <Text mb={4} color="fg.muted">
         Válassz a meglévő napelemrendszerek közül! A kiválasztott rendszer paraméterei automatikusan
         kitöltésre kerülnek, ezeket a "Saját rendszer paraméterezése" nézetben bármikor módosíthatod.
       </Text>

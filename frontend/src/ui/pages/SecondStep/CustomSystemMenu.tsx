@@ -47,8 +47,8 @@ export const CustomSystemMenu = ({ onBack, onChange, currentMode, form }: Custom
   return (
     <>
       <Button variant="outline" mb={4} onClick={onBack}>Vissza</Button>
-      <Heading mb={2}>Saját rendszer paraméterezése</Heading>
-      <Text mb={6} color="fg.muted">
+      <Heading mb={4}>Saját rendszer paraméterezése</Heading>
+      <Text mb={4} color="fg.muted">
         Add meg a napelemrendszer egyedi paramétereit! Ha egy értékben nem vagy biztos, az adott mező melletti ⓘ ikon elmagyarázza a jelentését, valamint az alapértelmezett érték jó kiindulópontnak számíthat.
       </Text>
 

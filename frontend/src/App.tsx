@@ -10,6 +10,8 @@ import { SetupComplete } from './ui/pages/SetupComplete'
 
   - Hibakezeles (404 not found stb.)
   - NREL SAM adatbazisbol modulok es inverterek betoltese?
+  - Sajat fogyasztasi profil osszeallitasa oldal fogyaszto hozzaadasa nelkul is kivalasztottnak tekintett
+  - Nincsenek elmentve a koordinatak
 
 */
 

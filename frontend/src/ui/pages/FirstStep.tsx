@@ -23,7 +23,7 @@ export const FirstStep = () => {
   return (
     <AnimatedPage>
       <Heading mb={4}>Első lépés</Heading>
-      <Text mb={4}>Válaszd ki a térképen, hogy hol szeretnél napelemrendszert telepíteni!</Text>
+      <Text mb={4} color="fg.muted">Válaszd ki a térképen, hogy hol szeretnél napelemrendszert telepíteni!</Text>
 
       <Box position="relative" isolation="isolate" zIndex={0}>
         <LocationPicker onChange={setLocation} selected={location} /> {/* Terkep helye */}

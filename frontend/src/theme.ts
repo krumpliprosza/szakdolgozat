@@ -8,10 +8,10 @@ const config = defineConfig({
             colors: {
                 bg: {
                     DEFAULT: {
-                        value: { _light: "#F1F9E9", _dark: "#0E0616" },
+                        value: { _light: "#E9FFE9", _dark: "#0E0616" },
                     },
                     panel: {
-                        value: { _light: "#F1F9E9", _dark: "#0E0616" },
+                        value: { _light: "#E9FFE9", _dark: "#0E0616" },
                     },
                 },
                 purple: {

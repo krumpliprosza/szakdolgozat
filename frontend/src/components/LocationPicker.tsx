@@ -151,7 +151,7 @@ export const LocationPicker = ({
 
       </Box>
 
-      <Text fontSize="sm" color="gray.500" mt={1}>
+      <Text fontSize="sm" color="fg.muted" mt={1}>
         Kattints bárhova a térképen a pont kiválasztásához.
       </Text>
 

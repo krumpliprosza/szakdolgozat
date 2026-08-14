@@ -49,9 +49,11 @@ export const OptionCard = ({
     )}
     <Card.Body gap="2">
       <Card.Title>
-        {title} {selected && <Badge ml={2} colorPalette="purple">Kiválasztva</Badge>}
+        {title}<br></br>{selected && <Badge colorPalette="purple">Kiválasztva</Badge>}
       </Card.Title>
-      <Card.Description>{description}</Card.Description>
+      <Card.Description color="fg.muted">
+        {description}
+      </Card.Description>
     </Card.Body>
     <Card.Footer>
       <Button

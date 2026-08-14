@@ -10,7 +10,7 @@ export const PredefinedProfileMenu = ({ onBack }: PredefinedProfileMenuProps) =>
   <>
     <Button variant="outline" mb={4} onClick={onBack}>Vissza</Button>
     <Heading mb={4}>Előre meghatározott fogyasztási profil kiválasztása</Heading>
-    <Text mb={4}>
+    <Text mb={4} color="fg.muted">
       Válassz a meglévő fogyasztási profilok közül!
       {/* TODO: az elore beallitott fogyasztasi profilok listajanak megjelenitese */}
     </Text>
