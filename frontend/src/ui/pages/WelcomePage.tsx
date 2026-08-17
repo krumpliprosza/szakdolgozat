@@ -36,7 +36,7 @@ export const WelcomePage = () => {
   return (
     <Center h="100vh">
       <AnimatedPage textAlign="center">
-        <Heading size="4xl" m={2} mb={2}>Napelemrendszer szimulátor</Heading>
+        <Heading size="5xl" m={2} mb={2}>Napelemrendszer szimulátor</Heading>
         <Text fontSize="lg" color="fg.muted" m={2} mb={6}>
           Kattints a következő gombra, hogy a szimuláció paramétereit megadhasd!
         </Text>

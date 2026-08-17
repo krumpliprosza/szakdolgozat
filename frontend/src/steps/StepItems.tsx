@@ -7,7 +7,7 @@ import {
   LuHousePlug,
 } from "react-icons/lu"
 import { getHouseholdItemsError } from "../hooks/useConsumptionProfileForm"
-import { getSystemParamsError } from "../hooks/useSystemParamsForm"
+import { getSystemParametersError } from "../hooks/useSystemParametersForm"
 import type { WizardData } from './WizardDataContext'
 
 // Leiras: A lepesek statikus adatai (ikonok, cimek), a gombfeliratokat visszaado fuggvenyek es az adatok ellenorzesenek leirasa.
@@ -31,11 +31,11 @@ export const items = [
     title: "Napelemrendszer paraméterezése",
     // Parameterek ellenorzese
     getErrorMessage: (data: WizardData): string | null => {
-      if (data.systemParamsMode === null) {
+      if (data.systemParametersMode === null) {
         return "Válassz egy előre meghatározott rendszert, vagy végezd el a sajátod paraméterezését!"
       }
-      if (data.systemParamsMode === 'custom' && data.systemParams) {
-        return getSystemParamsError(data.systemParams)
+      if (data.systemParametersMode === 'custom' && data.systemParameters) {
+        return getSystemParametersError(data.systemParameters)
       }
       return null
     },

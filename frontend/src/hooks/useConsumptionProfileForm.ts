@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { HouseholdItem, ConsumptionUsagePeriod } from '../steps/WizardDataContext'
+import type { HouseholdItem, UsagePeriod } from '../steps/WizardDataContext'
 import { getAllowedUsageDateRange } from '../components/DateRange'
 
 // Leiras: a Sajat fogyasztasi profil osszeallitasa urlapot kezeli.
@@ -17,12 +17,12 @@ export const timeToMinutes = (time: string): number => {
 }
 
 // Datumok ellenorzese
-export const isUsagePeriodDateRangeFilled = (period: ConsumptionUsagePeriod): boolean => {
+export const isUsagePeriodDateRangeFilled = (period: UsagePeriod): boolean => {
   return period.wholeYear || (period.startDate !== '' && period.endDate !== '')
 }
 
 // Idotartamok ellenorzese
-export const isUsagePeriodTimeRangeValid = (period: ConsumptionUsagePeriod): boolean => {
+export const isUsagePeriodTimeRangeValid = (period: UsagePeriod): boolean => {
   return period.wholeDay || (timeToMinutes(period.endTime) - MIN_USAGE_TIME_GAP_IN_MINUTES >= timeToMinutes(period.startTime))
 }
 
@@ -31,7 +31,7 @@ export const getHouseholdItemError = (item: HouseholdItem): string | null => {
   if (item.name.trim() === '') {
     return `Adj nevet minden fogyasztónak!`
   }
-  if (item.consumptionW === 0) {
+  if (item.consumption === 0) {
     return `A(z) "${item.name}" elem fogyasztása csak pozitív szám lehet!`
   }
   if (item.usagePeriods.length === 0) {
@@ -70,7 +70,7 @@ export const getHouseholdItemsError = (items: HouseholdItem[] | null): string | 
 const makeId = () => Math.random().toString(36).slice(2, 10)
 
 // Uj hasznalati idotartam alapertelmezett ertekekkel
-const createEmptyPeriod = (): ConsumptionUsagePeriod => {
+const createEmptyPeriod = (): UsagePeriod => {
   const { minDate, maxDate } = getAllowedUsageDateRange()
   return {
     id: makeId(),
@@ -97,7 +97,7 @@ const createEmptyItem = (existing: HouseholdItem[]): HouseholdItem => ({
   id: makeId(),
   name: makeUniqueName(existing, 'Új eszköz'),
   count: 1,
-  consumptionW: 0,
+  consumption: 0,
   usagePeriods: [createEmptyPeriod()],
 })
 
@@ -127,7 +127,7 @@ export function useConsumptionProfileForm(initial?: HouseholdItem[] | null) {
   }
 
   // Hasznalati idotartam frissitese
-  const updateUsagePeriod = (itemId: string, periodId: string, patch: Partial<ConsumptionUsagePeriod>) => {
+  const updateUsagePeriod = (itemId: string, periodId: string, patch: Partial<UsagePeriod>) => {
     setItems((prev) =>
       prev.map((item) =>
         item.id === itemId

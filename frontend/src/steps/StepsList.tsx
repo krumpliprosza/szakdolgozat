@@ -8,8 +8,8 @@ export const StepsList = () => {
     <Steps.List>
       {items.map((step, index) => (
         <Steps.Item key={index} index={index} title={step.title}>
-          <Steps.Indicator>
-            <Steps.Status incomplete={step.icon} complete={step.iconcomplete} />
+          <Steps.Indicator color="purple.fg" _complete={{ color: "#E9FFE9" }}>
+            <Steps.Status incomplete={step.icon} complete={step.iconcomplete}/>
           </Steps.Indicator>
           <Steps.Title display={{ base: "none", lg: "block" }} fontSize={{ base: "md", xl: "lg" }}>
             {step.title}

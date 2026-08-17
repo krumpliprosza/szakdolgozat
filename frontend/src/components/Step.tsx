@@ -47,7 +47,7 @@ const StepInner = () => {
       // Hibasan kitoltott lepes eseten hibauzenetet dob
       onStepInvalid={(details) => {
         const message = items[details.step]?.getErrorMessage(data)
-        setError(message ?? `A(z) ${details.step + 1}. lépés nincs kitöltve.`)
+        setError(message ?? `Ismeretlen hiba a(z) ${details.step + 1}. lépésnél!`)
       }}
     >
       <ErrorAutoClear error={error} setError={setError} data={data} />
@@ -57,7 +57,7 @@ const StepInner = () => {
         <StepRouteSync />
         <Outlet />
         {error && (
-          <Box color="red.fg" textStyle="sm" mt={3}>
+          <Box fontSize="sm" fontWeight={"bold"} color="red.muted" mt={3}>
             {error}
           </Box>
         )}

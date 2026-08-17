@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Tooltip } from "./Tooltip"
+import { useColorModeValue } from './color-mode'
 import { Box, Button, HStack, Text, useBreakpointValue } from '@chakra-ui/react'
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet'
 import L from 'leaflet'
@@ -67,6 +68,7 @@ export const LocationPicker = ({
     }
   }, [selected])
 
+  const markerColor = useColorModeValue('#641BA3', '#9333EA')
   // Lila jelolo ikon
   const purpleIcon = L.divIcon({
     className: 'custom-marker',
@@ -74,8 +76,8 @@ export const LocationPicker = ({
       <svg width="30" height="42" viewBox="0 0 30 42" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M15 0C6.7 0 0 6.7 0 15c0 11.25 15 27 15 27s15-15.75 15-27c0-8.3-6.7-15-15-15z"
-          fill="#805AD5"
-          stroke="#553C9A"
+          fill=${markerColor}
+          stroke="#000000"
           stroke-width="0"
         />
         <circle cx="15" cy="15" r="6" fill="white" />
@@ -164,7 +166,7 @@ export const LocationPicker = ({
       </HStack>
       
       {error && ( 
-        <Text fontSize="sm" color="red.500" mb={2}> { /* Hibakezeles */ }
+        <Text fontSize="sm" fontWeight={"bold"} color="red.muted" mb={2}> { /* Hibakezeles */ }
           {error}
         </Text>
       )}

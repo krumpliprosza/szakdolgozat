@@ -28,6 +28,11 @@ const config = defineConfig({
                         value: { _light: "{colors.purple.200}", _dark: "{colors.purple.900}" },
                     },
                 },
+                red: {
+                    muted: {
+                        value: { _light: "{colors.red.600}", _dark: "{colors.red.400}" },
+                    },
+                },
                 border: {
                     value: { _light: "{colors.purple.700}", _dark: "{colors.purple.400}" },
                 },

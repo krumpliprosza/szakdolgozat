@@ -1,6 +1,7 @@
 import { Field, HStack, IconButton, Input, NumberInput, Portal, Select, Switch, Text, createListCollection, DatePicker, parseDate } from '@chakra-ui/react'
 import { LuInfo, LuMinus, LuPlus, LuCalendar } from 'react-icons/lu'
 import { Tooltip } from './Tooltip'
+import { useColorModeValue } from './color-mode'
 
 // Leiras: ujrafelhasznalhato urlap mezok.
 
@@ -69,13 +70,17 @@ interface DateFieldProps {
   errorText?: string
 }
 
-const InfoIcon = ({ info }: { info: string }) => (
-  <Tooltip content={info} showArrow contentProps={{ maxW: '260px', css: { "--tooltip-bg": "#9333EA", "color": "#FFFFFF", "justify-content": "center" } }} interactive>
-    <Text as="span" display="inline-flex" alignItems="center" color="fg.muted" cursor="help">
-      <LuInfo size={14} />
-    </Text>
-  </Tooltip>
-)
+// (i) ikon es a hozzatartozo leiras
+const InfoIcon = ({ info }: { info: string }) => {
+  const tooltipBg = useColorModeValue('#641BA3', '#9333EA')
+  return (
+    <Tooltip content={info} showArrow contentProps={{ maxW: '260px', css: { "--tooltip-bg": tooltipBg, "color": "#FFFFFF", "justify-content": "center" } }} interactive>
+      <Text as="span" display="inline-flex" alignItems="center" color="purple.fg" cursor="help">
+        <LuInfo size={14} />
+      </Text>
+    </Tooltip>
+  )
+}
 
 // Tooltip hozzaadasa
 const FieldLabelWithInfo = ({ label, info }: { label: string; info: string }) => (
@@ -90,6 +95,7 @@ export const NumField = ({ label, info, value, onChange, min, max, step = 1, hel
   <Field.Root invalid={invalid}>
     <FieldLabelWithInfo label={label} info={info} />
     <NumberInput.Root
+      colorPalette="purple"
       value={value === null ? '' : String(value)}
       onValueChange={(details) => {
         if (details.value === '') {
@@ -103,11 +109,14 @@ export const NumField = ({ label, info, value, onChange, min, max, step = 1, hel
       step={step}
       w="full"
     >
-      <NumberInput.Control />
+      <NumberInput.Control>
+        <NumberInput.IncrementTrigger color="purple.fg" _hover={{ bg: 'purple.subtle' }} />
+        <NumberInput.DecrementTrigger color="purple.fg" _hover={{ bg: 'purple.subtle' }} />
+      </NumberInput.Control>
       <NumberInput.Input placeholder={placeholder} />
     </NumberInput.Root>
     {helperText && <Field.HelperText>{helperText}</Field.HelperText>}
-    {invalid && errorText && <Field.ErrorText>{errorText}</Field.ErrorText>}
+    {invalid && errorText && <Field.ErrorText fontSize="sm" fontWeight={"bold"} color="red.muted">{errorText}</Field.ErrorText>}
   </Field.Root>
 )
 
@@ -127,13 +136,13 @@ export const CounterField = ({ label, info, value, onChange, min = 0, max, step 
     >
       <HStack gap={2}>
         <NumberInput.DecrementTrigger asChild>
-          <IconButton variant="outline" size="sm" aria-label="Csökkentés">
+          <IconButton variant="outline" size="sm" color="purple.fg" aria-label="Csökkentés" _hover={{ bg: 'purple.subtle' }}>
             <LuMinus />
           </IconButton>
         </NumberInput.DecrementTrigger>
         <NumberInput.Input textAlign="center" />
         <NumberInput.IncrementTrigger asChild>
-          <IconButton variant="outline" size="sm" aria-label="Növelés">
+          <IconButton variant="outline" size="sm" color="purple.fg" aria-label="Növelés" _hover={{ bg: 'purple.subtle' }}>
             <LuPlus />
           </IconButton>
         </NumberInput.IncrementTrigger>
@@ -155,12 +164,13 @@ export const SelectField = ({ label, info, value, onChange, options }: SelectFie
           if (details.value[0]) onChange(details.value[0])
         }}
       >
+        <Select.HiddenSelect />
         <Select.Control>
           <Select.Trigger>
             <Select.ValueText />
           </Select.Trigger>
           <Select.IndicatorGroup>
-            <Select.Indicator />
+            <Select.Indicator color="purple.fg" />
           </Select.IndicatorGroup>
         </Select.Control>
         <Portal>
@@ -175,10 +185,10 @@ export const SelectField = ({ label, info, value, onChange, options }: SelectFie
                 borderWidth: "1px",
                 p: 1,
               }}>
-              {options.map((opt) => (
-                <Select.Item item={opt} key={opt.value}>
-                  {opt.label}
-                  <Select.ItemIndicator />
+              {options.map((option) => (
+                <Select.Item item={option} key={option.value} _hover={{ bg: 'purple.subtle' }} _selected={{ bg: 'bg.panel' }}>
+                  {option.label}
+                  <Select.ItemIndicator color="purple.fg" />
                 </Select.Item>
               ))}
             </Select.Content>
@@ -198,7 +208,7 @@ export const TextField = ({ label, info, value, onChange, placeholder, invalid, 
       onChange={(e) => onChange(e.target.value)} 
       placeholder={placeholder}
     />
-    {invalid && errorText && <Field.ErrorText>{errorText}</Field.ErrorText>}
+    {invalid && errorText && <Field.ErrorText fontSize="sm" fontWeight={"bold"} color="red.muted">{errorText}</Field.ErrorText>}
   </Field.Root>
 )
 
@@ -212,7 +222,7 @@ export const SwitchField = ({ label, info, checked, onChange }: SwitchFieldProps
         colorPalette="purple"
       >
         <Switch.HiddenInput />
-        <Switch.Control>
+        <Switch.Control bg="fg.muted" _checked={{ bg: 'purple.solid' }}>
           <Switch.Thumb />
         </Switch.Control>
       </Switch.Root>
@@ -308,6 +318,6 @@ export const DateField = ({ label, minimum, maximum, startDate, endDate, onChang
         </DatePicker.Content>
       </DatePicker.Positioner>
     </Portal>
-    {invalid && errorText && <Field.ErrorText>{errorText}</Field.ErrorText>}
+    {invalid && errorText && <Field.ErrorText fontSize="sm" fontWeight={"bold"} color="red.muted">{errorText}</Field.ErrorText>}
   </DatePicker.Root>
 )

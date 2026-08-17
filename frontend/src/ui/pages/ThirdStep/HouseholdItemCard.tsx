@@ -2,7 +2,7 @@ import { Button, Card, HStack, SimpleGrid, Text, VStack } from '@chakra-ui/react
 import { LuPlus, LuTrash2 } from 'react-icons/lu'
 import { CounterField, NumField, TextField } from '../../../components/FormFields'
 import { UsagePeriodEditor } from './UsagePeriodEditor'
-import type { HouseholdItem, ConsumptionUsagePeriod } from '../../../steps/WizardDataContext'
+import type { HouseholdItem, UsagePeriod } from '../../../steps/WizardDataContext'
 import { MAX_USAGE_PERIODS } from '../../../hooks/useConsumptionProfileForm'
 
 // Leiras: Egy fogyasztasi tetel kartyaja.
@@ -12,7 +12,7 @@ interface HouseholdItemCardProps {
   onUpdate: (patch: Partial<Omit<HouseholdItem, 'id' | 'usagePeriods'>>) => void
   onRemove: () => void
   onAddUsagePeriod: () => void
-  onUpdateUsagePeriod: (periodId: string, patch: Partial<ConsumptionUsagePeriod>) => void
+  onUpdateUsagePeriod: (periodId: string, patch: Partial<UsagePeriod>) => void
   onRemoveUsagePeriod: (periodId: string) => void
 }
 
@@ -32,7 +32,7 @@ export const HouseholdItemCard = ({
           label="Név"
           info="A fogyasztó elnevezése."
           value={item.name}
-          onChange={(v) => onUpdate({ name: v })}
+          onChange={(value) => onUpdate({ name: value })}
           placeholder="pl. Hűtőszekrény"
           invalid={item.name === ''}
           errorText="Adj nevet ennek a fogyasztónak!"
@@ -41,19 +41,19 @@ export const HouseholdItemCard = ({
           label="Darabszám"
           info="Az eszközök száma a háztartásban."
           value={item.count}
-          onChange={(v) => onUpdate({ count: v })}
+          onChange={(value) => onUpdate({ count: value })}
           min={1}
           max={50}
         />
         <NumField
           label="Fogyasztás"
           info="Egy darab eszköz üzemi teljesítményfelvétele."
-          value={item.consumptionW}
-          onChange={(v) => v !== null && onUpdate({ consumptionW: v })}
+          value={item.consumption}
+          onChange={(value) => value !== null && onUpdate({ consumption: value })}
           min={0}
           step={25}
           helperText="watt (W)"
-          invalid={item.consumptionW === 0}
+          invalid={item.consumption === 0}
           errorText="Ezen elemtípus fogyasztása csak pozitív szám lehet!"
         />
       </SimpleGrid>

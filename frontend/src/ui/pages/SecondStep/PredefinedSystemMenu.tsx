@@ -1,7 +1,7 @@
 import { Button, Heading, Text, Center, Stack } from '@chakra-ui/react'
 import { OptionCard } from '../../../components/OptionCard'
 import { predefinedSystems, type PredefinedSystem } from './PredefinedSystems'
-import type { useSystemParamsForm } from '../../../hooks/useSystemParamsForm'
+import type { useSystemParametersForm } from '../../../hooks/useSystemParametersForm'
 
 // Leiras: Elore meghatarozott rendszer valasztasahoz tartozo menu.
 
@@ -9,7 +9,7 @@ interface PredefinedSystemMenuProps {
   onBack: () => void
   onSelect: (id: string) => void
   selectedId: string | null
-  form: ReturnType<typeof useSystemParamsForm>
+  form: ReturnType<typeof useSystemParametersForm>
 }
 
 export const PredefinedSystemMenu = ({ onBack, onSelect, selectedId, form }: PredefinedSystemMenuProps) => {
@@ -17,12 +17,12 @@ export const PredefinedSystemMenu = ({ onBack, onSelect, selectedId, form }: Pre
 
   // Az elore meghatarozott rendszer kivalasztasa eseten az osszes parametert bemasolja a varazslo adataihoz
   const selectSystem = (system: PredefinedSystem) => {
-    patchOrientation(system.params.orientation)
-    patchModule(system.params.module)
-    patchInverter(system.params.inverter)
-    patchLosses(system.params.losses)
-    patchAlbedo(system.params.albedo)
-    patchBattery(system.params.battery)
+    patchOrientation(system.parameters.orientation)
+    patchModule(system.parameters.module)
+    patchInverter(system.parameters.inverter)
+    patchLosses(system.parameters.losses)
+    patchAlbedo(system.parameters.albedo)
+    patchBattery(system.parameters.battery)
     onSelect(system.id)
     onBack()
   }

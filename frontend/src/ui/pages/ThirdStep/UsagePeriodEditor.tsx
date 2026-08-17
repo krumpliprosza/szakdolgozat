@@ -3,13 +3,13 @@ import { LuTrash2 } from 'react-icons/lu'
 import { SwitchField, DateField } from '../../../components/FormFields'
 import { getAllowedUsageDateRange } from '../../../components/DateRange'
 import { isUsagePeriodDateRangeFilled, isUsagePeriodTimeRangeValid } from '../../../hooks/useConsumptionProfileForm'
-import type { ConsumptionUsagePeriod } from '../../../steps/WizardDataContext'
+import type { UsagePeriod } from '../../../steps/WizardDataContext'
 
 // Leiras: Egy fogyasztasi tetelhez tartozo egy hasznalati idotartam szerkesztese.
 
 interface UsagePeriodEditorProps {
-  period: ConsumptionUsagePeriod
-  onChange: (patch: Partial<ConsumptionUsagePeriod>) => void
+  period: UsagePeriod
+  onChange: (patch: Partial<UsagePeriod>) => void
   onRemove: () => void
 }
 
@@ -47,8 +47,8 @@ export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEdi
             </HStack>
           )}
           {(!isUsagePeriodDateRangeFilled(period)) && (
-            <Field.Root invalid mt={1}>
-              <Field.ErrorText>Ennél a felhasználási időtartamnál a kezdési dátum vagy a befejezési dátum üresen lett hagyva!</Field.ErrorText>
+            <Field.Root invalid mt={2}>
+              <Field.ErrorText fontSize="sm" fontWeight={"bold"} color="red.muted">Ennél a felhasználási időtartamnál a kezdési dátum vagy a befejezési dátum üresen lett hagyva!</Field.ErrorText>
             </Field.Root>
           )}
         </Box>
@@ -67,6 +67,11 @@ export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEdi
                   type="time"
                   value={period.startTime}
                   onChange={(e) => e.target.value && onChange({ startTime: e.target.value })}
+                  css={{
+                    '&::-webkit-calendar-picker-indicator': {
+                      display: 'none',
+                    },
+                  }}
                 />
               </Field.Root>
               <Field.Root invalid={ !isUsagePeriodTimeRangeValid(period) }>
@@ -75,13 +80,18 @@ export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEdi
                   type="time"
                   value={period.endTime}
                   onChange={(e) => e.target.value && onChange({ endTime: e.target.value })}
+                  css={{
+                    '&::-webkit-calendar-picker-indicator': {
+                      display: 'none',
+                    },
+                  }}
                 />
               </Field.Root>
             </HStack>
           )}
           {(!isUsagePeriodTimeRangeValid(period)) && (
-            <Field.Root invalid mt={1}>
-              <Field.ErrorText>Ennél a felhasználási időtartamnál a kezdési időnek legalább 15 perccel korábbinak kell lennie, mint a befejezési időnek!</Field.ErrorText>
+            <Field.Root invalid mt={2}>
+              <Field.ErrorText fontSize="sm" fontWeight={"bold"} color="red.muted">Ennél a felhasználási időtartamnál a kezdési időnek legalább 15 perccel korábbinak kell lennie, mint a befejezési időnek!</Field.ErrorText>
             </Field.Root>
           )}
         </Box>

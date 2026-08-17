@@ -13,27 +13,27 @@ interface CoordinateEditableProps {
 export const CoordinateEditable = ({ value, onCommit, placeholder, unitLabel }: CoordinateEditableProps) => (
   <HStack>
     <Mark variant="subtle" colorPalette="purple">
-      <Editable.Root
+      <Editable.Root  
         key={value}
         defaultValue={value}
         onValueCommit={(details) => onCommit(details.value)}
         placeholder={placeholder}
       >
-        <Editable.Preview />
+        <Editable.Preview _hover={{ bg: 'purple.subtle' }} />
         <Editable.Input />
         <Editable.Control>
           <Editable.EditTrigger asChild>
-            <IconButton variant="outline" size="xs">
+            <IconButton variant="outline" size="xs" _hover={{ bg: 'purple.subtle' }}>
               <LuPencilLine />
             </IconButton>
           </Editable.EditTrigger>
           <Editable.CancelTrigger asChild>
-            <IconButton variant="outline" size="xs">
+            <IconButton variant="outline" size="xs" _hover={{ bg: 'purple.subtle' }}>
               <LuX />
             </IconButton>
           </Editable.CancelTrigger>
           <Editable.SubmitTrigger asChild>
-            <IconButton variant="outline" size="xs">
+            <IconButton variant="outline" size="xs" _hover={{ bg: 'purple.subtle' }}>
               <LuCheck />
             </IconButton>
           </Editable.SubmitTrigger>

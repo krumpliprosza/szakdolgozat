@@ -1,13 +1,13 @@
 import { Heading, Text, Center, Stack } from '@chakra-ui/react'
 import { OptionCard } from '../../../components/OptionCard'
-import type { SystemParamsMode } from '../../../steps/WizardDataContext'
+import type { SystemParametersMode } from '../../../steps/WizardDataContext'
 
 // Leiras: A masodik lepes elso nezete: kivalaszthato az elore meghatarozott rendszer vagy a sajat rendszer parameterezese.
 
 interface ChoiceMenuProps {
   onSelectPredefined: () => void
   onSelectCustom: () => void
-  selectedMode: SystemParamsMode
+  selectedMode: SystemParametersMode
 }
 
 export const ChoiceMenu = ({ onSelectPredefined, onSelectCustom, selectedMode }: ChoiceMenuProps) => (

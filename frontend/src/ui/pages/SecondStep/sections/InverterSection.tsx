@@ -1,20 +1,20 @@
 import { Accordion, Heading, SimpleGrid } from '@chakra-ui/react'
 import { NumField } from '../../../../components/FormFields'
-import { isInverterPowerValid } from '../../../../hooks/useSystemParamsForm'
-import type { SystemParams } from '../../../../steps/WizardDataContext'
+import { isInverterPowerValid } from '../../../../hooks/useSystemParametersForm'
+import type { SystemParameters } from '../../../../steps/WizardDataContext'
 
 // A Sajat rendszer parameterezese lapon az inverter parametereinek beallitasat teszi lehetove.
 
 interface InverterSectionProps {
-  params: SystemParams['inverter']
-  onPatch: (patch: Partial<SystemParams['inverter']>) => void
+  parameters: SystemParameters['inverter']
+  onPatch: (patch: Partial<SystemParameters['inverter']>) => void
 }
 
-export const InverterSection = ({ params, onPatch }: InverterSectionProps) => (
+export const InverterSection = ({ parameters, onPatch }: InverterSectionProps) => (
   <Accordion.Item value="inverter">
     <Accordion.ItemTrigger>
       <Heading size="md" flex="1" textAlign="left">Inverter</Heading>
-      <Accordion.ItemIndicator />
+      <Accordion.ItemIndicator color="purple.fg" />
     </Accordion.ItemTrigger>
     <Accordion.ItemContent>
       <Accordion.ItemBody>
@@ -22,18 +22,18 @@ export const InverterSection = ({ params, onPatch }: InverterSectionProps) => (
           <NumField
             label="Névleges AC teljesítmény"
             info="Az inverter névleges váltóáramú kimeneti teljesítménye."
-            value={params.pAcNomW}
-            onChange={(v) => v !== null && onPatch({ pAcNomW: v })}
+            value={parameters.pAc}
+            onChange={(value) => value !== null && onPatch({ pAc: value })}
             min={0} step={50}
             helperText="watt (W)"
-            invalid={ !isInverterPowerValid(params) }
+            invalid={ !isInverterPowerValid(parameters) }
             errorText='A névleges AC teljesítmény csak pozitív értéket vehet fel!'
           />
           <NumField
             label="Névleges hatásfok"
             info="Az inverter hatásfoka (a DC → AC átalakítás veszteségét jellemzi)."
-            value={params.inverterEfficiencyNom}
-            onChange={(v) => v !== null && onPatch({ inverterEfficiencyNom: v })}
+            value={parameters.inverterEfficiency}
+            onChange={(value) => value !== null && onPatch({ inverterEfficiency: value })}
             min={0.5} max={1} step={0.005}
             helperText="0.5 és 1 között, pl. 0.96 = 96%"
           />

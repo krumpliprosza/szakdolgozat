@@ -1,7 +1,7 @@
 import { Accordion, Button, Heading, Text } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import type { SystemParams, SystemParamsMode } from '../../../steps/WizardDataContext'
-import type { useSystemParamsForm } from '../../../hooks/useSystemParamsForm'
+import type { SystemParameters, SystemParametersMode } from '../../../steps/WizardDataContext'
+import type { useSystemParametersForm } from '../../../hooks/useSystemParametersForm'
 import { OrientationSection } from './sections/OrientationSection'
 import { ModuleSection } from './sections/ModuleSection'
 import { InverterSection } from './sections/InverterSection'
@@ -14,13 +14,13 @@ import { LossesSection } from './sections/LossesSection'
 interface CustomSystemMenuProps {
   onBack: () => void
   onChange: () => void
-  currentMode: SystemParamsMode
-  form: ReturnType<typeof useSystemParamsForm>
+  currentMode: SystemParametersMode
+  form: ReturnType<typeof useSystemParametersForm>
 }
 
 export const CustomSystemMenu = ({ onBack, onChange, currentMode, form }: CustomSystemMenuProps) => {
   const {
-    params,
+    parameters,
     patchOrientation: patchOrientationRaw,
     patchModule: patchModuleRaw,
     patchInverter: patchInverterRaw,
@@ -30,12 +30,12 @@ export const CustomSystemMenu = ({ onBack, onChange, currentMode, form }: Custom
   } = form
 
   // Minden modositas eseten jelezzuk a szulo elemnek, hogy a Sajat rendszer parameterezese legyen kivalasztva
-  const patchOrientation: typeof patchOrientationRaw = (p: Partial<SystemParams['orientation']>) => { onChange(); patchOrientationRaw(p) }
-  const patchModule: typeof patchModuleRaw = (p: Partial<SystemParams['module']>) => { onChange(); patchModuleRaw(p) }
-  const patchInverter: typeof patchInverterRaw = (p: Partial<SystemParams['inverter']>) => { onChange(); patchInverterRaw(p) }
-  const patchLosses: typeof patchLossesRaw = (p: Partial<SystemParams['losses']>) => { onChange(); patchLossesRaw(p) }
-  const patchAlbedo: typeof patchAlbedoRaw = (p: Partial<SystemParams['albedo']>) => { onChange(); patchAlbedoRaw(p) }
-  const patchBattery: typeof patchBatteryRaw = (p: Partial<SystemParams['battery']>) => { onChange(); patchBatteryRaw(p) }
+  const patchOrientation: typeof patchOrientationRaw = (p: Partial<SystemParameters['orientation']>) => { onChange(); patchOrientationRaw(p) }
+  const patchModule: typeof patchModuleRaw = (p: Partial<SystemParameters['module']>) => { onChange(); patchModuleRaw(p) }
+  const patchInverter: typeof patchInverterRaw = (p: Partial<SystemParameters['inverter']>) => { onChange(); patchInverterRaw(p) }
+  const patchLosses: typeof patchLossesRaw = (p: Partial<SystemParameters['losses']>) => { onChange(); patchLossesRaw(p) }
+  const patchAlbedo: typeof patchAlbedoRaw = (p: Partial<SystemParameters['albedo']>) => { onChange(); patchAlbedoRaw(p) }
+  const patchBattery: typeof patchBatteryRaw = (p: Partial<SystemParameters['battery']>) => { onChange(); patchBatteryRaw(p) }
 
   // Ha egyik mod sincs meg kivalasztva, akkor is a Sajat rendszer parameterezesere alljon at
   useEffect(() => {
@@ -53,12 +53,12 @@ export const CustomSystemMenu = ({ onBack, onChange, currentMode, form }: Custom
       </Text>
 
       <Accordion.Root collapsible variant="outline">
-        <OrientationSection params={params.orientation} onPatch={patchOrientation} />
-        <ModuleSection params={params.module} onPatch={patchModule} />
-        <InverterSection params={params.inverter} onPatch={patchInverter} />
-        <BatterySection params={params.battery} onPatch={patchBattery} />
-        <AlbedoSection params={params.albedo} onPatch={patchAlbedo} />
-        <LossesSection params={params.losses} onPatch={patchLosses} />
+        <OrientationSection parameters={parameters.orientation} onPatch={patchOrientation} />
+        <ModuleSection parameters={parameters.module} onPatch={patchModule} />
+        <InverterSection parameters={parameters.inverter} onPatch={patchInverter} />
+        <BatterySection parameters={parameters.battery} onPatch={patchBattery} />
+        <AlbedoSection parameters={parameters.albedo} onPatch={patchAlbedo} />
+        <LossesSection parameters={parameters.losses} onPatch={patchLosses} />
       </Accordion.Root>
     </>
   )

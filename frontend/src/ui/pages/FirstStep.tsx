@@ -1,5 +1,4 @@
 import { Box, VStack, Text, Heading } from '@chakra-ui/react'
-import { useEffect } from 'react'
 import { useWizardData } from '../../steps/WizardDataContext'
 import { usePageTitle } from '../../hooks/usePageTitle'
 import { useLocationForm } from '../../hooks/useLocationForm'
@@ -12,13 +11,10 @@ import { CoordinateEditable } from '../../components/CoordinateEditable'
 export const FirstStep = () => {
   usePageTitle("Helyszín kiválasztása")
 
-  const { location, setLocation, draftLat, draftLon, commitLat, commitLon } = useLocationForm()
-  const { setData } = useWizardData()
-
   // A kivalasztott helyszint a varazslo adatai koze masolja, hogy mindenhol elerheto legyen
-  useEffect(() => {
-    setData({ location })
-  }, [location])
+  const { data, setData } = useWizardData()
+  const setLocation = (location: { lat: number; lon: number } | null) => { setData({ location }) }
+  const { draftLat, draftLon, commitLat, commitLon } = useLocationForm(data.location, setLocation)
 
   return (
     <AnimatedPage>
@@ -26,7 +22,7 @@ export const FirstStep = () => {
       <Text mb={4} color="fg.muted">Válaszd ki a térképen, hogy hol szeretnél napelemrendszert telepíteni!</Text>
 
       <Box position="relative" isolation="isolate" zIndex={0}>
-        <LocationPicker onChange={setLocation} selected={location} /> {/* Terkep helye */}
+        <LocationPicker onChange={setLocation} selected={data.location} /> {/* Terkep helye */}
       </Box>
 
       <Text mt={4} mb={1}>
