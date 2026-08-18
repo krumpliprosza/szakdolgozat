@@ -10,8 +10,19 @@ interface LossesSectionProps {
 }
 
 export const LossesSection = ({ parameters, onPatch }: LossesSectionProps) => (
-  <Accordion.Item value="losses">
-    <Accordion.ItemTrigger>
+  <Accordion.Item value="losses" borderBottomWidth="2px">
+    <Accordion.ItemTrigger 
+      _open={{ borderBottomWidth: "2px" }}
+      transition="border-bottom-width linear 0ms"
+      css={{
+        '&[data-state="open"]': {
+          transitionDelay: "0ms",
+        },
+        '&[data-state="closed"]': {
+          transitionDelay: "200ms",
+        },
+      }}
+    >
       <Heading size="md" flex="1" textAlign="left">Veszteségek</Heading>
       <Accordion.ItemIndicator color="purple.fg" />
     </Accordion.ItemTrigger>

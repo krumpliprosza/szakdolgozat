@@ -11,8 +11,19 @@ interface ModuleSectionProps {
 }
 
 export const ModuleSection = ({ parameters, onPatch }: ModuleSectionProps) => (
-  <Accordion.Item value="module">
-    <Accordion.ItemTrigger>
+  <Accordion.Item value="module" borderBottomWidth="2px">
+    <Accordion.ItemTrigger 
+      _open={{ borderBottomWidth: "2px" }}
+      transition="border-bottom-width linear 0ms"
+      css={{
+        '&[data-state="open"]': {
+          transitionDelay: "0ms",
+        },
+        '&[data-state="closed"]': {
+          transitionDelay: "200ms",
+        },
+      }}
+    >
       <Heading size="md" flex="1" textAlign="left">Modul</Heading>
       <Accordion.ItemIndicator color="purple.fg" />
     </Accordion.ItemTrigger>

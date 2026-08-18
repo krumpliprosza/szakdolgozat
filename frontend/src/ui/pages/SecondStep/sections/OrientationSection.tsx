@@ -10,8 +10,19 @@ interface OrientationSectionProps {
 }
 
 export const OrientationSection = ({ parameters, onPatch }: OrientationSectionProps) => (
-  <Accordion.Item value="orientation">
-    <Accordion.ItemTrigger>
+  <Accordion.Item value="orientation" borderBottomWidth="2px">
+    <Accordion.ItemTrigger 
+      _open={{ borderBottomWidth: "2px" }}
+      transition="border-bottom-width linear 0ms"
+      css={{
+        '&[data-state="open"]': {
+          transitionDelay: "0ms",
+        },
+        '&[data-state="closed"]': {
+          transitionDelay: "200ms",
+        },
+      }}
+    >
       <Heading size="md" flex="1" textAlign="left">Tájolás</Heading>
       <Accordion.ItemIndicator color="purple.fg" />
     </Accordion.ItemTrigger>

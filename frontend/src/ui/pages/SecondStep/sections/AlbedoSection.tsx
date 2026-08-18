@@ -10,8 +10,19 @@ interface AlbedoSectionProps {
 }
 
 export const AlbedoSection = ({ parameters, onPatch }: AlbedoSectionProps) => (
-  <Accordion.Item value="albedo">
-    <Accordion.ItemTrigger>
+  <Accordion.Item value="albedo" borderBottomWidth="2px">
+    <Accordion.ItemTrigger 
+      _open={{ borderBottomWidth: "2px" }}
+      transition="border-bottom-width linear 0ms"
+      css={{
+        '&[data-state="open"]': {
+          transitionDelay: "0ms",
+        },
+        '&[data-state="closed"]': {
+          transitionDelay: "200ms",
+        },
+      }}
+    >
       <Heading size="md" flex="1" textAlign="left">Talaj-visszaverődés (albedó)</Heading>
       <Accordion.ItemIndicator color="purple.fg" />
     </Accordion.ItemTrigger>

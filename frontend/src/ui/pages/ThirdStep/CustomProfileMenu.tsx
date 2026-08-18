@@ -47,7 +47,7 @@ export const CustomProfileMenu = ({ onBack, onChange, form }: CustomProfileMenuP
       {items.length === 0 ? (
         <Text color="fg.muted">Még nincs hozzáadva egyetlen fogyasztó sem.</Text>
       ) : (
-        <SimpleGrid columns={{ base: 1, lg: 2 }} gap={4}>
+        <SimpleGrid columns={{ base: 1, xl: 2 }} gap={2}>
           {items.map((item) => (
             <HouseholdItemCard
               key={item.id}

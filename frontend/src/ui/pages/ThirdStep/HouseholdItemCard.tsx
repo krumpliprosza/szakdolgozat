@@ -27,16 +27,16 @@ export const HouseholdItemCard = ({
   <Card.Root borderColor="purple.border" borderWidth="2px">
     <Card.Body gap={4}>
 
+      <TextField
+        label="Név"
+        info="A fogyasztó elnevezése."
+        value={item.name}
+        onChange={(value) => onUpdate({ name: value })}
+        placeholder="pl. Hűtőszekrény"
+        invalid={item.name === ''}
+        errorText="Adj nevet ennek a fogyasztónak!"
+      />
       <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
-        <TextField
-          label="Név"
-          info="A fogyasztó elnevezése."
-          value={item.name}
-          onChange={(value) => onUpdate({ name: value })}
-          placeholder="pl. Hűtőszekrény"
-          invalid={item.name === ''}
-          errorText="Adj nevet ennek a fogyasztónak!"
-        />
         <CounterField
           label="Darabszám"
           info="Az eszközök száma a háztartásban."
@@ -79,6 +79,7 @@ export const HouseholdItemCard = ({
           />
         ))}
       </VStack>
+      
     </Card.Body>
     <Card.Footer>
       <Button variant="outline" colorPalette="red" onClick={onRemove}>
