@@ -110,8 +110,8 @@ export const NumField = ({ label, info, value, onChange, min, max, step = 1, hel
       w="full"
     >
       <NumberInput.Control>
-        <NumberInput.IncrementTrigger color="purple.fg" _hover={{ bg: 'purple.subtle' }} />
-        <NumberInput.DecrementTrigger color="purple.fg" _hover={{ bg: 'purple.subtle' }} />
+        <NumberInput.IncrementTrigger color="purple.fg" transition="background-color 150ms ease-in-out" _hover={{ bg: 'purple.subtle' }} />
+        <NumberInput.DecrementTrigger color="purple.fg" transition="background-color 150ms ease-in-out" _hover={{ bg: 'purple.subtle' }} />
       </NumberInput.Control>
       <NumberInput.Input placeholder={placeholder} />
     </NumberInput.Root>

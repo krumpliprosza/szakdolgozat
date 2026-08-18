@@ -29,18 +29,25 @@ export const ThirdStep = () => {
       {view === 'valasztosmenu' && (
         <ChoiceMenu
           onSelectPredefined={() => setView('eloremeghatarozottprofil')}
-          onSelectCustom={() => {
-            setData({ consumptionProfileMode: 'custom', selectedPredefinedProfileId: null })
-            setView('sajatprofil')
-          }}
+          onSelectCustom={() => setView('sajatprofil')}
           selectedMode={data.consumptionProfileMode}
         />
       )}
       {view === 'eloremeghatarozottprofil' && (
-        <PredefinedProfileMenu onBack={() => setView('valasztosmenu')} />
+        <PredefinedProfileMenu
+          onBack={() => setView('valasztosmenu')}
+          onSelect={(id) => setData({ consumptionProfileMode: 'predefined', selectedPredefinedProfileId: id })}
+          selectedId={data.selectedPredefinedProfileId}
+          form={form}
+        />
       )}
       {view === 'sajatprofil' && (
-        <CustomProfileMenu onBack={() => setView('valasztosmenu')} form={form} />
+        <CustomProfileMenu 
+          onBack={() => setView('valasztosmenu')} 
+          onChange={() => setData({ consumptionProfileMode: 'custom', selectedPredefinedProfileId: null })}
+          currentMode={data.consumptionProfileMode}
+          form={form}
+        />
       )}
     </AnimatedPage>
   )

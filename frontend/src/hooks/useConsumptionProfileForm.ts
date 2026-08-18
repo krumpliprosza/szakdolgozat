@@ -147,6 +147,17 @@ export function useConsumptionProfileForm(initial?: HouseholdItem[] | null) {
   // Megvizsgalja, hogy a megadott nevet mar hasznalja-e egy masik tetel
   const isNameTaken = (id: string, name: string) => items.some((item) => item.id !== id && item.name.trim().toLowerCase() === name.trim().toLowerCase() && name.trim() !== '')
 
+  // A teljes fogyasztasi profil lecserelese
+  const loadItems = (newItems: Array<Omit<HouseholdItem, 'id' | 'usagePeriods'> & { usagePeriods: Array<Omit<UsagePeriod, 'id'>> }>) => {
+    setItems(
+      newItems.map((item) => ({
+        ...item,
+        id: makeId(),
+        usagePeriods: item.usagePeriods.map((period) => ({ ...period, id: makeId() })),
+      }))
+    )
+  }
+
   return {
     items,
     addItem,
@@ -156,5 +167,6 @@ export function useConsumptionProfileForm(initial?: HouseholdItem[] | null) {
     updateUsagePeriod,
     removeUsagePeriod,
     isNameTaken,
+    loadItems,
   }
 }
