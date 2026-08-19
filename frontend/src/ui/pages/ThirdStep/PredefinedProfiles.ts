@@ -55,16 +55,34 @@ export const predefinedProfiles: PredefinedProfile[] = [
         name: 'Légkondícionáló (hűtő üzemmód)',
         count: 1,
         consumption: 3,
+        dutyCycle: 0.3,
         usagePeriods: [
-          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: true, startTime: '00:00', endTime: '23:59' },
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: true, 
+            startTime: '00:00', 
+            endTime: '23:59', 
+            condition: { type: 'temperature', comparator: '>=', threshold: 30 },
+          },
         ],
       },
       {
         name: 'Légkondícionáló (fűtő üzemmód)',
         count: 1,
         consumption: 3,
+        dutyCycle: 0.3,
         usagePeriods: [
-          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: true, startTime: '00:00', endTime: '23:59' },
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: true, 
+            startTime: '00:00', 
+            endTime: '23:59', 
+            condition: { type: 'temperature', comparator: '<=', threshold: 15 },
+          },
         ],
       },
       {

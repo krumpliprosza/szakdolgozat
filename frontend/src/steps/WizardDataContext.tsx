@@ -99,6 +99,16 @@ export const defaultSystemParameters: SystemParameters = {
   },
 }
 
+// Homersekleti feltetel
+export interface TemperatureCondition {
+  type: 'temperature'
+  comparator: '>=' | '>' | '<=' | '<'
+  threshold: number
+}
+
+// Felhasznalasi idotartamhoz feltetelek osszegyujtese
+export type UsageCondition = TemperatureCondition
+
 // Felhasznalasi idotartam
 export interface UsagePeriod {
   id: string
@@ -108,6 +118,7 @@ export interface UsagePeriod {
   wholeDay: boolean
   startTime: string
   endTime: string
+  condition?: UsageCondition
 }
 
 // A fogyasztas egy adott eleme
@@ -116,6 +127,7 @@ export interface HouseholdItem {
   name: string
   count: number
   consumption: number
+  dutyCycle?: number
   usagePeriods: UsagePeriod[]
 }
 

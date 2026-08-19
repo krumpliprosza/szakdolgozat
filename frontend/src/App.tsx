@@ -10,6 +10,7 @@ import { SetupComplete } from './ui/pages/SetupComplete'
 
   - Hibakezeles (404 not found stb.)
   - NREL SAM adatbazisbol modulok es inverterek betoltese?
+  - Felteteles felhasznalas kialakitasa (homerseklet, napszak stb.)
   
 */
 
