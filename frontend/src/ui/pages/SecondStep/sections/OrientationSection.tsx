@@ -98,7 +98,8 @@ export const OrientationSection = ({ parameters, onPatch }: OrientationSectionPr
               value={parameters.groundCoverageRatio}
               onChange={(value) => value !== null && onPatch({ groundCoverageRatio: value })}
               min={0.05} max={0.95} step={0.01}
-              helperText="0.05 és 0.95 között"
+              formatOptions={{ style: 'percent', maximumFractionDigits: 0 }}
+              helperText="5% és 95% között"
             />
           )}
         </VStack>

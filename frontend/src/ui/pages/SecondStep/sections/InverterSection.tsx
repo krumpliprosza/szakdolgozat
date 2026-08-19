@@ -46,7 +46,8 @@ export const InverterSection = ({ parameters, onPatch }: InverterSectionProps) =
             value={parameters.inverterEfficiency}
             onChange={(value) => value !== null && onPatch({ inverterEfficiency: value })}
             min={0.5} max={1} step={0.005}
-            helperText="0.5 és 1 között, pl. 0.96 = 96%"
+            formatOptions={{ style: 'percent', maximumFractionDigits: 1 }}
+            helperText="50% és 100% között"
           />
         </SimpleGrid>
       </Accordion.ItemBody>

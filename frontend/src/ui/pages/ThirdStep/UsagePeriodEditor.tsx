@@ -43,6 +43,7 @@ export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEdi
                 startDate={period.startDate} 
                 endDate={period.endDate}
                 onChange={({startDate, endDate}) => onChange({startDate, endDate})}
+                invalid={!isUsagePeriodDateRangeFilled(period)}
               ></DateField>
             </HStack>
           )}
@@ -67,6 +68,7 @@ export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEdi
                   type="time"
                   value={period.startTime}
                   onChange={(e) => e.target.value && onChange({ startTime: e.target.value })}
+                  borderColor={!isUsagePeriodTimeRangeValid(period) ? 'red.muted' : undefined}
                   css={{
                     '&::-webkit-calendar-picker-indicator': {
                       display: 'none',
@@ -80,6 +82,7 @@ export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEdi
                   type="time"
                   value={period.endTime}
                   onChange={(e) => e.target.value && onChange({ endTime: e.target.value })}
+                  borderColor={!isUsagePeriodTimeRangeValid(period) ? 'red.muted' : undefined}
                   css={{
                     '&::-webkit-calendar-picker-indicator': {
                       display: 'none',

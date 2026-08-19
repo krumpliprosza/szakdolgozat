@@ -13,6 +13,11 @@ export const isInverterPowerValid = (inverter: SystemParameters['inverter']): bo
   return inverter.pAc !== 0
 }
 
+// Az akkumulator toltottsegi szintjeinek sorrendiseget biztositja
+export const isBatterySocValid = (battery: SystemParameters['battery']): boolean => {
+  return battery.socMin <= battery.soc0 && battery.soc0 <= battery.socMax
+}
+
 // A Sajat rendszer parameterezese urlap hibakezelese
 export const getSystemParametersError = (parameters: SystemParameters): string | null => {
   if (!isModulePowerValid(parameters.module)) {
@@ -20,6 +25,9 @@ export const getSystemParametersError = (parameters: SystemParameters): string |
   }
   if (!isInverterPowerValid(parameters.inverter)) {
     return 'Az inverter névleges AC teljesítménye csak pozitív értéket vehet fel!'
+  }
+  if (!isBatterySocValid(parameters.battery)) {
+    return 'Az akkumulátorhoz beállított töltöttségi szintek sorrendisége nem megfelelő!'
   }
   return null
 }

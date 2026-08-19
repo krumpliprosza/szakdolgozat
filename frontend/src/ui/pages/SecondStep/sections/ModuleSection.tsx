@@ -47,7 +47,8 @@ export const ModuleSection = ({ parameters, onPatch }: ModuleSectionProps) => (
               value={parameters.gammaPdc}
               onChange={(value) => value !== null && onPatch({ gammaPdc: value })}
               min={-0.01} max={0} step={0.0005}
-              helperText="1/°C, pl. -0.004 = -0.4%/°C"
+              formatOptions={{ style: 'percent', maximumFractionDigits: 2 }}
+              helperText="%/°C, -1%/°C és 0%/°C között"
             />
           </SimpleGrid>
 
@@ -89,7 +90,8 @@ export const ModuleSection = ({ parameters, onPatch }: ModuleSectionProps) => (
               value={parameters.bifaciality}
               onChange={(value) => value !== null && onPatch({ bifaciality: value })}
               min={0} max={1} step={0.01}
-              helperText="0 és 1 között"
+              formatOptions={{ style: 'percent', maximumFractionDigits: 0 }}
+              helperText="0% és 100% között"
             />
           )}
         </VStack>

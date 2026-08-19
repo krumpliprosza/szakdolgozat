@@ -1,5 +1,6 @@
 import { Accordion, Heading, SimpleGrid, VStack } from '@chakra-ui/react'
 import { NumField } from '../../../../components/FormFields'
+import { isBatterySocValid } from '../../../../hooks/useSystemParametersForm'
 import type { SystemParameters } from '../../../../steps/WizardDataContext'
 
 // A Sajat rendszer parameterezese lapon az akkumulator parametereinek beallitasat teszi lehetove.
@@ -45,7 +46,10 @@ export const BatterySection = ({ parameters, onPatch }: BatterySectionProps) => 
               value={parameters.soc0}
               onChange={(value) => value !== null && onPatch({ soc0: value })}
               min={0} max={1} step={0.05}
-              helperText="0 és 1 között, pl. 0.5 = 50%"
+              formatOptions={{ style: 'percent', maximumFractionDigits: 0 }}
+              helperText="0% és 100% között"
+              invalid={!isBatterySocValid(parameters)}
+              errorText="Nem megfelelő a megadott töltöttségi szintek sorrendisége!"
             />
           </SimpleGrid>
 
@@ -56,7 +60,10 @@ export const BatterySection = ({ parameters, onPatch }: BatterySectionProps) => 
               value={parameters.socMin}
               onChange={(value) => value !== null && onPatch({ socMin: value })}
               min={0} max={1} step={0.05}
-              helperText="0 és 1 között, pl. 0.1 = 10%"
+              formatOptions={{ style: 'percent', maximumFractionDigits: 0 }}
+              helperText="0% és 100% között"
+              invalid={!isBatterySocValid(parameters)}
+              errorText="Nem megfelelő a megadott töltöttségi szintek sorrendisége!"
             />
             <NumField
               label="Maximális töltöttségi szint"
@@ -64,7 +71,10 @@ export const BatterySection = ({ parameters, onPatch }: BatterySectionProps) => 
               value={parameters.socMax}
               onChange={(value) => value !== null && onPatch({ socMax: value })}
               min={0} max={1} step={0.05}
-              helperText="0 és 1 között, pl. 0.9 = 90%"
+              formatOptions={{ style: 'percent', maximumFractionDigits: 0 }}
+              helperText="0% és 100% között"
+              invalid={!isBatterySocValid(parameters)}
+              errorText="Nem megfelelő a megadott töltöttségi szintek sorrendisége!"
             />
           </SimpleGrid>
 
@@ -94,7 +104,8 @@ export const BatterySection = ({ parameters, onPatch }: BatterySectionProps) => 
               value={parameters.etaCharge}
               onChange={(value) => value !== null && onPatch({ etaCharge: value })}
               min={0.5} max={1} step={0.01}
-              helperText="0 és 1 között, pl. 0.97 = 97%"
+              formatOptions={{ style: 'percent', maximumFractionDigits: 0 }}
+              helperText="50% és 100% között"
             />
             <NumField
               label="Kisütési hatásfok"
@@ -102,7 +113,8 @@ export const BatterySection = ({ parameters, onPatch }: BatterySectionProps) => 
               value={parameters.etaDischarge}
               onChange={(value) => value !== null && onPatch({ etaDischarge: value })}
               min={0.5} max={1} step={0.01}
-              helperText="0 és 1 között, pl. 0.97 = 97%"
+              formatOptions={{ style: 'percent', maximumFractionDigits: 0 }}
+              helperText="50% és 100% között"
             />
           </SimpleGrid>
         </VStack>

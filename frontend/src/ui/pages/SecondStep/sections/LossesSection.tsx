@@ -37,7 +37,8 @@ export const LossesSection = ({ parameters, onPatch }: LossesSectionProps) => (
               value={parameters.lResistance}
               onChange={(value) => value !== null && onPatch({ lResistance: value })}
               min={0} max={0.2} step={0.005}
-              helperText="0 és 0.2 között, pl. 0.02 = 2%"
+              formatOptions={{ style: 'percent', maximumFractionDigits: 1 }}
+              helperText="0% és 20% között"
             />
             <NumField
               label="Modulillesztési veszteség"
@@ -45,7 +46,8 @@ export const LossesSection = ({ parameters, onPatch }: LossesSectionProps) => (
               value={parameters.lMismatch}
               onChange={(value) => value !== null && onPatch({ lMismatch: value })}
               min={0} max={0.2} step={0.005}
-              helperText="0 és 0.2 között, pl. 0.02 = 2%"
+              formatOptions={{ style: 'percent', maximumFractionDigits: 1 }}
+              helperText="0% és 20% között"
             />
           </SimpleGrid>
 
@@ -63,7 +65,8 @@ export const LossesSection = ({ parameters, onPatch }: LossesSectionProps) => (
               value={parameters.annualDegradationRate}
               onChange={(value) => value !== null && onPatch({ annualDegradationRate: value })}
               min={0} max={0.05} step={0.001}
-              helperText="1/év, pl. 0.005 = 0.5%/év"
+              formatOptions={{ style: 'percent', maximumFractionDigits: 1 }}
+              helperText="%/év, 0% és 5% között"
             />
           </SimpleGrid>
 
@@ -74,15 +77,17 @@ export const LossesSection = ({ parameters, onPatch }: LossesSectionProps) => (
               value={parameters.lSoilingMax}
               onChange={(value) => value !== null && onPatch({ lSoilingMax: value })}
               min={0} max={0.3} step={0.01}
-              helperText="0 és 0.3 között, pl. 0.06 = 6%"
+              formatOptions={{ style: 'percent', maximumFractionDigits: 0 }}
+              helperText="0% és 30% között"
             />
             <NumField
               label="Állandó árnyékolási veszteség"
-              info="Fix árnyékoló objektum esetén, ha az időben nem változó veszteséget okoz."
+              info="Fix árnyékoló objektum által okozott veszteség."
               value={parameters.lShade}
               onChange={(value) => value !== null && onPatch({ lShade: value })}
               min={0} max={0.9} step={0.01}
-              helperText="0 és 0.9 között"
+              formatOptions={{ style: 'percent', maximumFractionDigits: 0 }}
+              helperText="0% és 90% között"
             />
           </SimpleGrid>
         </VStack>

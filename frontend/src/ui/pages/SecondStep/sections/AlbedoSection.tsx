@@ -30,11 +30,12 @@ export const AlbedoSection = ({ parameters, onPatch }: AlbedoSectionProps) => (
       <Accordion.ItemBody>
         <NumField
           label="Talaj albedója"
-          info="A talajfelszín fényvisszaverő képessége. Referenciaértékek: aszfalt esetén ~0.1, fű/föld esetén ~0.2, friss hó esetén ~0.6-0.8. Kétoldalú moduloknál a hátoldali termelést is befolyásolja."
+          info="A talajfelszín fényvisszaverő képessége. Referenciaértékek: aszfalt esetén ~10%, fű/föld esetén ~20%, friss hó esetén ~60-80%. Kétoldalú moduloknál a hátoldali termelést is befolyásolja."
           value={parameters.albedo}
           onChange={(value) => value !== null && onPatch({ albedo: value })}
           min={0} max={1} step={0.01}
-          helperText="0 és 1 között"
+          formatOptions={{ style: 'percent', maximumFractionDigits: 0 }}
+          helperText="0% és 100% között"
         />
       </Accordion.ItemBody>
     </Accordion.ItemContent>

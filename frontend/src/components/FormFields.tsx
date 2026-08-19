@@ -17,6 +17,7 @@ interface NumFieldProps {
   placeholder?: string
   invalid?: boolean
   errorText?: string
+  formatOptions?: Intl.NumberFormatOptions
 }
 
 interface CounterFieldProps {
@@ -91,34 +92,39 @@ const FieldLabelWithInfo = ({ label, info }: { label: string; info: string }) =>
 )
 
 // Szam bemenet
-export const NumField = ({ label, info, value, onChange, min, max, step = 1, helperText, placeholder, invalid, errorText }: NumFieldProps) => (
-  <Field.Root invalid={invalid}>
-    <FieldLabelWithInfo label={label} info={info} />
-    <NumberInput.Root
-      colorPalette="purple"
-      value={value === null ? '' : String(value)}
-      onValueChange={(details) => {
-        if (details.value === '') {
-          onChange(null)
-          return
-        }
-        if (!Number.isNaN(details.valueAsNumber)) onChange(details.valueAsNumber)
-      }}
-      min={min}
-      max={max}
-      step={step}
-      w="full"
-    >
-      <NumberInput.Control>
-        <NumberInput.IncrementTrigger color="purple.fg" transition="background-color 150ms ease-in-out" _hover={{ bg: 'purple.subtle' }} />
-        <NumberInput.DecrementTrigger color="purple.fg" transition="background-color 150ms ease-in-out" _hover={{ bg: 'purple.subtle' }} />
-      </NumberInput.Control>
-      <NumberInput.Input placeholder={placeholder} />
-    </NumberInput.Root>
-    {helperText && <Field.HelperText>{helperText}</Field.HelperText>}
-    {invalid && errorText && <Field.ErrorText fontSize="sm" fontWeight={"bold"} color="red.muted">{errorText}</Field.ErrorText>}
-  </Field.Root>
-)
+export const NumField = ({ label, info, value, onChange, min, max, step = 1, helperText, placeholder, invalid, errorText, formatOptions }: NumFieldProps) => {
+  const displayValue = value === null ? '' : String(formatOptions?.style === 'percent' ? value * 100 : value)
+
+  return (
+    <Field.Root invalid={invalid}>
+      <FieldLabelWithInfo label={label} info={info} />
+      <NumberInput.Root
+        colorPalette="purple"
+        value={displayValue}
+        onValueChange={(details) => {
+          if (details.value === '') {
+            onChange(null)
+            return
+          }
+          if (!Number.isNaN(details.valueAsNumber)) onChange(details.valueAsNumber)
+        }}
+        min={min}
+        max={max}
+        step={step}
+        formatOptions={formatOptions}
+        w="full"
+      >
+        <NumberInput.Control borderColor={invalid ? 'red.muted' : undefined}>
+          <NumberInput.IncrementTrigger color="purple.fg" transition="background-color 150ms ease-in-out" _hover={{ bg: 'purple.subtle' }} borderColor={invalid ? 'red.muted' : undefined} />
+          <NumberInput.DecrementTrigger color="purple.fg" transition="background-color 150ms ease-in-out" _hover={{ bg: 'purple.subtle' }} borderColor={invalid ? 'red.muted' : undefined} />
+        </NumberInput.Control>
+        <NumberInput.Input placeholder={placeholder} borderColor={invalid ? 'red.muted' : undefined}/>
+      </NumberInput.Root>
+      {helperText && <Field.HelperText>{helperText}</Field.HelperText>}
+      {invalid && errorText && <Field.ErrorText fontSize="sm" fontWeight={"bold"} color="red.muted">{errorText}</Field.ErrorText>}
+    </Field.Root>
+  )
+}
 
 // Darabszam bemenet
 export const CounterField = ({ label, info, value, onChange, min = 0, max, step = 1 }: CounterFieldProps) => (
@@ -207,6 +213,7 @@ export const TextField = ({ label, info, value, onChange, placeholder, invalid, 
       value={value} 
       onChange={(e) => onChange(e.target.value)} 
       placeholder={placeholder}
+      borderColor={invalid ? 'red.muted' : undefined}
     />
     {invalid && errorText && <Field.ErrorText fontSize="sm" fontWeight={"bold"} color="red.muted">{errorText}</Field.ErrorText>}
   </Field.Root>
@@ -250,8 +257,8 @@ export const DateField = ({ label, minimum, maximum, startDate, endDate, onChang
   >
     <DatePicker.Label>{ label }</DatePicker.Label>
     <DatePicker.Control gap={2}>
-      <DatePicker.Input index={0} />
-      <DatePicker.Input index={1} />
+      <DatePicker.Input index={0} borderColor={invalid ? 'red.muted' : undefined} />
+      <DatePicker.Input index={1} borderColor={invalid ? 'red.muted' : undefined} />
       <DatePicker.IndicatorGroup>
         <DatePicker.Trigger>
           <IconButton variant="ghost" size="sm">
