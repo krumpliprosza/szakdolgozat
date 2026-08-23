@@ -106,8 +106,14 @@ export interface TemperatureCondition {
   threshold: number
 }
 
+export interface IsDayOrNightCondition {
+  type: 'isdayornight'
+  comparator: 'isday' | 'isnight'
+  threshold: number
+}
+
 // Felhasznalasi idotartamhoz feltetelek osszegyujtese
-export type UsageCondition = TemperatureCondition
+export type UsageCondition = TemperatureCondition | IsDayOrNightCondition
 
 // Felhasznalasi idotartam
 export interface UsagePeriod {

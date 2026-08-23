@@ -58,6 +58,19 @@ export const HouseholdItemCard = ({
         />
       </SimpleGrid>
 
+      <NumField
+        label="Aktív ciklusidő"
+        info="Azt adja meg, hogy az eszköz használati időtartamán belül az idő hány százalékában üzemel ténylegesen az eszköz."
+        value={item.dutyCycle ?? null}
+        onChange={(value) => onUpdate({ dutyCycle: value ?? undefined })}
+        min={0.05}
+        max={1}
+        step={0.05}
+        formatOptions={{ style: 'percent', maximumFractionDigits: 0 }}
+        helperText="5% és 100% között"
+        placeholder="100%"
+      />
+
       <VStack align="stretch" gap={3}>
         <HStack justify="space-between">
           <Text fontWeight="medium">Használati időtartamok</Text>

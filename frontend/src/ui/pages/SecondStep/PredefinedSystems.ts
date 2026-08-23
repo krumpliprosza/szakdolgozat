@@ -13,7 +13,7 @@ export const predefinedSystems: PredefinedSystem[] = [
   {
     id: 'rendszer1',
     title: 'Kompakt otthoni rendszer',
-    description: 'Kisebb, tetőre szerelt rendszer családi házakhoz, mérsékelt fogyasztás mellett. Kis akkumulátorral rendelkezik, alacsony kezdeti beruházási költségű.',
+    description: 'Kisebb, tetőre szerelt rendszer családi házakhoz mérsékelt fogyasztás mellett. Kis akkumulátorral rendelkezik, így alacsony kezdeti beruházási költségű.',
     parameters: {
       orientation: {
         trackingType: 'fixed',
@@ -111,7 +111,7 @@ export const predefinedSystems: PredefinedSystem[] = [
   {
     id: 'rendszer3',
     title: 'Nagyteljesítményű, napkövető rendszer',
-    description: 'Egytengelyes napkövetéssel és kétoldalas (bifaciális) modulokkal szerelt, nagyobb teljesítményű rendszer, nagy akkumulátoros kapacitással. Magasabb hozam, nagyobb terület- és beruházási igény mellett.',
+    description: 'Egytengelyes napkövetéssel és kétoldalas modulokkal szerelt, nagyobb teljesítményű rendszer, nagy kapacitású akkumulátorral. Ez egy magasabb hozamot biztosító, nagyobb beruházási igényű rendszer.',
     parameters: {
       orientation: {
         trackingType: 'single_axis',

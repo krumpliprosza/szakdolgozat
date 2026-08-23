@@ -1,9 +1,9 @@
 import { Box, Field, HStack, IconButton, Input, SimpleGrid, Text } from '@chakra-ui/react'
 import { LuTrash2 } from 'react-icons/lu'
-import { SwitchField, DateField } from '../../../components/FormFields'
+import { SwitchField, DateField, SelectField, NumField } from '../../../components/FormFields'
 import { getAllowedUsageDateRange } from '../../../components/DateRange'
 import { isUsagePeriodDateRangeFilled, isUsagePeriodTimeRangeValid } from '../../../hooks/useConsumptionProfileForm'
-import type { UsagePeriod } from '../../../steps/WizardDataContext'
+import type { TemperatureCondition, IsDayOrNightCondition, UsageCondition, UsagePeriod } from '../../../steps/WizardDataContext'
 
 // Leiras: Egy fogyasztasi tetelhez tartozo egy hasznalati idotartam szerkesztese.
 
@@ -11,6 +11,49 @@ interface UsagePeriodEditorProps {
   period: UsagePeriod
   onChange: (patch: Partial<UsagePeriod>) => void
   onRemove: () => void
+}
+
+// A feltetelek beallitasai a kulonbozo felteteltipusokhoz
+const conditionTypes: { value: UsageCondition['type']; label: string }[] = [
+  { value: 'temperature', label: 'Hőmérséklet' },
+  { value: 'isdayornight', label: 'Napszak' },
+]
+
+const conditionSettings: Record<UsageCondition['type'], { comparator: { value: string; label: string }[]; min: number; max: number; unit: string; default: () => UsageCondition }> = {
+  temperature: {
+    comparator: [
+      { value: '>', label: 'Nagyobb, mint (>)' },
+      { value: '>=', label: 'Nagyobb vagy egyenlő, mint (≥)' },
+      { value: '<', label: 'Kisebb, mint (<)' },
+      { value: '<=', label: 'Kisebb vagy egyenlő, mint (≤)' },
+    ],
+    min: -50,
+    max: 50,
+    unit: '°C',
+    default: () => ({
+      type: 'temperature',
+      comparator: '>=',
+      threshold: 20,
+    }),
+  },
+  isdayornight: {
+    comparator: [
+      { value: 'isday', label: 'Nappal' },
+      { value: 'isnight', label: 'Éjszaka' },
+    ],
+    min: 0,
+    max: 0,
+    unit: '',
+    default: () => ({
+      type: 'isdayornight',
+      comparator: 'isday',
+      threshold: 0,
+    }),
+  },
+}
+
+const createDefaultCondition = (): UsageCondition => {
+  return conditionSettings.temperature.default()
 }
 
 export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEditorProps) => {
@@ -99,6 +142,61 @@ export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEdi
           )}
         </Box>
       </SimpleGrid>
+
+      <Box mt={4} pt={4} borderTopWidth="1px" borderColor="border">
+        <SwitchField
+          label="Feltételhez kötött üzemelés"
+          info="Ha be van kapcsolva, a fogyasztó csak akkor üzemel ebben az időtartamban, ha a megadott feltétel is teljesül."
+          checked={!!period.condition}
+          onChange={(checked) => onChange({ condition: checked ? createDefaultCondition() : undefined })}
+        />
+        {period.condition && (() => {
+          const settings = conditionSettings[period.condition.type]
+          return (
+            <SimpleGrid columns={{ base: 1, md: 3 }} gap={4} mt={2}>
+              <SelectField
+                label="Feltétel alapja"
+                info="Azt adja meg, hogy milyen mennyiséghez legyen kötve a fogyasztó üzemelése."
+                value={period.condition.type}
+                onChange={(value) => onChange({ condition: conditionSettings[value as UsageCondition['type']].default() })}
+                options={conditionTypes}
+              />
+              {period.condition.type === 'temperature' && (
+                <>
+                  <SelectField
+                    label="Reláció"
+                    info="A feltétel iránya, amihez a küszöbérték tartozik."
+                    value={period.condition.comparator}
+                    onChange={(value) => onChange({ condition: { ...(period.condition as TemperatureCondition), comparator: value as TemperatureCondition['comparator'] } })}
+                    options={settings.comparator}
+                  />
+                  <NumField
+                    label="Küszöbérték"
+                    info="Az a hőmérsékletérték, amelyhez viszonyítva értelmezendő a feltétel."
+                    value={period.condition.threshold}
+                    onChange={(value) => value !== null && onChange({ condition: { ...period.condition!, threshold: value } })}
+                    min={settings.min} max={settings.max} step={1}
+                    helperText={settings.unit}
+                  />
+                </>
+              )
+              }
+              {period.condition.type === 'isdayornight' && (
+                <>
+                  <SelectField
+                    label="Érték"
+                    info="A napszak, amelyben a fogyasztó üzemel."
+                    value={period.condition.comparator}
+                    onChange={(value) => onChange({ condition: { ...(period.condition as IsDayOrNightCondition), comparator: value as IsDayOrNightCondition['comparator'] } })}
+                    options={settings.comparator}
+                  />
+                </>
+              )
+              }
+            </SimpleGrid>
+          )
+        })()}
+      </Box>
     </Box>
   )
 }
