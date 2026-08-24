@@ -22,11 +22,83 @@ export const predefinedProfiles: PredefinedProfile[] = [
     description: 'Alacsony fogyasztású, egy-két fős háztartásokra illő profil.',
     items: [
       {
-        name: 'A',
+        name: 'Hűtőszekrény',
         count: 1,
-        consumption: 1,
+        consumption: 120,
+        dutyCycle: 0.35,
         usagePeriods: [
-          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: true, startTime: '00:00', endTime: '23:59' },
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: true, 
+            startTime: '00:00', 
+            endTime: '23:59' 
+          },
+        ],
+      },
+      {
+        name: 'Világítótest',
+        count: 4,
+        consumption: 9,
+        dutyCycle: 1,
+        usagePeriods: [
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '18:00', 
+            endTime: '23:00' 
+          },
+        ],
+      },
+      {
+        name: 'Televízió',
+        count: 1,
+        consumption: 90,
+        dutyCycle: 1,
+        usagePeriods: [
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '19:00', 
+            endTime: '22:00' 
+          },
+        ],
+      },
+      {
+        name: 'Mosógép',
+        count: 1,
+        consumption: 2000,
+        dutyCycle: 0.2,
+        usagePeriods: [
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '19:00', 
+            endTime: '21:00' 
+          },
+        ],
+      },
+      {
+        name: 'Egyéb kisebb fogyasztók összesítve',
+        count: 1,
+        consumption: 250,
+        dutyCycle: 0.1,
+        usagePeriods: [
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '07:00', 
+            endTime: '09:00' 
+          },
         ],
       },
     ],
@@ -37,11 +109,131 @@ export const predefinedProfiles: PredefinedProfile[] = [
     description: 'Több fős, tipikus családi ház fogyasztási szokásait modellező profil.',
     items: [
       {
-        name: 'B',
+        name: 'Hűtőszekrény',
         count: 1,
-        consumption: 2,
+        consumption: 150,
+        dutyCycle: 0.35,
         usagePeriods: [
-          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: true, startTime: '00:00', endTime: '23:59' },
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: true, 
+            startTime: '00:00', 
+            endTime: '23:59' 
+          },
+        ],
+      },
+      {
+        name: 'Villanybojler',
+        count: 1,
+        consumption: 2000,
+        dutyCycle: 0.15,
+        usagePeriods: [
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: true, 
+            startTime: '00:00', 
+            endTime: '23:59' 
+          },
+        ],
+      },
+      {
+        name: 'Világítótest',
+        count: 8,
+        consumption: 9,
+        dutyCycle: 1,
+        usagePeriods: [
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '18:00', 
+            endTime: '23:00' 
+          },
+        ],
+      },
+      {
+        name: 'Televízió',
+        count: 2,
+        consumption: 100,
+        dutyCycle: 1,
+        usagePeriods: [
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '19:00', 
+            endTime: '23:00' 
+          },
+        ],
+      },
+      {
+        name: 'PC + monitor(ok)',
+        count: 1,
+        consumption: 200,
+        dutyCycle: 1,
+        usagePeriods: [
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '16:00', 
+            endTime: '22:00' 
+          },
+        ],
+      },
+      {
+        name: 'Mosógép',
+        count: 1,
+        consumption: 2100,
+        dutyCycle: 0.22,
+        usagePeriods: [
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '19:00', 
+            endTime: '21:00' 
+          },
+        ],
+      },
+      {
+        name: 'Mosogatógép',
+        count: 1,
+        consumption: 1800,
+        dutyCycle: 0.3,
+        usagePeriods: [
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '20:00', 
+            endTime: '22:00' 
+          },
+        ],
+      },
+      {
+        name: 'Egyéb kisebb fogyasztók összesítve',
+        count: 1,
+        consumption: 350,
+        dutyCycle: 0.1,
+        usagePeriods: [
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '07:00', 
+            endTime: '09:00' 
+          },
         ],
       },
     ],
@@ -54,8 +246,8 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Légkondícionáló (hűtő üzemmód)',
         count: 1,
-        consumption: 3,
-        dutyCycle: 0.3,
+        consumption: 1200,
+        dutyCycle: 0.4,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -71,8 +263,8 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Légkondícionáló (fűtő üzemmód)',
         count: 1,
-        consumption: 3,
-        dutyCycle: 0.3,
+        consumption: 1400,
+        dutyCycle: 0.4,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -88,97 +280,177 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'EV töltő',
         count: 1,
-        consumption: 3,
+        consumption: 11000,
+        dutyCycle: 0.25,
         usagePeriods: [
-          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: true, startTime: '00:00', endTime: '23:59' },
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '20:00', 
+            endTime: '23:59' 
+          },
         ],
       },
       {
         name: 'Villanybojler',
         count: 1,
-        consumption: 3,
+        consumption: 2000,
+        dutyCycle: 0.15,
         usagePeriods: [
-          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: true, startTime: '00:00', endTime: '23:59' },
-        ],
-      },
-      {
-        name: 'Ruhaszárító',
-        count: 1,
-        consumption: 3,
-        usagePeriods: [
-          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: true, startTime: '00:00', endTime: '23:59' },
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: true, 
+            startTime: '00:00', 
+            endTime: '23:59' 
+          },
         ],
       },
       {
         name: 'Mosógép',
         count: 1,
-        consumption: 3,
+        consumption: 2200,
+        dutyCycle: 0.22,
         usagePeriods: [
-          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: true, startTime: '00:00', endTime: '23:59' },
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '19:00', 
+            endTime: '21:00' 
+          },
         ],
       },
       {
         name: 'Mosogatógép',
         count: 1,
-        consumption: 3,
+        consumption: 1800,
+        dutyCycle: 0.3,
         usagePeriods: [
-          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: true, startTime: '00:00', endTime: '23:59' },
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '20:00', 
+            endTime: '22:00' 
+          },
         ],
       },
       {
         name: 'Hűtőszekrény',
         count: 1,
-        consumption: 3,
+        consumption: 150,
+        dutyCycle: 0.35,
         usagePeriods: [
-          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: true, startTime: '00:00', endTime: '23:59' },
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: true, 
+            startTime: '00:00', 
+            endTime: '23:59' 
+          },
         ],
       },
       {
         name: 'Villanysütő',
         count: 1,
-        consumption: 3,
+        consumption: 2500,
+        dutyCycle: 0.15,
         usagePeriods: [
-          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: true, startTime: '00:00', endTime: '23:59' },
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '17:00', 
+            endTime: '18:30' 
+          },
         ],
       },
       {
         name: 'Világítótest',
-        count: 1,
-        consumption: 3,
+        count: 10,
+        consumption: 9,
+        dutyCycle: 1,
         usagePeriods: [
-          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: true, startTime: '00:00', endTime: '23:59' },
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '18:00', 
+            endTime: '23:00' 
+          },
         ],
       },
       {
         name: 'Televízió',
-        count: 1,
-        consumption: 3,
+        count: 2,
+        consumption: 100,
+        dutyCycle: 1,
         usagePeriods: [
-          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: true, startTime: '00:00', endTime: '23:59' },
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '19:00', 
+            endTime: '23:00' 
+          },
         ],
       },
       {
         name: 'PC + monitor(ok)',
-        count: 1,
-        consumption: 3,
+        count: 2,
+        consumption: 250,
+        dutyCycle: 1,
         usagePeriods: [
-          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: true, startTime: '00:00', endTime: '23:59' },
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '16:00', 
+            endTime: '22:00' 
+          },
         ],
       },
       {
         name: 'Játékkonzol',
-        count: 1,
-        consumption: 3,
+        count: 2,
+        consumption: 150,
+        dutyCycle: 0.3,
         usagePeriods: [
-          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: true, startTime: '00:00', endTime: '23:59' },
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '17:00', 
+            endTime: '21:00' 
+          },
         ],
       },
       {
         name: 'Egyéb kisebb fogyasztók összesítve',
         count: 1,
-        consumption: 3,
+        consumption: 400,
+        dutyCycle: 0.1,
         usagePeriods: [
-          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: true, startTime: '00:00', endTime: '23:59' },
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '07:00', 
+            endTime: '09:00' 
+          },
         ],
       },
     ],

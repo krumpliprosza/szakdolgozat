@@ -51,6 +51,7 @@ export const HouseholdItemCard = ({
           value={item.consumption}
           onChange={(value) => value !== null && onUpdate({ consumption: value })}
           min={0}
+          max={25000}
           step={25}
           helperText="watt (W)"
           invalid={item.consumption === 0}
@@ -61,14 +62,13 @@ export const HouseholdItemCard = ({
       <NumField
         label="Aktív ciklusidő"
         info="Azt adja meg, hogy az eszköz használati időtartamán belül az idő hány százalékában üzemel ténylegesen az eszköz."
-        value={item.dutyCycle ?? null}
+        value={item.dutyCycle ?? 1}
         onChange={(value) => onUpdate({ dutyCycle: value ?? undefined })}
         min={0.05}
         max={1}
         step={0.05}
         formatOptions={{ style: 'percent', maximumFractionDigits: 0 }}
         helperText="5% és 100% között"
-        placeholder="100%"
       />
 
       <VStack align="stretch" gap={3}>

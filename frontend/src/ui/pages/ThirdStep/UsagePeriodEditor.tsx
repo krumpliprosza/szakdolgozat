@@ -27,7 +27,7 @@ const conditionSettings: Record<UsageCondition['type'], { comparator: { value: s
       { value: '<', label: 'Kisebb, mint (<)' },
       { value: '<=', label: 'Kisebb vagy egyenlő, mint (≤)' },
     ],
-    min: -50,
+    min: -30,
     max: 50,
     unit: '°C',
     default: () => ({
@@ -92,7 +92,7 @@ export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEdi
           )}
           {(!isUsagePeriodDateRangeFilled(period)) && (
             <Field.Root invalid mt={2}>
-              <Field.ErrorText fontSize="sm" fontWeight={"bold"} color="red.muted">Ennél a felhasználási időtartamnál a kezdési dátum vagy a befejezési dátum üresen lett hagyva!</Field.ErrorText>
+              <Field.ErrorText fontSize="sm" fontWeight="bold" color="red.muted">Ennél a felhasználási időtartamnál a kezdési dátum vagy a befejezési dátum üresen lett hagyva!</Field.ErrorText>
             </Field.Root>
           )}
         </Box>
@@ -137,7 +137,7 @@ export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEdi
           )}
           {(!isUsagePeriodTimeRangeValid(period)) && (
             <Field.Root invalid mt={2}>
-              <Field.ErrorText fontSize="sm" fontWeight={"bold"} color="red.muted">Ennél a felhasználási időtartamnál a kezdési időnek legalább 15 perccel korábbinak kell lennie, mint a befejezési időnek!</Field.ErrorText>
+              <Field.ErrorText fontSize="sm" fontWeight="bold" color="red.muted">Ennél a felhasználási időtartamnál a kezdési időnek legalább 15 perccel korábbinak kell lennie, mint a befejezési időnek!</Field.ErrorText>
             </Field.Root>
           )}
         </Box>

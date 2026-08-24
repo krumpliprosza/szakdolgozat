@@ -133,7 +133,7 @@ export interface HouseholdItem {
   name: string
   count: number
   consumption: number
-  dutyCycle?: number
+  dutyCycle: number
   usagePeriods: UsagePeriod[]
 }
 
