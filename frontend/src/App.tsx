@@ -5,6 +5,7 @@ import { FirstStep } from './ui/pages/FirstStep'
 import { SecondStep } from './ui/pages/SecondStep'
 import { ThirdStep } from './ui/pages/ThirdStep'
 import { SetupComplete } from './ui/pages/SetupComplete'
+import { SimulationResults } from './ui/pages/SimulationResults'
 
 /* TODO lista
 
@@ -13,6 +14,7 @@ import { SetupComplete } from './ui/pages/SetupComplete'
   - Fogyasztasi modell atalakitasa?
   - Kesz felhasznalasi profilok osszeirasa
   - Firefoxon az idovalaszto ikonja nem tunik el
+  - Szimulacios parameterek megosztasa (lzString + QR kod)?
   - Tarifak kezelese
   
 */
@@ -29,6 +31,7 @@ function App() {
         <Route path="/third-step" element={<ThirdStep />} />
         <Route path="/setup-complete" element={<SetupComplete />} />
       </Route>
+      <Route path="/simulation-results" element={<SimulationResults />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

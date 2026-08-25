@@ -1,10 +1,10 @@
 import { Box, VStack, Text, Heading } from '@chakra-ui/react'
-import { useWizardData } from '../../steps/WizardDataContext'
-import { usePageTitle } from '../../hooks/usePageTitle'
-import { useLocationForm } from '../../hooks/useLocationForm'
-import { AnimatedPage } from '../../components/AnimatedPage'
-import { LocationPicker } from '../../components/LocationPicker'
-import { CoordinateEditable } from '../../components/CoordinateEditable'
+import { useWizardData } from '../../../steps/WizardDataContext'
+import { usePageTitle } from '../../../hooks/usePageTitle'
+import { useLocationForm } from '../../../hooks/useLocationForm'
+import { AnimatedPage } from '../../../components/AnimatedPage'
+import { LocationPicker } from '../../../components/LocationPicker'
+import { CoordinateEditable } from '../../../components/CoordinateEditable'
 
 // Leiras: Helyszin kivalasztasa terkepen vagy kezi koordinata-bevitellel.
 
