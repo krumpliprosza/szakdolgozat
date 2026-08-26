@@ -1,7 +1,8 @@
 import Highcharts, { type Options } from 'highcharts'
+import 'highcharts/esm/modules/sankey'
 import * as HChartsReact from 'highcharts-react-official'
 import { useColorMode } from '../../../components/color-mode'
-import { baseChartOptions } from './HighChartsTheme'
+import { baseChartOptions } from './HighchartsTheme'
 
 // Leiras: Egyseges formazasu Highcharts diagram.
 

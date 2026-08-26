@@ -1,9 +1,9 @@
-import Highcharts, { type Options } from 'highcharts'
+import Highcharts from 'highcharts'
 import type { ColorMode } from '../../../components/color-mode'
 
 // Leiras: A diagramok egyseges, alapertelmezett formazasat adja vissza.
 
-const palette = {
+const colors = {
   light: {
     background: '#E9FFE9',
     panelBorder: '#6B46C1',
@@ -11,7 +11,7 @@ const palette = {
     mutedText: '#4A5568',
     gridLine: '#C6E8C6',
     axisLine: '#6B46C1',
-    seriesColors: ['#E53E3E', '#3182CE', '#38A169', '#6B46C1', '#D69E2E'],
+    seriesColors: ['#E53E3E', '#38A169', '#3182CE', '#D69E2E', '#6B46C1',],
     tooltipBackground: '#FFFFFF',
   },
   dark: {
@@ -21,14 +21,14 @@ const palette = {
     mutedText: '#A0AEC0',
     gridLine: '#2D2540',
     axisLine: '#B794F4',
-    seriesColors: ['#FC8181', '#63B3ED', '#68D391', '#B794F4', '#F6E05E'],
+    seriesColors: ['#FC8181', '#68D391', '#63B3ED', '#F6E05E', '#B794F4',],
     tooltipBackground: '#1A1025',
   },
 }
 
 // Az adott temahoz tartozo diagrambeallitasokat adja vissza
-export const baseChartOptions = (colorMode: ColorMode): Options => {
-    const colors = palette[colorMode] ?? palette.light
+export const baseChartOptions = (colorMode: ColorMode): void => {
+    const color = colors[colorMode] ?? colors.light
 
     Highcharts.setOptions({
         lang: {
@@ -36,9 +36,6 @@ export const baseChartOptions = (colorMode: ColorMode): Options => {
             resetZoomTitle: 'np',
             yAxisTitle: ''
         },
-    })
-
-    return {
         chart: {
             backgroundColor: 'transparent',
             style: {
@@ -49,88 +46,99 @@ export const baseChartOptions = (colorMode: ColorMode): Options => {
             },
             resetZoomButton: {
                 theme: {
-                    fill: colors.tooltipBackground,
-                    stroke: colors.axisLine,
-                    'stroke-width': 2,
+                    fill: color.tooltipBackground,
+                    stroke: color.axisLine,
+                    strokeWidth: 2,
                     r: 4,
                     padding: 8,
                     style: {
-                        color: colors.text,
+                        color: color.text,
                         fontWeight: '500',
                     },
                     states: {
                         hover: {
-                            fill: colors.axisLine,
+                            fill: color.axisLine,
                             style: {
-                                color: colors.background,
+                                color: color.background,
                             },
                         },
                     },
                 },
                 position: {
                     align: 'right',
-                    x: -10,
-                    y: 10,
                 },
             },
         },
-        colors: colors.seriesColors,
+        colors: color.seriesColors,
         title: {
             style: {
-                color: colors.text,
+                color: color.text,
                 fontWeight: 'bold',
             },
         },
         subtitle: {
             style: {
-                color: colors.mutedText,
+                color: color.mutedText,
             },
         },
         xAxis: {
-            lineColor: colors.axisLine,
-            tickColor: colors.axisLine,
-            gridLineColor: colors.gridLine,
+            lineColor: color.axisLine,
+            tickColor: color.axisLine,
+            gridLineColor: color.gridLine,
             labels: {
                 style: {
-                    color: colors.mutedText,
+                    color: color.mutedText,
                 },
             },
             title: {
                 style: {
-                    color: colors.text,
+                    color: color.text,
                 },
             },
         },
         yAxis: {
-            gridLineColor: colors.gridLine,
+            gridLineColor: color.gridLine,
             labels: {
                 style: {
-                    color: colors.mutedText,
+                    color: color.mutedText,
                 },
             },
             title: {
                 style: {
-                    color: colors.text,
+                    color: color.text,
                 },
             },
         },
         legend: {
             itemStyle: {
-                color: colors.text,
+                color: color.text,
             },
             itemHoverStyle: {
-                color: colors.mutedText,
+                color: color.mutedText,
             },
         },
         tooltip: {
-            backgroundColor: colors.tooltipBackground,
-            borderColor: colors.axisLine,
+            shared: true,
+            split: false,
+            backgroundColor: color.tooltipBackground,
+            borderColor: color.axisLine,
             style: {
-                color: colors.text,
+                color: color.text,
             },
+        },
+        plotOptions: {
+            areaspline: {
+                fillOpacity: 0.5,
+            },
+            column: {
+                opacity: 0.75,
+            },
+            area: {
+                fillOpacity: 0.15,
+            }
         },
         credits: {
             enabled: false,
         },
-    }
+    })
 }

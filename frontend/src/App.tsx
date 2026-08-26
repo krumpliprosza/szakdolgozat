@@ -9,14 +9,15 @@ import { SimulationResults } from './ui/pages/SimulationResults'
 
 /* TODO lista
 
-  - Hibakezeles (404 not found stb.)
+  - Hibakezeles (404 not found stb.)?
   - NREL SAM adatbazisbol modulok es inverterek betoltese?
   - Fogyasztasi modell atalakitasa?
-  - Kesz felhasznalasi profilok osszeirasa
   - Firefoxon az idovalaszto ikonja nem tunik el
   - Szimulacios parameterek megosztasa (lzString + QR kod)?
   - Tarifak kezelese
-  
+  - Egyaltalan nem vagy xy modon lehessen nagyitani, szinezes hozzaadasa, valamint mertekegysegek megjelolese a sankey diagramban
+  - Ne lehessen megnyitni egybol a SimulationResults oldalt
+
 */
 
 // Leiras: Az utvonalakat definialja, semmi mas logikat nem tartalmaz.
