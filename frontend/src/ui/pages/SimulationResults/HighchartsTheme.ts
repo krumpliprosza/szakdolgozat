@@ -43,6 +43,11 @@ export const baseChartOptions = (colorMode: ColorMode): void => {
             },
             zooming: {
                 type: 'x',
+                pinchType: 'x',
+            },
+            panning: { 
+                enabled: true, 
+                type: 'x', 
             },
             resetZoomButton: {
                 theme: {
@@ -139,6 +144,23 @@ export const baseChartOptions = (colorMode: ColorMode): void => {
         },
         credits: {
             enabled: false,
+        },
+        responsive: {
+            rules: [
+                {
+                    condition: {
+                        maxWidth: 600,
+                    },
+                    chartOptions: {
+                        yAxis: [
+                            { labels: { enabled: false }, title: { text: undefined } },
+                            { labels: { enabled: false }, title: { text: undefined } },
+                            { labels: { enabled: false }, title: { text: undefined } },
+                            { labels: { enabled: false }, title: { text: undefined } },
+                        ],
+                    },
+                },
+            ],
         },
     })
 }

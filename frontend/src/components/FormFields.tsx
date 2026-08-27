@@ -1,6 +1,5 @@
-import { Field, HStack, IconButton, Input, NumberInput, Portal, Select, Switch, Text, createListCollection, DatePicker, parseDate } from '@chakra-ui/react'
+import { Field, HStack, IconButton, Input, NumberInput, Portal, Select, Switch, Text, createListCollection, DatePicker, parseDate, Tooltip, useTooltip } from '@chakra-ui/react'
 import { LuInfo, LuMinus, LuPlus, LuCalendar } from 'react-icons/lu'
-import { Tooltip } from './Tooltip'
 import { useColorModeValue } from './color-mode'
 
 // Leiras: ujrafelhasznalhato urlap mezok.
@@ -74,12 +73,33 @@ interface DateFieldProps {
 // (i) ikon es a hozzatartozo leiras
 const InfoIcon = ({ info }: { info: string }) => {
   const tooltipBg = useColorModeValue('#641BA3', '#9333EA')
+  const tooltip = useTooltip({interactive: true, closeOnClick: false })
+
   return (
-    <Tooltip content={info} showArrow contentProps={{ maxW: '260px', css: { "--tooltip-bg": tooltipBg, "color": "#FFFFFF", "justify-content": "center" } }} interactive>
-      <Text as="span" display="inline-flex" alignItems="center" color="purple.fg" cursor="help">
-        <LuInfo size={14} />
-      </Text>
-    </Tooltip>
+    <Tooltip.RootProvider value={tooltip}>
+      <Tooltip.Trigger asChild>
+        <Text
+          as="span"
+          display="inline-flex"
+          alignItems="center"
+          color="purple.fg"
+          onClick={() => tooltip.setOpen(!tooltip.open)}
+        >
+          <LuInfo size={14} />
+        </Text>
+      </Tooltip.Trigger>
+      <Tooltip.Positioner>
+        <Tooltip.Content
+          maxW="260px"
+          css={{ "--tooltip-bg": tooltipBg, color: "#FFFFFF", justifyContent: "center" }}
+        >
+          {info}
+          <Tooltip.Arrow>
+            <Tooltip.ArrowTip />
+          </Tooltip.Arrow>
+        </Tooltip.Content>
+      </Tooltip.Positioner>
+    </Tooltip.RootProvider>
   )
 }
 

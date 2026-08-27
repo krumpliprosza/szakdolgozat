@@ -14,6 +14,11 @@ const config = defineConfig({
                         value: { _light: "#E9FFE9", _dark: "#0E0616" },
                     },
                 },
+                fg: {
+                    carouselIndicator: {
+                        value: { _light: "#CCCCCC", _dark: "#2B3933" },
+                    },
+                },
                 purple: {
                     border: {
                         value: { _light: "{colors.purple.700}", _dark: "{colors.purple.400}" },

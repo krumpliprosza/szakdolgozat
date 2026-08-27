@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Tooltip } from "./Tooltip"
 import { useColorModeValue } from './color-mode'
 import { Box, Button, HStack, Text, useBreakpointValue } from '@chakra-ui/react'
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet'
@@ -158,11 +157,9 @@ export const LocationPicker = ({
       </Text>
 
       <HStack my={2} gap={3}>
-        <Tooltip showArrow content="Ha a helymeghatározás rossz helyszínt adna vissza, ellenőrizd, hogy van-e aktív VPN kapcsolatod!" contentProps={{ css: { "--tooltip-bg": "#9333EA", "color": "#FFFFFF", "justify-content": "center" } }} interactive>
-          <Button size="sm" variant="outline" onClick={handleUseMyLocation} loading={locating}>
-            Saját helyzetem használata
-          </Button>
-        </Tooltip>
+        <Button size="sm" variant="outline" onClick={handleUseMyLocation} loading={locating}>
+          Saját helyzetem használata
+        </Button>
       </HStack>
       
       {error && ( 
