@@ -144,7 +144,7 @@ export const SimulationResults = () => {
                       name: '',
                       tooltip: {
                         nodeFormat: '{point.name}: <b>{point.sum} W</b><br/>',
-                        pointFormat: '{point.fromNode.name} → {point.toNode.name}: <b>{point.weight}</b><br/>',
+                        pointFormat: '{point.fromNode.name} → {point.toNode.name}: <b>{point.weight} W</b><br/>',
                       },
                       colors: [
                         '#e42535', '#d5401a', '#b15e16', '#917112', 
