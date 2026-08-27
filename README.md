@@ -1,6 +1,8 @@
 ```sh
 # Elso inditas elott
-# Backend:
+# Backend (venv hasznalata ajanlott):
+pip install openmeteo-requests
+pip install requests-cache retry-requests numpy pandas
 
 # Frontend:
 cd frontend
