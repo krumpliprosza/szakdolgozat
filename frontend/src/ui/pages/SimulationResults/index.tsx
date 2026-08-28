@@ -1,4 +1,4 @@
-import { Box, Heading, Text, Center, Carousel, IconButton } from '@chakra-ui/react'
+import { Box, Heading, Text, Carousel, IconButton } from '@chakra-ui/react'
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu"
 import { usePageTitle } from '../../../hooks/usePageTitle'
 import { AnimatedPage } from '../../../components/AnimatedPage'
@@ -212,7 +212,7 @@ export const SimulationResults = () => {
 
       </Box>
       
-      <Center><Text fontSize="xs" color="fg.muted">Megjegyzés: a statisztikák elsősorban tájékoztató jellegűek, mivel a termelési és fogyasztási adatok mind modellek segítségével kerültek kiszámításra. Ebből adódóan a valós termeléshez és fogyasztáshoz képest a kapott eredmények eltérhetnek.</Text></Center>
+      <Text fontSize="xs" color="fg.muted" textAlign="center">Megjegyzés: a statisztikák elsősorban tájékoztató jellegűek, mivel a termelési és fogyasztási adatok mind modellek segítségével kerültek kiszámításra; ebből adódóan a valós termeléshez és fogyasztáshoz képest a kapott eredmények eltérhetnek. Az időjárási adatok szolgáltatását az <a href="https://open-meteo.com/">open-meteo.com biztosítja.</a></Text>
       <ChangeColorModeButton></ChangeColorModeButton>
 
     </AnimatedPage>

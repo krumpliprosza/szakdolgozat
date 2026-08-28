@@ -1,8 +1,8 @@
 ```sh
+pip freeze > requirements.txt
 # Elso inditas elott
 # Backend (venv hasznalata ajanlott):
-pip install openmeteo-requests
-pip install requests-cache retry-requests numpy pandas
+pip install -r requirements.txt
 
 # Frontend:
 cd frontend
@@ -13,7 +13,7 @@ npm install
 # Minden inditas elott
 # Backend:
 cd backend
-python main.py
+fastapi dev
 
 # Frontend:
 cd frontend
