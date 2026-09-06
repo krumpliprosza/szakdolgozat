@@ -32,7 +32,7 @@ export const PrevNextButtons = () => {
             <Button>{getNextButtonLabel(value)}</Button>
           </Steps.NextTrigger>
         ) : (
-          <Button onClick={() => window.open("/simulation-results")}>
+          <Button onClick={() => navigate("/simulation-results")}>
             {getNextButtonLabel(value)}
           </Button>
         )}

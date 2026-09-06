@@ -16,7 +16,7 @@ L.Icon.Default.mergeOptions({
 })
 
 // Segedvaltozo a szelesseg/hosszusag tarolasara
-type LatLon = { lat: number; lon: number }
+type LatLon = { latitude: number; longitude: number }
 
 interface LocationPickerProps {
   onChange: (coords: LatLon) => void
@@ -26,7 +26,7 @@ interface LocationPickerProps {
 }
 
 // Kattintasokat figyelo komponens
-const ClickHandler = ({ onPick }: { onPick: (lat: number, lon: number) => void }) => {
+const ClickHandler = ({ onPick }: { onPick: (latitude: number, longitude: number) => void }) => {
   useMapEvents({
     click(e) {
       onPick(e.latlng.lat, e.latlng.lng)
@@ -40,7 +40,7 @@ const RecenterOnLocate = ({ target }: { target: LatLon | null }) => {
   const map = useMap()
   useEffect(() => {
     if (target) {
-      map.flyTo([target.lat, target.lon], 14)
+      map.flyTo([target.latitude, target.longitude], 14)
     }
   }, [target, map])
   return null
@@ -50,7 +50,7 @@ const RecenterOnLocate = ({ target }: { target: LatLon | null }) => {
 export const LocationPicker = ({
   onChange,
   selected,
-  initialCenter = { lat: 47.1625, lon: 19.5033 }, // Alapertelmezetten Magyarorszag
+  initialCenter = { latitude: 47.1625, longitude: 19.5033 }, // Alapertelmezetten Magyarorszag
   initialZoom = 7,
 }: LocationPickerProps) => {
 
@@ -61,7 +61,7 @@ export const LocationPicker = ({
   useEffect(() => {
     if (
       selected &&
-      (selected.lat !== coords?.lat || selected.lon !== coords?.lon)
+      (selected.latitude !== coords?.latitude || selected.longitude !== coords?.longitude)
     ) {
       setCoords(selected)
     }
@@ -88,8 +88,8 @@ export const LocationPicker = ({
   })
 
   // Uj koordinata beallitasa
-  const setLocation = (lat: number, lon: number) => {
-    const next = { lat, lon }
+  const setLocation = (latitude: number, longitude: number) => {
+    const next = { latitude, longitude }
     setCoords(next)
     setError(null)
     onChange(next)
@@ -137,7 +137,7 @@ export const LocationPicker = ({
       <Box borderWidth="1px" borderRadius="md" overflow="hidden">
         
         <MapContainer
-          center={[initialCenter.lat, initialCenter.lon]}
+          center={[initialCenter.latitude, initialCenter.longitude]}
           zoom={initialZoom}
           style={{ height: mapHeight, width: '100%' }}
         >
@@ -147,7 +147,7 @@ export const LocationPicker = ({
           />
           <ClickHandler onPick={setLocation} /> { /* Kattintasok vizsgalata */ }
           <RecenterOnLocate target={coords} /> { /* A terkep igazitasa ugy, hogy a marker kozepre legyen allitva */ }
-          {coords && <Marker position={[coords.lat, coords.lon]} icon={purpleIcon} />}
+          {coords && <Marker position={[coords.latitude, coords.longitude]} icon={purpleIcon} />}
         </MapContainer>
 
       </Box>

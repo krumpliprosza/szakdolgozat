@@ -6,7 +6,7 @@ import { StepRouteSync } from '../steps/StepRouteSync'
 import { PrevNextButtons } from '../steps/PrevNextButtons'
 import { ChangeColorModeButton } from '../components/ChangeColorModeButton'
 import { items } from '../steps/StepItems'
-import { WizardDataProvider, useWizardData, type WizardData } from '../steps/WizardDataContext'
+import { useWizardData, type WizardData } from '../steps/WizardDataContext'
 
 // Leiras: Az egesz varazslo vaza: osszefogja a StepsList, StepRouteSync, Outlet, PrevNextButtons, ChangeColorModeButton elemeket.
 
@@ -74,8 +74,6 @@ const StepInner = () => {
 // A varazslo adatait atadja a StepInner-nek
 export const Step = () => (
   <Stack align="flex-start">
-    <WizardDataProvider>
-      <StepInner />
-    </WizardDataProvider>
+    <StepInner />
   </Stack>
 )

@@ -106,6 +106,7 @@ export interface TemperatureCondition {
   threshold: number
 }
 
+// Napszak feltetel
 export interface IsDayOrNightCondition {
   type: 'isdayornight'
   comparator: 'isday' | 'isnight'
@@ -139,7 +140,7 @@ export interface HouseholdItem {
 
 // A teljes szimulacio bemeneti adatai
 export interface WizardData {
-  location: { lat: number; lon: number } | null
+  location: { latitude: number; longitude: number } | null
   systemParameters: SystemParameters | null
   systemParametersMode: SystemParametersMode
   selectedPredefinedSystemId: string | null
@@ -179,7 +180,7 @@ export const WizardDataProvider = ({ children }: { children: ReactNode }) => {
 
 // Segedelem: a WizardDataContext egyszerubb elereset biztositja
 export const useWizardData = () => {
-  const ctx = useContext(WizardDataContext)
-  if (!ctx) throw new Error('Hiba')
-  return ctx
+  const context = useContext(WizardDataContext)
+  if (!context) throw new Error('Hiba')
+  return context
 }

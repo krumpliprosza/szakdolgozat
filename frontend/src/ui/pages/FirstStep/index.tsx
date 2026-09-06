@@ -13,7 +13,7 @@ export const FirstStep = () => {
 
   // A kivalasztott helyszint a varazslo adatai koze masolja, hogy mindenhol elerheto legyen
   const { data, setData } = useWizardData()
-  const setLocation = (location: { lat: number; lon: number } | null) => { setData({ location }) }
+  const setLocation = (location: { latitude: number; longitude: number } | null) => { setData({ location }) }
   const { draftLat, draftLon, commitLat, commitLon } = useLocationForm(data.location, setLocation)
 
   return (
