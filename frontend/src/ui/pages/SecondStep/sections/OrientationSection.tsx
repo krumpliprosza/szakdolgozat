@@ -40,12 +40,12 @@ export const OrientationSection = ({ parameters, onPatch }: OrientationSectionPr
               { label: 'Kéttengelyes követés', value: 'dual_axis' },
             ]}
           />
-
+          {/* Fix tajolasu rendszer */}
           {parameters.trackingType === 'fixed' && (
             <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
               <NumField
                 label="Dőlésszög"
-                info="A panel síkja és a vízszintes talaj bezárt szöge. Referenciaértékek: 0° = vízszintes, 90° = függőleges."
+                info="A panel függőleges irányultsága. Referenciaértékek: 0° = vízszintes, 90° = függőleges."
                 value={parameters.surfaceTilt}
                 onChange={(value) => value !== null && onPatch({ surfaceTilt: value })}
                 min={0} max={90} step={1}
@@ -53,7 +53,7 @@ export const OrientationSection = ({ parameters, onPatch }: OrientationSectionPr
               />
               <NumField
                 label="Tájolási szög (azimut)"
-                info="A panel irányítási szöge. Referenciaértékek: 0° = észak, 90° = kelet, 180° = dél, 270° = nyugat."
+                info="A panel vízszintes irányítási szöge. Referenciaértékek: 0° = észak, 90° = kelet, 180° = dél, 270° = nyugat."
                 value={parameters.surfaceAzimuth}
                 onChange={(value) => value !== null && onPatch({ surfaceAzimuth: value })}
                 min={0} max={360} step={1}
@@ -61,9 +61,9 @@ export const OrientationSection = ({ parameters, onPatch }: OrientationSectionPr
               />
             </SimpleGrid>
           )}
-
+          {/* Egytengelyes kovetesu rendszer */}
           {parameters.trackingType === 'single_axis' && (
-            <SimpleGrid columns={{ base: 1, md: 3 }} gap={4}>
+            <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
               <NumField
                 label="Tengely dőlésszöge"
                 info="Az egytengelyes követő forgástengelyének dőlése a vízszintestől. Sík terepen jellemzően 0°."
@@ -81,25 +81,33 @@ export const OrientationSection = ({ parameters, onPatch }: OrientationSectionPr
                 helperText="fok (°)"
               />
               <NumField
-                label="Maximális követési szög"
-                info="Az a legnagyobb szög, amennyire a panel a tengelye körül elfordulhat napkeltétől napnyugtáig."
+                  label="Maximális követési szög"
+                  info="Az a legnagyobb szög, amennyire a panel a tengelye körül elfordulhat napkeltétől napnyugtáig."
+                  value={parameters.maxTrackingAngle}
+                  onChange={(value) => value !== null && onPatch({ maxTrackingAngle: value })}
+                  min={0} max={90} step={1}
+                  helperText="fok (°)"
+              />
+              <NumField
+                label="Sortávolság aránya (GCR)"
+                info="A modulszélesség és a sorok közti távolság aránya."
+                value={parameters.groundCoverageRatio}
+                onChange={(value) => value !== null && onPatch({ groundCoverageRatio: value })}
+                min={0.05} max={0.95} step={0.01}
+                formatOptions={{ style: 'percent', maximumFractionDigits: 0 }}
+                helperText="5% és 95% között"
+              />
+            </SimpleGrid>
+          )}
+          {/* Kettengelyes kovetesu rendszer */}
+          {parameters.trackingType === 'dual_axis' && (
+            <NumField
+                label="Maximális dőlésszög"
+                info="Az a legnagyobb szög, amennyire a panel a vízszintestől mérve megdőlhet a napot követve."
                 value={parameters.maxTrackingAngle}
                 onChange={(value) => value !== null && onPatch({ maxTrackingAngle: value })}
                 min={0} max={90} step={1}
                 helperText="fok (°)"
-              />
-            </SimpleGrid>
-          )}
-
-          {parameters.trackingType !== 'fixed' && (
-            <NumField
-              label="Sortávolság aránya (GCR)"
-              info="A modulszélesség és a sorok közti távolság aránya."
-              value={parameters.groundCoverageRatio}
-              onChange={(value) => value !== null && onPatch({ groundCoverageRatio: value })}
-              min={0.05} max={0.95} step={0.01}
-              formatOptions={{ style: 'percent', maximumFractionDigits: 0 }}
-              helperText="5% és 95% között"
             />
           )}
         </VStack>

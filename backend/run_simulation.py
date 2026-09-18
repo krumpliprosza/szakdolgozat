@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from receive_weather_data import receive_weather_data, WeatherDataRequest
+from solar_production import solar_production_fc
 from energy_consumption import energy_consumption_fc
 from classes import WizardData
 
@@ -21,7 +22,7 @@ def run_simulation(data: WizardData):
 
     # Napelemrendszer termelesenek meghatarozasa
     print(f"\nSystemParameters:\nOrientation: {data.systemParameters.orientation}\nModule: {data.systemParameters.module}\nInverter: {data.systemParameters.inverter}\nLosses: {data.systemParameters.losses}\nBattery: {data.systemParameters.battery}\nAlbedo: {data.systemParameters.albedo}")
-    solar_production = None
+    solar_production = solar_production_fc(weather_data, data.location, data.systemParameters)
 
     # Fogyasztott energia megszamolasa
     print(f"\nHouseholdItems:")
@@ -32,9 +33,10 @@ def run_simulation(data: WizardData):
     # Energiaelosztasi strategiak futtatasa
     strategy_1, strategy_2, strategy_3 = None, None, None
 
+    # Peldaadatok kiirasa
     print(f"\n--------------------------------------------------")
     print(f"\nweatherData pelda:\n{weather_data[0]}")
-    print(f"\nsolarProduction pelda:\nsolar_production[0]")
+    print(f"\nsolarProduction pelda:\n{solar_production[0]}")
     print(f"\nenergyConsumption pelda:\n{energy_consumption[0]}")
 
     # Adatok osszefuzese

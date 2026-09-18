@@ -6,6 +6,7 @@ import { usePageTitle } from '../../../hooks/usePageTitle'
 import { AnimatedPage } from '../../../components/AnimatedPage'
 import { ChangeColorModeButton } from '../../../components/ChangeColorModeButton'
 import { Chart } from './Chart'
+import { useColorModeValue } from '../../../components/color-mode'
 
 // Leiras: A szimulacio eredmenyeit megjelenito oldal.
 
@@ -17,12 +18,24 @@ interface WeatherData {
   is_day: number
 }
 
+interface SolarProductionData {
+  date: string
+  production_kWh: number
+}
+
+interface EnergyConsumptionData {
+  date: string
+  consumption_kWh: number
+  household_items: Record<string, number>
+}
+
 export const SimulationResults = () => {
   usePageTitle("Statisztikák")
 
   const { data } = useWizardData()
-  console.log(data)
   const [weatherData, setWeatherData] = useState<WeatherData[]>([])
+  const [solarProduction, setSolarProduction] = useState<SolarProductionData[]>([])
+  const [energyConsumption, setEnergyConsumption] = useState<EnergyConsumptionData[]>([])
 
   useEffect(() => {
     if (!data.location) return
@@ -32,7 +45,11 @@ export const SimulationResults = () => {
       body: JSON.stringify(data),
     })
       .then(response => response.json())
-      .then(result => setWeatherData(result.weatherData))
+      .then(result => {
+        setWeatherData(result.weatherData)
+        setSolarProduction(result.solarProduction)
+        setEnergyConsumption(result.energyConsumption)
+      })
       .catch((error) => console.error('Nem sikerult a szimulacio futtatasa: ', error))
   }, [data.location])
 
@@ -60,7 +77,7 @@ export const SimulationResults = () => {
               text: 'Időjárási adatok',
             },
             rangeSelector: { enabled: false },
-            navigator: { enabled: true },
+            navigator: { enabled: true, baseSeries: 'napszak' },
             scrollbar: { enabled: true },
             xAxis: { type: 'datetime' },
             yAxis: [
@@ -89,7 +106,7 @@ export const SimulationResults = () => {
                 yAxis: 0,
                 type: 'spline',
                 name: 'Hőmérséklet',
-                tooltip: { valueSuffix: ' °C' },
+                tooltip: { valueSuffix: ' °C', valueDecimals: 2 },
                 data: weatherData.map((row) => [new Date(row.date).getTime(), row.temperature_2m]),
                 zIndex: 2,
               },
@@ -97,7 +114,7 @@ export const SimulationResults = () => {
                 yAxis: 1,
                 type: 'spline',
                 name: 'Szélsebesség',
-                tooltip: { valueSuffix: ' km/h' },
+                tooltip: { valueSuffix: ' km/h', valueDecimals: 2 },
                 data: weatherData.map((row) => [new Date(row.date).getTime(), row.wind_speed_10m]),
                 zIndex: 3,
               },
@@ -105,11 +122,13 @@ export const SimulationResults = () => {
                 yAxis: 2,
                 type: 'column',
                 name: 'Csapadék mennyisége',
-                tooltip: { valueSuffix: ' mm' },
+                tooltip: { valueSuffix: ' mm', valueDecimals: 2 },
+                dataGrouping: { approximation: 'sum' },
                 data: weatherData.map((row) => [new Date(row.date).getTime(), row.precipitation]),
                 zIndex: 1,
               },
               {
+                id: 'napszak',
                 yAxis: 3,
                 type: 'area',
                 name: 'Napszak',
@@ -124,41 +143,84 @@ export const SimulationResults = () => {
           }}
         />
 
+        {/* A haztartas fogyasztasa es a napelemrendszer termelese + energiamerleg */}
+        <Chart
+          isStock
+          options={{
+            title: {
+              text: 'A háztartás fogyasztása és a napelemrendszer termelése',
+            },
+            rangeSelector: { enabled: false },
+            navigator: { enabled: true, baseSeries: 'energiamerleg' },
+            scrollbar: { enabled: true },
+            xAxis: { type: 'datetime' },
+            yAxis: [
+              {
+                title: { text: 'Energia (kWh)' },
+                labels: { format: '{value} kWh' },
+                height: '65%',
+                resize: { enabled: true },
+                startOnTick: false,
+                endOnTick: false,
+              },
+              {
+                title: { text: 'Energiamérleg (kWh)' },
+                labels: { format: '{value} kWh' },
+                top: '70%',
+                height: '30%',
+                offset: 0,
+                startOnTick: false,
+                endOnTick: false,
+              },
+            ],
+            series: [
+              {
+                yAxis: 0,
+                type: 'areaspline',
+                name: 'Fogyasztás',
+                tooltip: { valueSuffix: ' kWh', valueDecimals: 2 },
+                dataGrouping: { approximation: 'sum', groupPixelWidth: 20 },
+                data: energyConsumption.map((row) => [new Date(row.date).getTime(), row.consumption_kWh]),
+                zIndex: 0,
+              },
+              {
+                yAxis: 0,
+                type: 'areaspline',
+                name: 'Termelés',
+                tooltip: { valueSuffix: ' kWh', valueDecimals: 2 },
+                dataGrouping: { approximation: 'sum', groupPixelWidth: 20 },
+                data: solarProduction.map((row) => [new Date(row.date).getTime(), row.production_kWh]),
+                zIndex: 1,
+              },
+              {
+                id: 'energiamerleg',
+                yAxis: 1,
+                type: 'line',
+                name: 'Energiamérleg',
+                tooltip: { valueSuffix: ' kWh', valueDecimals: 2  },
+                dataGrouping: { approximation: 'sum', groupPixelWidth: 20 },
+                data: energyConsumption.map((row, i) => [new Date(row.date).getTime(), ((solarProduction[i].production_kWh) - row.consumption_kWh)]),
+                zoneAxis: 'y',
+                zones: [
+                  { // Fogyasztas > termeles
+                    value: 0, 
+                    color: useColorModeValue('#E53E3E', '#FC8181')
+                  },
+                  { // Termeles > fogyasztas
+                    color: useColorModeValue('#38A169', '#9AE6B4')
+                  },
+                ],
+                marker: { enabled: false },
+                zIndex: 2,
+              },
+            ],
+          }}
+        />
+
         <Carousel.Root slideCount={3} allowMouseDrag>
           <Carousel.ItemGroup>
             {items.map((_, index) => (
               <Carousel.Item key={index} index={index}>
-
-                {/* A haztartas fogyasztasa es a napelemrendszer termelese */}
-                <Chart
-                  options={{
-                    title: {
-                      text: 'A háztartás fogyasztása és a napelemrendszer termelése',
-                    },
-                    yAxis: [
-                      {
-                        title: { text: 'Teljesítmény (W)' },
-                        labels: { format: '{value} W' },
-                      },
-                    ],
-                    series: [
-                      {
-                        type: 'areaspline',
-                        name: 'Fogyasztás',
-                        tooltip: { valueSuffix: ' W' },
-                        data: [15, 25, 25, 15, 25, 15, 15, 10, 20, 21, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 41, 41, 41, 41, 41, 41, 41, 50, 50, 50, 50, 50, 50, 50, 10, 20, 21, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 41, 41, 41, 41, 41, 41, 41, 50, 50, 50, 50, 50, 50, 50, 10, 20, 21, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 41, 41, 41, 41, 41, 41, 41, 50, 50, 50, 50, 50, 50, 50, 10, 20, 21, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 41, 41, 41, 41, 41, 41, 41, 50, 50, 50, 50, 50, 50, 50, 10, 20, 21, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 41, 41, 41, 41, 41, 41, 41, 50, 50, 50, 50, 50, 50, 50, 10, 20, 21, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 41, 41, 41, 41, 41, 41, 41, 50, 50, 50, 50, 50, 50, 50, 10, 20, 21, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 41, 41, 41, 41, 41, 41, 41, 50, 50, 50, 50, 50, 50, 50, 10, 20, 21, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 41, 41, 41, 41, 41, 41, 41, 50, 50, 50, 50, 50, 50, 50, 10, 20, 21, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 41, 41, 41, 41, 41, 41, 41, 50, 50, 50, 50, 50, 50, 50, 10, 20, 21, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 41, 41, 41, 41, 41, 41, 41, 50, 50, 50, 50, 50, 50, 50],
-                        zIndex: 0,
-                      },
-                      {
-                        type: 'areaspline',
-                        name: 'Termelés',
-                        tooltip: { valueSuffix: ' W' },
-                        data: [25, 15, 15, 15, 15, 15, 15, 20, 10, 10, 10, 10, 10, 10, 10, 32, 32, 32, 32, 32, 32, 32, 30, 30, 30, 30, 30, 30, 30, 14, 24, 34, 24, 14, 34, 24, 50, 50, 50, 50, 50, 50, 50, 20, 10, 10, 10, 10, 10, 10, 10, 32, 32, 32, 32, 32, 32, 32, 30, 30, 30, 30, 30, 30, 30, 14, 24, 34, 24, 14, 34, 24, 50, 50, 50, 50, 50, 50, 50, 20, 10, 10, 10, 10, 10, 10, 10, 32, 32, 32, 32, 32, 32, 32, 30, 30, 30, 30, 30, 30, 30, 14, 24, 34, 24, 14, 34, 24, 50, 50, 50, 50, 50, 50, 50, 20, 10, 10, 10, 10, 10, 10, 10, 32, 32, 32, 32, 32, 32, 32, 30, 30, 30, 30, 30, 30, 30, 14, 24, 34, 24, 14, 34, 24, 50, 50, 50, 50, 50, 50, 50, 20, 10, 10, 10, 10, 10, 10, 10, 32, 32, 32, 32, 32, 32, 32, 30, 30, 30, 30, 30, 30, 30, 14, 24, 34, 24, 14, 34, 24, 50, 50, 50, 50, 50, 50, 50, 20, 10, 10, 10, 10, 10, 10, 10, 32, 32, 32, 32, 32, 32, 32, 30, 30, 30, 30, 30, 30, 30, 14, 24, 34, 24, 14, 34, 24, 50, 50, 50, 50, 50, 50, 50, 20, 10, 10, 10, 10, 10, 10, 10, 32, 32, 32, 32, 32, 32, 32, 30, 30, 30, 30, 30, 30, 30, 14, 24, 34, 24, 14, 34, 24, 50, 50, 50, 50, 50, 50, 50, 20, 10, 10, 10, 10, 10, 10, 10, 32, 32, 32, 32, 32, 32, 32, 30, 30, 30, 30, 30, 30, 30, 14, 24, 34, 24, 14, 34, 24, 50, 50, 50, 50, 50, 50, 50, 20, 10, 10, 10, 10, 10, 10, 10, 32, 32, 32, 32, 32, 32, 32, 30, 30, 30, 30, 30, 30, 30, 14, 24, 34, 24, 14, 34, 24, 50, 50, 50, 50, 50, 50, 50, 20, 10, 10, 10, 10, 10, 10, 10, 32, 32, 32, 32, 32, 32, 32, 30, 30, 30, 30, 30, 30, 30, 14, 24, 34, 24, 14, 34, 24, 50, 50, 50, 50, 50, 50, 50],
-                        zIndex: 1,
-                      },
-                    ],
-                  }}
-                />
 
                 {/* Az energiaaramlas eloszlasa */}
                 <Chart
@@ -175,8 +237,8 @@ export const SimulationResults = () => {
                       type: 'sankey',
                       name: '',
                       tooltip: {
-                        nodeFormat: '{point.name}: <b>{point.sum} W</b><br/>',
-                        pointFormat: '{point.fromNode.name} → {point.toNode.name}: <b>{point.weight} W</b><br/>',
+                        nodeFormat: '{point.name}: <b>{point.sum} kWh</b><br/>',
+                        pointFormat: '{point.fromNode.name} → {point.toNode.name}: <b>{point.weight} kWh</b><br/>',
                       },
                       colors: [
                         '#e42535', '#d5401a', '#b15e16', '#917112', 
@@ -243,7 +305,7 @@ export const SimulationResults = () => {
         </Carousel.Root>
 
       </Box>
-      
+      <br/>
       <Text fontSize="xs" color="fg.muted" textAlign="center">Megjegyzés: a statisztikák elsősorban tájékoztató jellegűek, mivel a termelési és fogyasztási adatok mind modellek segítségével kerültek kiszámításra; ebből adódóan a valós termeléshez és fogyasztáshoz képest a kapott eredmények eltérhetnek. Az időjárási adatok szolgáltatását az <a href="https://open-meteo.com/">open-meteo.com biztosítja.</a></Text>
       <ChangeColorModeButton></ChangeColorModeButton>
 

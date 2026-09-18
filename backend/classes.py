@@ -7,10 +7,9 @@ Leiras: Az osztalyok leirasa.
 
 TrackingType = Literal['fixed', 'single_axis', 'dual_axis']
 MountType = Literal[
-    'open_rack_glass_glass',
-    'close_mount_glass_glass',
-    'open_rack_glass_polymer',
-    'insulated_back_glass_polymer',
+    'freestanding',
+    'semi_integrated',
+    'insulated',
 ]
 SystemParametersMode = Literal['predefined', 'custom']
 ConsumptionProfileMode = Literal['predefined', 'custom']
@@ -73,7 +72,6 @@ class TemperatureCondition(BaseModel):
 class IsDayOrNightCondition(BaseModel):
     type: Literal['isdayornight']
     comparator: Literal['isday', 'isnight']
-    threshold: float
 
 UsageCondition = Union[TemperatureCondition, IsDayOrNightCondition]
 

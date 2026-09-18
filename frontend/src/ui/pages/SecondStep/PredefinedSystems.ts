@@ -27,7 +27,7 @@ export const predefinedSystems: PredefinedSystem[] = [
       module: {
         pStc: 3000,
         gammaPdc: -0.0035,
-        mountType: 'close_mount_glass_glass',
+        mountType: 'insulated',
         isBifacial: false,
         bifaciality: 0.8,
         iamB0: 0.05,
@@ -76,7 +76,7 @@ export const predefinedSystems: PredefinedSystem[] = [
       module: {
         pStc: 5000,
         gammaPdc: -0.004,
-        mountType: 'open_rack_glass_glass',
+        mountType: 'freestanding',
         isBifacial: false,
         bifaciality: 0.8,
         iamB0: 0.05,
@@ -125,7 +125,7 @@ export const predefinedSystems: PredefinedSystem[] = [
       module: {
         pStc: 8000,
         gammaPdc: -0.0038,
-        mountType: 'open_rack_glass_glass',
+        mountType: 'freestanding',
         isBifacial: true,
         bifaciality: 0.85,
         iamB0: 0.017,

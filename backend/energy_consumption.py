@@ -120,8 +120,7 @@ def energy_consumption_fc(weather_data: List[Dict[str, Any]], household_items: L
 
     # Kimenet osszeallitasa
     dates = weather_df["date"].to_numpy()
-    total_consumption_w = total_consumption.round(2).to_numpy()
-    total_consumption_kwh = (total_consumption * 0.25 / 1000).round(4).to_numpy()
+    consumption_kwh = (total_consumption * 0.25 / 1000).round(4).to_numpy()
     item_consumption_arrays = {
         name: series.round(2).to_numpy() for name, series in consumption_per_item.items()
     }
@@ -129,8 +128,7 @@ def energy_consumption_fc(weather_data: List[Dict[str, Any]], household_items: L
     energy_consumption: List[Dict[str, Any]] = [
         {
             "date": dates[i],
-            "total_consumption_W": float(total_consumption_w[i]),
-            "total_consumption_kWh": float(total_consumption_kwh[i]),
+            "consumption_kWh": float(consumption_kwh[i]),
             "household_items": {name: float(household_items[i]) for name, household_items in item_consumption_arrays.items()},
         }
         for i in range(len(weather_df))

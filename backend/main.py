@@ -32,4 +32,3 @@ Utvonalak
 Szimulacio futtatasa (/run_simulation)
 """
 app.include_router(run_simulation)
-

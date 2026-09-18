@@ -4,7 +4,7 @@ import { createContext, useContext, useState, type ReactNode } from 'react'
 
 export const currentYear = new Date().getFullYear()
 export type TrackingType = 'fixed' | 'single_axis' | 'dual_axis'
-export type MountType = 'open_rack_glass_glass' | 'close_mount_glass_glass' | 'open_rack_glass_polymer' | 'insulated_back_glass_polymer'
+export type MountType = 'freestanding' | 'semi_integrated' | 'insulated'
 export type SystemParametersMode = 'predefined' | 'custom' | null
 export type ConsumptionProfileMode = 'predefined' | 'custom' | null
 
@@ -67,7 +67,7 @@ export const defaultSystemParameters: SystemParameters = {
   module: {
     pStc: 5000,
     gammaPdc: -0.004,
-    mountType: 'open_rack_glass_glass',
+    mountType: 'freestanding',
     isBifacial: false,
     bifaciality: 0.8,
     iamB0: 0.05,
@@ -110,7 +110,6 @@ export interface TemperatureCondition {
 export interface IsDayOrNightCondition {
   type: 'isdayornight'
   comparator: 'isday' | 'isnight'
-  threshold: number
 }
 
 // Felhasznalasi idotartamhoz feltetelek osszegyujtese

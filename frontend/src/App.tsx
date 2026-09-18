@@ -12,7 +12,6 @@ import { WizardLayout } from './ui/layouts/WizardLayout'
 
   Altalanos/ismeretlen hely:
   - Tarifak kezelese
-  - Hibakezeles (404 not found stb.)?
   SecondStep:
   - NREL SAM adatbazisbol modulok es inverterek betoltese?
   ThirdStep:
@@ -21,6 +20,7 @@ import { WizardLayout } from './ui/layouts/WizardLayout'
   - Szimulacios parameterek megosztasa (lzString + QR kod)?
   SimulationResults:
   - Ne lehessen megnyitni ellenorzes nelkul a SimulationResults oldalt
+  - Diagramok nagyitasa, benne levo adatok lathatosaganak allitasa?
 
 */
 

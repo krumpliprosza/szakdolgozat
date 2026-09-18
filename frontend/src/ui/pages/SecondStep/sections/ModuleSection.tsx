@@ -58,10 +58,9 @@ export const ModuleSection = ({ parameters, onPatch }: ModuleSectionProps) => (
             value={parameters.mountType}
             onChange={(value) => onPatch({ mountType: value as MountType })}
             options={[
-              { label: 'Nyitott állvány, üveg-üveg', value: 'open_rack_glass_glass' },
-              { label: 'Nyitott állvány, üveg-polimer hátlap', value: 'open_rack_glass_polymer' },
-              { label: 'Tetőre integrált, üveg-üveg', value: 'close_mount_glass_glass' },
-              { label: 'Hátul szigetelt, üveg-polimer hátlap', value: 'insulated_back_glass_polymer' },
+              { label: 'Nyitott állványon, szabadon szellőző', value: 'freestanding' },
+              { label: 'Tetőhöz közel szerelve, kis légréssel', value: 'semi_integrated' },
+              { label: 'Tetőre integrált, légrés nélkül', value: 'insulated' },
             ]}
           />
 

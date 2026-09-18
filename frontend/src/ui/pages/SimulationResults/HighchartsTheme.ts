@@ -34,7 +34,11 @@ export const baseChartOptions = (colorMode: ColorMode): void => {
         lang: {
             resetZoom: 'Nagyítás visszaállítása',
             resetZoomTitle: 'np',
-            yAxisTitle: ''
+            yAxisTitle: '',
+            locale: 'hu-HU',
+            months: ['január', 'február', 'március', 'április', 'május', 'június', 'július', 'augusztus', 'szeptember', 'október', 'november', 'december'],
+            shortMonths: ['jan.', 'febr.', 'márc.', 'ápr.', 'máj.', 'jún.', 'júl.', 'aug.', 'szept.', 'okt.', 'nov.', 'dec.'],
+            weekdays: ['vasárnap', 'hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat'],
         },
         chart: {
             backgroundColor: 'transparent',
@@ -140,7 +144,14 @@ export const baseChartOptions = (colorMode: ColorMode): void => {
             },
             area: {
                 fillOpacity: 0.15,
-            }
+            },
+            series: {
+                dataGrouping: {
+                    dateTimeLabelFormats: {
+                        week: ['%[AebY] hete', '%[Aeb]', '-%[AebY]'],
+                    },
+                },
+            },
         },
         credits: {
             enabled: false,

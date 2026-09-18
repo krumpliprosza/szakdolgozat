@@ -24,8 +24,8 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Hűtőszekrény',
         count: 1,
-        consumption: 120,
-        dutyCycle: 0.35,
+        consumption: 140,
+        dutyCycle: 0.4,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -39,8 +39,8 @@ export const predefinedProfiles: PredefinedProfile[] = [
       },
       {
         name: 'Világítótest',
-        count: 4,
-        consumption: 9,
+        count: 5,
+        consumption: 10,
         dutyCycle: 1,
         usagePeriods: [
           { 
@@ -49,14 +49,15 @@ export const predefinedProfiles: PredefinedProfile[] = [
             endDate: maxDate, 
             wholeDay: false, 
             startTime: '18:00', 
-            endTime: '23:00' 
+            endTime: '23:00', 
+            condition: { type: 'isdayornight', comparator: 'isnight' },
           },
         ],
       },
       {
         name: 'Televízió',
         count: 1,
-        consumption: 90,
+        consumption: 100,
         dutyCycle: 1,
         usagePeriods: [
           { 
@@ -70,10 +71,42 @@ export const predefinedProfiles: PredefinedProfile[] = [
         ],
       },
       {
+        name: 'Laptop',
+        count: 1,
+        consumption: 60,
+        dutyCycle: 1,
+        usagePeriods: [
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '19:00', 
+            endTime: '22:00' 
+          },
+        ],
+      },
+      {
+        name: 'Villanytűzhely',
+        count: 1,
+        consumption: 2000,
+        dutyCycle: 0.15,
+        usagePeriods: [
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: false, 
+            startTime: '18:00', 
+            endTime: '19:00' 
+          },
+        ],
+      },
+      {
         name: 'Mosógép',
         count: 1,
         consumption: 2000,
-        dutyCycle: 0.2,
+        dutyCycle: 0.25,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -82,6 +115,22 @@ export const predefinedProfiles: PredefinedProfile[] = [
             wholeDay: false, 
             startTime: '19:00', 
             endTime: '21:00' 
+          },
+        ],
+      },
+      {
+        name: 'Elektroikai eszközök készenléti fogyasztása (pl. router)',
+        count: 1,
+        consumption: 60,
+        dutyCycle: 1,
+        usagePeriods: [
+          { 
+            wholeYear: true, 
+            startDate: minDate, 
+            endDate: maxDate, 
+            wholeDay: true, 
+            startTime: '00:00', 
+            endTime: '23:59' 
           },
         ],
       },
@@ -111,8 +160,8 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Hűtőszekrény',
         count: 1,
-        consumption: 150,
-        dutyCycle: 0.35,
+        consumption: 170,
+        dutyCycle: 0.4,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -143,7 +192,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Világítótest',
         count: 8,
-        consumption: 9,
+        consumption: 10,
         dutyCycle: 1,
         usagePeriods: [
           { 
@@ -152,14 +201,15 @@ export const predefinedProfiles: PredefinedProfile[] = [
             endDate: maxDate, 
             wholeDay: false, 
             startTime: '18:00', 
-            endTime: '23:00' 
+            endTime: '23:00', 
+            condition: { type: 'isdayornight', comparator: 'isnight' },
           },
         ],
       },
       {
         name: 'Televízió',
         count: 2,
-        consumption: 100,
+        consumption: 150,
         dutyCycle: 1,
         usagePeriods: [
           { 
@@ -283,14 +333,8 @@ export const predefinedProfiles: PredefinedProfile[] = [
         consumption: 11000,
         dutyCycle: 0.25,
         usagePeriods: [
-          { 
-            wholeYear: true, 
-            startDate: minDate, 
-            endDate: maxDate, 
-            wholeDay: false, 
-            startTime: '20:00', 
-            endTime: '23:59' 
-          },
+          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: false, startTime: '20:00', endTime: '23:59' },
+          { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: false, startTime: '00:00', endTime: '06:00' },
         ],
       },
       {
@@ -343,8 +387,8 @@ export const predefinedProfiles: PredefinedProfile[] = [
       },
       {
         name: 'Hűtőszekrény',
-        count: 1,
-        consumption: 150,
+        count: 2,
+        consumption: 200,
         dutyCycle: 0.35,
         usagePeriods: [
           { 
@@ -376,7 +420,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Világítótest',
         count: 10,
-        consumption: 9,
+        consumption: 8,
         dutyCycle: 1,
         usagePeriods: [
           { 
@@ -385,7 +429,8 @@ export const predefinedProfiles: PredefinedProfile[] = [
             endDate: maxDate, 
             wholeDay: false, 
             startTime: '18:00', 
-            endTime: '23:00' 
+            endTime: '23:00', 
+            condition: { type: 'isdayornight', comparator: 'isnight' },
           },
         ],
       },
