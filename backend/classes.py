@@ -13,6 +13,8 @@ MountType = Literal[
 ]
 SystemParametersMode = Literal['predefined', 'custom']
 ConsumptionProfileMode = Literal['predefined', 'custom']
+DistributorType = Literal['mvm_demasz', 'eon_del_dunantuli', 'eon_eszak_dunantuli', 'opus_titasz', 'elmu', 'mvm_emasz']
+TariffType = Literal['a1', 'a2', 'b_alap', 'b_komfort', 'h']
 
 class Orientation(BaseModel):
     trackingType: TrackingType
@@ -85,6 +87,20 @@ class UsagePeriod(BaseModel):
     endTime: str
     condition: Optional[UsageCondition] = None
 
+class TariffPricing(BaseModel):
+    baseFee: float
+    discountedEnergyPrice: float
+    marketEnergyPrice: float
+    offPeakDiscountedEnergyPrice: Optional[float] = None
+    offPeakMarketEnergyPrice: Optional[float] = None
+    hasNoConsumptionThreshold: bool = False
+
+class MeteringPoint(BaseModel):
+    id: str
+    label: str
+    tariffType: TariffType
+    hasSolarConnection: bool
+
 class HouseholdItem(BaseModel):
     id: str
     name: str
@@ -92,6 +108,7 @@ class HouseholdItem(BaseModel):
     consumption: float
     dutyCycle: float
     usagePeriods: List[UsagePeriod]
+    meteringPointId: str
 
 class Location(BaseModel):
     latitude: float
@@ -107,3 +124,5 @@ class WizardData(BaseModel):
     consumptionProfileMode: ConsumptionProfileMode
     selectedPredefinedProfileId: Optional[str]
     HouseholdItems: List[HouseholdItem]
+    distributor: DistributorType
+    meteringPoints: List[MeteringPoint]

@@ -1,5 +1,6 @@
 import { Button, Heading, Text, Center, Stack } from '@chakra-ui/react'
 import { OptionCard } from '../../../components/OptionCard'
+import { mainMeteringPointId } from '../../../steps/WizardDataContext'
 import { predefinedProfiles, type PredefinedProfile } from './PredefinedProfiles'
 import type { useConsumptionProfileForm } from '../../../hooks/useConsumptionProfileForm'
 
@@ -16,7 +17,7 @@ export const PredefinedProfileMenu = ({ onBack, onSelect, selectedId, form }: Pr
   const { loadItems } = form
 
   const selectProfile = (profile: PredefinedProfile) => {
-    loadItems(profile.items)
+    loadItems(profile.items, mainMeteringPointId)
     onSelect(profile.id)
     onBack()
   }

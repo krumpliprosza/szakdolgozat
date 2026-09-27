@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Navigate } from 'react-router-dom'
 import { useWizardData } from '../../../steps/WizardDataContext'
 import { Box, Heading, Text, Carousel, IconButton } from '@chakra-ui/react'
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu"
@@ -33,6 +34,9 @@ export const SimulationResults = () => {
   usePageTitle("Statisztikák")
 
   const { data } = useWizardData()
+  if (!data.simulationStarted) {
+    return <Navigate to="/" replace />
+  }
   const [weatherData, setWeatherData] = useState<WeatherData[]>([])
   const [solarProduction, setSolarProduction] = useState<SolarProductionData[]>([])
   const [energyConsumption, setEnergyConsumption] = useState<EnergyConsumptionData[]>([])
@@ -64,7 +68,6 @@ export const SimulationResults = () => {
 
       <Box
         bg="bg.panel"
-        borderColor="border"
         borderRadius="md"
         p={{ base: 0, lg: 4 }}
       >
@@ -76,7 +79,9 @@ export const SimulationResults = () => {
             title: {
               text: 'Időjárási adatok',
             },
-            rangeSelector: { enabled: false },
+            legend: {
+              enabled: true,
+            },
             navigator: { enabled: true, baseSeries: 'napszak' },
             scrollbar: { enabled: true },
             xAxis: { type: 'datetime' },
@@ -120,11 +125,14 @@ export const SimulationResults = () => {
               },
               {
                 yAxis: 2,
-                type: 'column',
+                type: 'area',
                 name: 'Csapadék mennyisége',
+                step: 'center',
                 tooltip: { valueSuffix: ' mm', valueDecimals: 2 },
-                dataGrouping: { approximation: 'sum' },
+                dataGrouping: { approximation: 'sum', groupPixelWidth: 10 },
                 data: weatherData.map((row) => [new Date(row.date).getTime(), row.precipitation]),
+                fillOpacity: 0.7,
+                lineWidth: 1,
                 zIndex: 1,
               },
               {
@@ -137,6 +145,7 @@ export const SimulationResults = () => {
                 lineWidth: 0,
                 marker: { enabled: false },
                 enableMouseTracking: false,
+                showInLegend: false,
                 zIndex: 0,
               },
             ],
@@ -150,7 +159,9 @@ export const SimulationResults = () => {
             title: {
               text: 'A háztartás fogyasztása és a napelemrendszer termelése',
             },
-            rangeSelector: { enabled: false },
+            legend: {
+              enabled: true,
+            },
             navigator: { enabled: true, baseSeries: 'energiamerleg' },
             scrollbar: { enabled: true },
             xAxis: { type: 'datetime' },
@@ -211,6 +222,7 @@ export const SimulationResults = () => {
                   },
                 ],
                 marker: { enabled: false },
+                showInLegend: false,
                 zIndex: 2,
               },
             ],
@@ -228,6 +240,9 @@ export const SimulationResults = () => {
                     title: {
                       text: 'Az energiaáramlás eloszlása',
                     },
+                    rangeSelector: {
+                      enabled: false,
+                    },
                     chart: {
                       zooming: {
                         type: undefined,
@@ -241,6 +256,7 @@ export const SimulationResults = () => {
                         pointFormat: '{point.fromNode.name} → {point.toNode.name}: <b>{point.weight} kWh</b><br/>',
                       },
                       colors: [
+                        '#000000', '#000000', '#000000', '#000000', 
                         '#e42535', '#d5401a', '#b15e16', '#917112', 
                         '#11883d', '#108467', '#11828d', '#167db1', 
                         '#1b73de', '#456be8', '#6567ec', '#785ceb', 
@@ -249,27 +265,29 @@ export const SimulationResults = () => {
                       ],
                       keys: ['from', 'to', 'weight'],
                       nodes: [
-                        { id: 'Napelem', color: '#D69E2E', },
                         { id: 'Hálózati bevitel', color: '#38A169', },
+                        { id: 'Napelem', color: '#D69E2E', },
                         { id: 'Inverter', color: '#B794F4'},
                         { id: 'Akkumulátor', color: '#63B3ED'},
-                        { id: 'Veszteség', color: '#E53E3E', },
+                        { id: 'Visszatáplálás a hálózatba', color: '#ffff00' },
+                        { id: 'Veszteség', color: '#888888', },
                         { id: 'Világítás', },
                         { id: 'Hűtő', },
                         { id: 'Sütő', },
-                        { id: 'Visszatáplálás a hálózatba', color: '#ffff00' },
                       ],
                       data: [
+                        ['Hálózati bevitel', 'Inverter', 15],
                         ['Napelem', 'Inverter', 35],
                         ['Napelem', 'Akkumulátor', 10],
-                        ['Napelem', 'Veszteség', 5],
-                        ['Hálózati bevitel', 'Inverter', 15],
                         ['Inverter', 'Világítás', 10],
                         ['Inverter', 'Hűtő', 15],
                         ['Inverter', 'Sütő', 15],
-                        ['Inverter', 'Visszatáplálás a hálózatba', 10],
-                        ['Akkumulátor', 'Világítás', 5],
-                        ['Akkumulátor', 'Sütő', 5],
+                        ['Inverter', 'Visszatáplálás a hálózatba', 8],
+                        ['Akkumulátor', 'Világítás', 3],
+                        ['Akkumulátor', 'Sütő', 4],
+                        ['Inverter', 'Veszteség', 2],
+                        ['Akkumulátor', 'Veszteség', 3],
+                        ['Napelem', 'Veszteség', 5],
                       ],
                     },
                     ],

@@ -1,5 +1,6 @@
 import { useStepsContext, Box, ButtonGroup, Button, Steps } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
+import { useWizardData } from './WizardDataContext'
 import { getPrevButtonLabel, getNextButtonLabel } from './StepItems'
 
 // Leiras: Az elozo/kovetkezo gombokat jeleniti meg, a szelso eseteket (0. lepes elotti es 3. lepes utani) kulon kezelve.
@@ -7,6 +8,7 @@ import { getPrevButtonLabel, getNextButtonLabel } from './StepItems'
 export const PrevNextButtons = () => {
   const { value } = useStepsContext()
   const navigate = useNavigate()
+  const { setData } = useWizardData()
 
   return (
     <Box
@@ -32,7 +34,7 @@ export const PrevNextButtons = () => {
             <Button>{getNextButtonLabel(value)}</Button>
           </Steps.NextTrigger>
         ) : (
-          <Button onClick={() => navigate("/simulation-results")}>
+          <Button onClick={() => {setData({ simulationStarted: true }); navigate("/simulation-results")}}>
             {getNextButtonLabel(value)}
           </Button>
         )}

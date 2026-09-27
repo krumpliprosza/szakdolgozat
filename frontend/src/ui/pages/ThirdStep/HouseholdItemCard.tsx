@@ -1,14 +1,15 @@
 import { Button, Card, HStack, SimpleGrid, Text, VStack } from '@chakra-ui/react'
 import { LuPlus, LuTrash2 } from 'react-icons/lu'
-import { CounterField, NumField, TextField } from '../../../components/FormFields'
+import { CounterField, NumField, SelectField, TextField } from '../../../components/FormFields'
 import { UsagePeriodEditor } from './UsagePeriodEditor'
-import type { HouseholdItem, UsagePeriod } from '../../../steps/WizardDataContext'
+import type { HouseholdItem, MeteringPoint, UsagePeriod } from '../../../steps/WizardDataContext'
 import { MAX_USAGE_PERIODS } from '../../../hooks/useConsumptionProfileForm'
 
 // Leiras: Egy fogyasztasi tetel kartyaja.
 
 interface HouseholdItemCardProps {
   item: HouseholdItem
+  meteringPoints: MeteringPoint[]
   onUpdate: (patch: Partial<Omit<HouseholdItem, 'id' | 'usagePeriods'>>) => void
   onRemove: () => void
   onAddUsagePeriod: () => void
@@ -18,6 +19,7 @@ interface HouseholdItemCardProps {
 
 export const HouseholdItemCard = ({
   item,
+  meteringPoints,
   onUpdate,
   onRemove,
   onAddUsagePeriod,
@@ -36,6 +38,17 @@ export const HouseholdItemCard = ({
         invalid={item.name === ''}
         errorText="Adj nevet ennek a fogyasztónak!"
       />
+
+      {meteringPoints.length > 1 && (
+        <SelectField
+          label="Mérési pont"
+          info="Az a mérőóra, amelyik köréhez kapcsolódik a fogyasztó."
+          value={item.meteringPointId}
+          onChange={(value) => onUpdate({ meteringPointId: value })}
+          options={meteringPoints.map((point) => ({ label: point.label, value: point.id }))}
+        />
+      )}
+
       <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
         <CounterField
           label="Darabszám"

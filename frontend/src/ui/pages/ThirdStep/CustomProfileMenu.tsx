@@ -1,8 +1,10 @@
 import { Button, Heading, Text, SimpleGrid } from '@chakra-ui/react'
 import { LuPlus } from 'react-icons/lu'
 import { HouseholdItemCard } from './HouseholdItemCard'
+import { mainMeteringPointId } from '../../../steps/WizardDataContext'
+import { MeteringPointsSection } from './MeteringPointsSection'
 import type { useConsumptionProfileForm } from '../../../hooks/useConsumptionProfileForm'
-import type { ConsumptionProfileMode, HouseholdItem, UsagePeriod } from '../../../steps/WizardDataContext'
+import type { ConsumptionProfileMode, HouseholdItem, UsagePeriod, DistributorType, MeteringPoint } from '../../../steps/WizardDataContext'
 
 // Leiras: Sajat fogyasztasi profil osszeallitasahoz tartozo menu.
 
@@ -11,9 +13,13 @@ interface CustomProfileMenuProps {
   onChange: () => void
   currentMode: ConsumptionProfileMode
   form: ReturnType<typeof useConsumptionProfileForm>
+  distributor: DistributorType
+  onDistributorChange: (distributor: DistributorType) => void
+  meteringPoints: MeteringPoint[]
+  onMeteringPointsChange: (points: MeteringPoint[]) => void
 }
 
-export const CustomProfileMenu = ({ onBack, onChange, form }: CustomProfileMenuProps) => {
+export const CustomProfileMenu = ({ onBack, onChange, form, distributor, onDistributorChange, meteringPoints, onMeteringPointsChange }: CustomProfileMenuProps) => {
   const {
     items,
     addItem: addItemRaw,
@@ -23,6 +29,13 @@ export const CustomProfileMenu = ({ onBack, onChange, form }: CustomProfileMenuP
     updateUsagePeriod: updateUsagePeriodRaw,
     removeUsagePeriod: removeUsagePeriodRaw,
   } = form
+
+  // A vezerelt kor eltavolitasa eseten a hozza tartozo elemek fo korre valo kapcsolasa
+  const handleControlledPointRemoved = (removedMeteringPointId: string) => {
+    items
+      .filter((item) => item.meteringPointId === removedMeteringPointId)
+      .forEach((item) => updateItemRaw(item.id, { meteringPointId: mainMeteringPointId }))
+  }
 
   // Minden modositas eseten jelezzuk a szulo elemnek, hogy a Sajat profil osszeallitasa legyen kivalasztva
   const addItem = () => { onChange(); addItemRaw() }
@@ -36,6 +49,15 @@ export const CustomProfileMenu = ({ onBack, onChange, form }: CustomProfileMenuP
     <>
       <Button variant="outline" mb={4} onClick={onBack}>Vissza</Button>
       <Heading mb={4}>Saját fogyasztási profil összeállítása</Heading>
+
+      <MeteringPointsSection
+        distributor={distributor}
+        onDistributorChange={onDistributorChange}
+        meteringPoints={meteringPoints}
+        onMeteringPointsChange={onMeteringPointsChange}
+        onControlledPointRemoved={handleControlledPointRemoved}
+      />
+
       <Text mb={4} color="fg.muted">
         Add hozzá háztartásod fogyasztóit típusonként!
       </Text>
@@ -52,6 +74,7 @@ export const CustomProfileMenu = ({ onBack, onChange, form }: CustomProfileMenuP
             <HouseholdItemCard
               key={item.id}
               item={item}
+              meteringPoints={meteringPoints}
               onUpdate={(patch) => updateItem(item.id, patch)}
               onRemove={() => removeItem(item.id)}
               onAddUsagePeriod={() => addUsagePeriod(item.id)}

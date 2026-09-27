@@ -4,7 +4,7 @@ import type { HouseholdItem, UsagePeriod } from "../../../steps/WizardDataContex
 // Leiras: Elore meghatarozott fogyasztasi profilok adatai.
 
 type UsagePeriodTemplate = Omit<UsagePeriod, 'id'>
-type HouseholdItemTemplate = Omit<HouseholdItem, 'id' | 'usagePeriods'> & { usagePeriods: UsagePeriodTemplate[] }
+type HouseholdItemTemplate = Omit<HouseholdItem, 'id' | 'usagePeriods' | 'meteringPointId'> & { usagePeriods: UsagePeriodTemplate[] }
 
 export interface PredefinedProfile {
   id: string

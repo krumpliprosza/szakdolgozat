@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { usePageTitle } from '../../../hooks/usePageTitle'
 import { AnimatedPage } from '../../../components/AnimatedPage'
-import { useWizardData } from '../../../steps/WizardDataContext'
+import { useWizardData, mainMeteringPointId } from '../../../steps/WizardDataContext'
 import { useConsumptionProfileForm } from '../../../hooks/useConsumptionProfileForm'
 import { ChoiceMenu } from './ChoiceMenu'
 import { PredefinedProfileMenu } from './PredefinedProfileMenu'
@@ -17,7 +17,7 @@ export const ThirdStep = () => {
 
   const [view, setView] = useState<ThirdStepView>('valasztosmenu')
   const { data, setData } = useWizardData()
-  const form = useConsumptionProfileForm(data.HouseholdItems)
+  const form = useConsumptionProfileForm(data.HouseholdItems, mainMeteringPointId)
 
   // A felvett fogyasztokat atmasolja a varazslo adatai koze
   useEffect(() => {
@@ -47,6 +47,10 @@ export const ThirdStep = () => {
           onChange={() => setData({ consumptionProfileMode: 'custom', selectedPredefinedProfileId: null })}
           currentMode={data.consumptionProfileMode}
           form={form}
+          distributor={data.distributor}
+          onDistributorChange={(distributor) => setData({distributor})}
+          meteringPoints={data.meteringPoints}
+          onMeteringPointsChange={(meteringPoints) => setData({meteringPoints})}
         />
       )}
     </AnimatedPage>

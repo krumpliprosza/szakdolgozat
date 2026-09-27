@@ -10,17 +10,12 @@ import { WizardLayout } from './ui/layouts/WizardLayout'
 
 /* TODO lista
 
-  Altalanos/ismeretlen hely:
-  - Tarifak kezelese
   SecondStep:
   - NREL SAM adatbazisbol modulok es inverterek betoltese?
   ThirdStep:
   - Fogyasztasi modell atalakitasa?
   SetupComplete:
   - Szimulacios parameterek megosztasa (lzString + QR kod)?
-  SimulationResults:
-  - Ne lehessen megnyitni ellenorzes nelkul a SimulationResults oldalt
-  - Diagramok nagyitasa, benne levo adatok lathatosaganak allitasa?
 
 */
 

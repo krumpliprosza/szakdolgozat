@@ -14,9 +14,9 @@ interface ChartProperties {
 
 export const Chart = ({ options, isStock = false }: ChartProperties) => {
   const { colorMode } = useColorMode()
-  const Options = Highcharts.merge(baseChartOptions(colorMode), options)
+  baseChartOptions(colorMode)
 
   return (
-    <HChartsReact.HighchartsReact key={colorMode} highcharts={Highcharts} constructorType={isStock ? 'stockChart' : 'chart'} options={Options} />
+    <HChartsReact.HighchartsReact key={colorMode} highcharts={Highcharts} constructorType={isStock ? 'stockChart' : 'chart'} options={options} />
   )
 }

@@ -93,20 +93,22 @@ const makeUniqueName = (existing: HouseholdItem[], base: string) => {
 }
 
 // Uj fogyaszto alapertelmezett ertekekkel
-const createEmptyItem = (existing: HouseholdItem[]): HouseholdItem => ({
+const createEmptyItem = (existing: HouseholdItem[], meteringPointId: string): HouseholdItem => ({
   id: makeId(),
   name: makeUniqueName(existing, 'Új eszköz'),
   count: 1,
   consumption: 0,
+  dutyCycle: 1,
   usagePeriods: [createEmptyPeriod()],
+  meteringPointId,
 })
 
-export function useConsumptionProfileForm(initial?: HouseholdItem[] | null) {
+export function useConsumptionProfileForm(initial?: HouseholdItem[] | null, defaultMeteringPointId?: string) {
   const [items, setItems] = useState<HouseholdItem[]>(initial ?? [])
 
   // Tetel hozzaadasa
   const addItem = () => {
-    setItems((prev) => [...prev, createEmptyItem(prev)])
+    setItems((prev) => [...prev, createEmptyItem(prev, defaultMeteringPointId ?? '')])
   }
 
   // Tetel adatainak frissitese
@@ -148,11 +150,12 @@ export function useConsumptionProfileForm(initial?: HouseholdItem[] | null) {
   const isNameTaken = (id: string, name: string) => items.some((item) => item.id !== id && item.name.trim().toLowerCase() === name.trim().toLowerCase() && name.trim() !== '')
 
   // A teljes fogyasztasi profil lecserelese
-  const loadItems = (newItems: Array<Omit<HouseholdItem, 'id' | 'usagePeriods'> & { usagePeriods: Array<Omit<UsagePeriod, 'id'>> }>) => {
+  const loadItems = (newItems: Array<Omit<HouseholdItem, 'id' | 'usagePeriods' | 'meteringPointId'> & { usagePeriods: Array<Omit<UsagePeriod, 'id'>> }>, meteringPointId: string) => {
     setItems(
       newItems.map((item) => ({
         ...item,
         id: makeId(),
+        meteringPointId,
         usagePeriods: item.usagePeriods.map((period) => ({ ...period, id: makeId() })),
       }))
     )

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 
 // Leiras: A szimulaciohoz szukseges adatok adatait es tipusait gyujti ossze.
 
@@ -7,6 +7,41 @@ export type TrackingType = 'fixed' | 'single_axis' | 'dual_axis'
 export type MountType = 'freestanding' | 'semi_integrated' | 'insulated'
 export type SystemParametersMode = 'predefined' | 'custom' | null
 export type ConsumptionProfileMode = 'predefined' | 'custom' | null
+export type DistributorType = 'mvm_demasz' | 'eon_del_dunantuli' | 'eon_eszak_dunantuli' | 'opus_titasz' | 'elmu' | 'mvm_emasz'
+export const distributorList: { label: string; value: DistributorType }[] = [
+  { label: 'E.ON Dél-dunántúli Áramhálózati Zrt.', value: 'eon_del_dunantuli' },
+  { label: 'E.ON Észak-dunántúli Áramhálózati Zrt.', value: 'eon_eszak_dunantuli' },
+  { label: 'ELMŰ Hálózati Kft.', value: 'elmu' },
+  { label: 'MVM Démász Áramhálózati Kft.', value: 'mvm_demasz' },
+  { label: 'MVM Émász Áramhálózati Kft.', value: 'mvm_emasz' },
+  { label: 'OPUS TITÁSZ Zrt.', value: 'opus_titasz' },
+]
+export type TariffType = 'a1' | 'a2' | 'b_alap' | 'b_komfort' | 'h'
+export const tariffList: Record<DistributorType, TariffType[]> = {
+  mvm_demasz: ['a1', 'a2', 'b_alap', 'b_komfort', 'h'],
+  eon_del_dunantuli: ['a1', 'a2', 'b_alap', 'h'],
+  eon_eszak_dunantuli: ['a1', 'a2', 'b_alap', 'h'],
+  opus_titasz: ['a1', 'a2', 'b_alap', 'h'],
+  elmu: ['a1', 'a2', 'b_alap', 'h'],
+  mvm_emasz: ['a1', 'a2', 'b_alap', 'h'],
+}
+export const mainCircuitTariffs: TariffType[] = ['a1', 'a2']
+export const controlledCircuitTariffs: TariffType[] = ['b_alap', 'b_komfort', 'h']
+export const tariffLabels: Record<TariffType, string> = {
+  a1: 'A1',
+  a2: 'A2',
+  b_alap: 'B Alap',
+  b_komfort: 'B Komfort',
+  h: 'H',
+}
+export const mainMeteringPointId = 'fo_kor'
+export const controlledMeteringPointId = 'vezerelt_kor'
+export const defaultMeteringPoint = (): MeteringPoint => ({
+  id: mainMeteringPointId,
+  label: 'Fő kör',
+  tariffType: 'a1',
+  hasSolarConnection: true,
+})
 
 // Napelemrendszer parameterei
 export interface SystemParameters {
@@ -127,6 +162,14 @@ export interface UsagePeriod {
   condition?: UsageCondition
 }
 
+// Meresi pont
+export interface MeteringPoint {
+  id: string
+  label: string
+  tariffType: TariffType
+  hasSolarConnection: boolean
+}
+
 // A fogyasztas egy adott eleme
 export interface HouseholdItem {
   id: string
@@ -135,6 +178,7 @@ export interface HouseholdItem {
   consumption: number
   dutyCycle: number
   usagePeriods: UsagePeriod[]
+  meteringPointId: string
 }
 
 // A teljes szimulacio bemeneti adatai
@@ -146,6 +190,9 @@ export interface WizardData {
   consumptionProfileMode: ConsumptionProfileMode
   selectedPredefinedProfileId: string | null
   HouseholdItems: HouseholdItem[] | null
+  distributor: DistributorType
+  meteringPoints: MeteringPoint[]
+  simulationStarted?: boolean
 }
 
 interface WizardDataContextValue {
@@ -155,9 +202,17 @@ interface WizardDataContextValue {
 
 const WizardDataContext = createContext<WizardDataContextValue | null>(null)
 
-// A varazslo adatait biztositja minden lepesben
-export const WizardDataProvider = ({ children }: { children: ReactNode }) => {
-  const [data, setDataState] = useState<WizardData>({ 
+const wizardDataStorageKey = 'wizardData'
+
+const getInitialWizardData = (): WizardData => {
+  try {
+    const stored = sessionStorage.getItem(wizardDataStorageKey)
+    if (stored) return JSON.parse(stored) as WizardData
+  }
+  catch {
+    
+  }
+  return {
     location: null, 
     systemParameters: null, 
     systemParametersMode: null, 
@@ -165,7 +220,24 @@ export const WizardDataProvider = ({ children }: { children: ReactNode }) => {
     consumptionProfileMode: null, 
     selectedPredefinedProfileId: null, 
     HouseholdItems: [], 
-  })
+    distributor: distributorList[0].value,
+    meteringPoints: [defaultMeteringPoint()],
+    simulationStarted: false,
+  }
+}
+
+// A varazslo adatait biztositja minden lepesben
+export const WizardDataProvider = ({ children }: { children: ReactNode }) => {
+  const [data, setDataState] = useState<WizardData>(getInitialWizardData)
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(wizardDataStorageKey, JSON.stringify(data))
+    }
+    catch {
+
+    }
+  }, [data])
 
   const setData = (patch: Partial<WizardData>) =>
     setDataState((prev) => ({ ...prev, ...patch }))
