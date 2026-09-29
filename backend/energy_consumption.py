@@ -122,7 +122,7 @@ def energy_consumption_fc(weather_data: List[Dict[str, Any]], household_items: L
     dates = weather_df["date"].to_numpy()
     consumption_kwh = (total_consumption * 0.25 / 1000).round(4).to_numpy()
     item_consumption_arrays = {
-        name: series.round(2).to_numpy() for name, series in consumption_per_item.items()
+        name: (series * 0.25 / 1000).round(4).to_numpy() for name, series in consumption_per_item.items()
     }
 
     energy_consumption: List[Dict[str, Any]] = [

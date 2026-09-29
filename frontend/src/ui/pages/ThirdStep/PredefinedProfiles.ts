@@ -38,6 +38,22 @@ export const predefinedProfiles: PredefinedProfile[] = [
         ],
       },
       {
+        name: 'Villanybojler',
+        count: 1,
+        consumption: 1200,
+        dutyCycle: 0.08,
+        usagePeriods: [
+          {
+            wholeYear: true,
+            startDate: minDate,
+            endDate: maxDate,
+            wholeDay: true,
+            startTime: '00:00',
+            endTime: '23:59'
+          },
+        ],
+      },
+      {
         name: 'Világítótest',
         count: 5,
         consumption: 10,
@@ -331,7 +347,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
         name: 'EV töltő',
         count: 1,
         consumption: 11000,
-        dutyCycle: 0.25,
+        dutyCycle: 0.1,
         usagePeriods: [
           { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: false, startTime: '20:00', endTime: '23:59' },
           { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: false, startTime: '00:00', endTime: '06:00' },

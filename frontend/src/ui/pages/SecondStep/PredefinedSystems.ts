@@ -25,7 +25,7 @@ export const predefinedSystems: PredefinedSystem[] = [
         groundCoverageRatio: 0.35,
       },
       module: {
-        pStc: 3000,
+        pStc: 2500,
         gammaPdc: -0.0035,
         mountType: 'insulated',
         isBifacial: false,
@@ -33,7 +33,7 @@ export const predefinedSystems: PredefinedSystem[] = [
         iamB0: 0.05,
       },
       inverter: {
-        pAc: 3000,
+        pAc: 2500,
         inverterEfficiency: 0.95,
       },
       losses: {
@@ -48,7 +48,7 @@ export const predefinedSystems: PredefinedSystem[] = [
         albedo: 0.2,
       },
       battery: {
-        capacity: 7,
+        capacity: 5,
         soc0: 0.5,
         socMin: 0.1,
         socMax: 0.9,
