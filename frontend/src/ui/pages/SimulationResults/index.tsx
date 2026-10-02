@@ -30,6 +30,35 @@ interface EnergyConsumptionData {
   household_items: Record<string, number>
 }
 
+interface StrategyTimeseriesRow {
+  date: string
+  soc_kWh: number
+  pv_to_load: number
+  pv_to_battery: number
+  pv_to_grid: number
+  battery_to_load: number
+  grid_to_load: number
+}
+
+interface StrategySummary {
+  pv_to_load: number
+  pv_to_battery: number
+  pv_to_grid: number
+  battery_to_load: number
+  grid_to_load: number
+  inverter_loss: number
+  charge_loss: number
+  discharge_loss: number
+  item_from_inverter: Record<string, number>
+  item_from_battery: Record<string, number>
+}
+
+interface Strategy {
+  title: string
+  timeseries: StrategyTimeseriesRow[]
+  summary: StrategySummary
+}
+
 export const SimulationResults = () => {
   usePageTitle("Statisztikák")
 
@@ -40,7 +69,9 @@ export const SimulationResults = () => {
   const [weatherData, setWeatherData] = useState<WeatherData[]>([])
   const [solarProduction, setSolarProduction] = useState<SolarProductionData[]>([])
   const [energyConsumption, setEnergyConsumption] = useState<EnergyConsumptionData[]>([])
+  const [strategies, setStrategies] = useState<Strategy[]>([])
 
+  // Szimulacio futtatasa, adatok lekerese
   useEffect(() => {
     if (!data.location) return
     fetch('http://localhost:8000/run_simulation', {
@@ -53,11 +84,11 @@ export const SimulationResults = () => {
         setWeatherData(result.weatherData)
         setSolarProduction(result.solarProduction)
         setEnergyConsumption(result.energyConsumption)
+        setStrategies(Object.values<Strategy | null>(result.strategies).filter((strategy) => strategy !== null))
       })
       .catch((error) => console.error('Nem sikerult a szimulacio futtatasa: ', error))
   }, [data.location])
 
-  const items = [1, 2, 3]
   return (
     <AnimatedPage p={{ base: 2, md: 4, lg: 8 }}>
 
@@ -229,16 +260,19 @@ export const SimulationResults = () => {
           }}
         />
 
-        <Carousel.Root slideCount={3} allowMouseDrag>
+        {/* Strategiankenti adatok */}
+        <Carousel.Root slideCount={strategies.length} allowMouseDrag>
           <Carousel.ItemGroup>
-            {items.map((_, index) => (
-              <Carousel.Item key={index} index={index}>
+            {strategies.map(({ title, summary }, index) => {
+              const itemNames = Object.keys(summary.item_from_inverter)
+              return (
+              <Carousel.Item key={title} index={index}>
 
                 {/* Az energiaaramlas eloszlasa */}
                 <Chart
                   options={{
                     title: {
-                      text: 'Az energiaáramlás eloszlása',
+                      text: `Az energiaáramlás eloszlása - ${title}`,
                     },
                     rangeSelector: {
                       enabled: false,
@@ -252,42 +286,38 @@ export const SimulationResults = () => {
                       type: 'sankey',
                       name: '',
                       tooltip: {
-                        nodeFormat: '{point.name}: <b>{point.sum} kWh</b><br/>',
-                        pointFormat: '{point.fromNode.name} → {point.toNode.name}: <b>{point.weight} kWh</b><br/>',
+                        nodeFormat: '{point.name}: <b>{point.sum:.2f} kWh</b><br/>',
+                        pointFormat: '{point.fromNode.name} → {point.toNode.name}: <b>{point.weight:.2f} kWh</b><br/>',
                       },
                       colors: [
                         '#000000', '#000000', '#000000', '#000000', 
-                        '#e42535', '#d5401a', '#b15e16', '#917112', 
-                        '#11883d', '#108467', '#11828d', '#167db1', 
-                        '#1b73de', '#456be8', '#6567ec', '#785ceb', 
-                        '#9253ea', '#aa40e7', '#c51ce3', '#d11ac5', 
-                        '#da1ba4', '#de1b7d', '#e31c54', '#de351b',
+                        '#E42535', '#D5401A', '#B15E16', '#917112', 
+                        '#11883D', '#108467', '#11828D', '#167DB1', 
+                        '#1B73DE', '#456BE8', '#6567EC', '#785CEB', 
+                        '#9253EA', '#AA40E7', '#C51CE3', '#D11AC5', 
+                        '#DA1BA4', '#DE1b7D', '#E31C54', '#DE351B',
                       ],
                       keys: ['from', 'to', 'weight'],
                       nodes: [
-                        { id: 'Hálózati bevitel', color: '#38A169', },
-                        { id: 'Napelem', color: '#D69E2E', },
-                        { id: 'Inverter', color: '#B794F4'},
-                        { id: 'Akkumulátor', color: '#63B3ED'},
-                        { id: 'Visszatáplálás a hálózatba', color: '#ffff00' },
-                        { id: 'Veszteség', color: '#888888', },
-                        { id: 'Világítás', },
-                        { id: 'Hűtő', },
-                        { id: 'Sütő', },
+                        { id: 'Hálózati bevitel', color: '#38A169' },
+                        { id: 'Napelem', color: '#D69E2E' },
+                        { id: 'Inverter', color: '#B794F4' },
+                        { id: 'Akkumulátor', color: '#63B3ED' },
+                        { id: 'Visszatáplálás a hálózatba', color: '#FFFF00' },
+                        { id: 'Veszteségek', color: '#888888' },
+                        ...itemNames.map((id) => ({ id })),
                       ],
                       data: [
-                        ['Hálózati bevitel', 'Inverter', 15],
-                        ['Napelem', 'Inverter', 35],
-                        ['Napelem', 'Akkumulátor', 10],
-                        ['Inverter', 'Világítás', 10],
-                        ['Inverter', 'Hűtő', 15],
-                        ['Inverter', 'Sütő', 15],
-                        ['Inverter', 'Visszatáplálás a hálózatba', 8],
-                        ['Akkumulátor', 'Világítás', 3],
-                        ['Akkumulátor', 'Sütő', 4],
-                        ['Inverter', 'Veszteség', 2],
-                        ['Akkumulátor', 'Veszteség', 3],
-                        ['Napelem', 'Veszteség', 5],
+                        ['Hálózati bevitel', 'Inverter', summary.grid_to_load],
+                        ['Napelem', 'Inverter', summary.pv_to_load + summary.pv_to_grid + summary.inverter_loss],
+                        ['Napelem', 'Akkumulátor', summary.pv_to_battery],
+                        ['Inverter', 'Visszatáplálás a hálózatba', summary.pv_to_grid],
+                        ...itemNames.flatMap((name) => [
+                          ['Inverter', name, summary.item_from_inverter[name]],
+                          ['Akkumulátor', name, summary.item_from_battery[name]],
+                        ]),
+                        ['Inverter', 'Veszteségek', summary.inverter_loss],
+                        ['Akkumulátor', 'Veszteségek', summary.charge_loss + summary.discharge_loss]
                       ],
                     },
                     ],
@@ -295,7 +325,8 @@ export const SimulationResults = () => {
                 />
 
               </Carousel.Item>
-            ))}
+              )
+            })}
           </Carousel.ItemGroup>
 
           <Carousel.Control justifyContent="center" gap="4">

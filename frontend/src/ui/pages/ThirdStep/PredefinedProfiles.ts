@@ -24,8 +24,8 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Hűtőszekrény',
         count: 1,
-        consumption: 140,
-        dutyCycle: 0.4,
+        consumption: 100,
+        dutyCycle: 0.3,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -122,7 +122,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
         name: 'Mosógép',
         count: 1,
         consumption: 2000,
-        dutyCycle: 0.25,
+        dutyCycle: 0.1,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -137,7 +137,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Elektroikai eszközök készenléti fogyasztása (pl. router)',
         count: 1,
-        consumption: 60,
+        consumption: 30,
         dutyCycle: 1,
         usagePeriods: [
           { 
@@ -176,8 +176,8 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Hűtőszekrény',
         count: 1,
-        consumption: 170,
-        dutyCycle: 0.4,
+        consumption: 110,
+        dutyCycle: 0.3,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -193,7 +193,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
         name: 'Villanybojler',
         count: 1,
         consumption: 2000,
-        dutyCycle: 0.15,
+        dutyCycle: 0.1,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -225,8 +225,8 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Televízió',
         count: 2,
-        consumption: 150,
-        dutyCycle: 1,
+        consumption: 100,
+        dutyCycle: 0.6,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -241,8 +241,8 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'PC + monitor(ok)',
         count: 1,
-        consumption: 200,
-        dutyCycle: 1,
+        consumption: 150,
+        dutyCycle: 0.6,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -258,7 +258,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
         name: 'Mosógép',
         count: 1,
         consumption: 2100,
-        dutyCycle: 0.22,
+        dutyCycle: 0.15,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -274,7 +274,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
         name: 'Mosogatógép',
         count: 1,
         consumption: 1800,
-        dutyCycle: 0.3,
+        dutyCycle: 0.2,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -313,7 +313,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
         name: 'Légkondícionáló (hűtő üzemmód)',
         count: 1,
         consumption: 1200,
-        dutyCycle: 0.4,
+        dutyCycle: 0.35,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -322,7 +322,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
             wholeDay: true, 
             startTime: '00:00', 
             endTime: '23:59', 
-            condition: { type: 'temperature', comparator: '>=', threshold: 30 },
+            condition: { type: 'temperature', comparator: '>=', threshold: 25 },
           },
         ],
       },
@@ -330,7 +330,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
         name: 'Légkondícionáló (fűtő üzemmód)',
         count: 1,
         consumption: 1400,
-        dutyCycle: 0.4,
+        dutyCycle: 0.35,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -339,15 +339,15 @@ export const predefinedProfiles: PredefinedProfile[] = [
             wholeDay: true, 
             startTime: '00:00', 
             endTime: '23:59', 
-            condition: { type: 'temperature', comparator: '<=', threshold: 15 },
+            condition: { type: 'temperature', comparator: '<=', threshold: 10 },
           },
         ],
       },
       {
         name: 'EV töltő',
         count: 1,
-        consumption: 11000,
-        dutyCycle: 0.1,
+        consumption: 7400,
+        dutyCycle: 0.06,
         usagePeriods: [
           { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: false, startTime: '20:00', endTime: '23:59' },
           { wholeYear: true, startDate: minDate, endDate: maxDate, wholeDay: false, startTime: '00:00', endTime: '06:00' },
@@ -357,7 +357,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
         name: 'Villanybojler',
         count: 1,
         consumption: 2000,
-        dutyCycle: 0.15,
+        dutyCycle: 0.1,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -373,7 +373,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
         name: 'Mosógép',
         count: 1,
         consumption: 2200,
-        dutyCycle: 0.22,
+        dutyCycle: 0.15,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -389,7 +389,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
         name: 'Mosogatógép',
         count: 1,
         consumption: 1800,
-        dutyCycle: 0.3,
+        dutyCycle: 0.2,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -404,8 +404,8 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Hűtőszekrény',
         count: 2,
-        consumption: 200,
-        dutyCycle: 0.35,
+        consumption: 150,
+        dutyCycle: 0.3,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -469,8 +469,8 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'PC + monitor(ok)',
         count: 2,
-        consumption: 250,
-        dutyCycle: 1,
+        consumption: 200,
+        dutyCycle: 0.5,
         usagePeriods: [
           { 
             wholeYear: true, 

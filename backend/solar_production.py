@@ -148,11 +148,13 @@ def solar_production_fc(weather_data: List[Dict[str, Any]], location: Location, 
     # Kimenet osszeallitasa
     dates = weather_df["date"].to_numpy()
     production_kwh = (ac_power * 0.25 / 1000).round(4).to_numpy()
+    inverter_loss_kwh = ((dc_power_after_losses - ac_power).clip(lower=0.0) * 0.25 / 1000).round(4).to_numpy()
 
     solar_production: List[Dict[str, Any]] = [
         {
             "date": dates[i],
             "production_kWh": float(production_kwh[i]),
+            "inverter_loss_kWh": float(inverter_loss_kwh[i])
         }
         for i in range(len(weather_df))
     ]

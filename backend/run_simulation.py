@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from receive_weather_data import receive_weather_data, WeatherDataRequest
 from solar_production import solar_production_fc
 from energy_consumption import energy_consumption_fc
+from distribution_strategies import bau_strategy
 from classes import WizardData
 
 """
@@ -31,7 +32,9 @@ def run_simulation(data: WizardData):
     energy_consumption = energy_consumption_fc(weather_data, data.HouseholdItems)
 
     # Energiaelosztasi strategiak futtatasa
-    strategy_1, strategy_2, strategy_3 = None, None, None
+    strategy_1 = bau_strategy(solar_production, energy_consumption, data.systemParameters.battery)
+    strategy_2 = None
+    strategy_3 = None
 
     # Peldaadatok kiirasa
     print(f"\n--------------------------------------------------")
