@@ -20,6 +20,9 @@ const config = defineConfig({
                     },
                 },
                 purple: {
+                    tableHeader: {
+                        value: { _light: "#7131AA", _dark: "#852FD5" },
+                    },
                     border: {
                         value: { _light: "{colors.purple.700}", _dark: "{colors.purple.400}" },
                     },

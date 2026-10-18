@@ -101,6 +101,12 @@ def energy_consumption_fc(weather_data: List[Dict[str, Any]], household_items: L
     temperature = weather_df.get("temperature_2m")
     is_day = weather_df.get("is_day")
 
+    # Veletlenszammal modositott fogyasztas
+    random_number = np.random.default_rng()
+    unique_dates = pd.Index(dates.unique())
+    date_to_day_index = {date: index for index, date in enumerate(unique_dates)}
+    day_positions = dates.map(date_to_day_index).to_numpy()
+
     total_consumption = pd.Series(0.0, index=weather_df.index)
     consumption_per_item: Dict[str, pd.Series] = {}
 
@@ -114,6 +120,10 @@ def energy_consumption_fc(weather_data: List[Dict[str, Any]], household_items: L
         # Aktiv ciklusidok meghatarozasa, teljesitmeny szamitasa
         rated_power = item.count * item.consumption
         item_consumption = duty_cycle_handler(is_item_active, item.dutyCycle, rated_power)
+
+        # A veletlenszeru ingadozas hozzaadasa
+        daily_factors = np.clip(random_number.normal(loc=1.0, scale=0.1, size=len(unique_dates)), 0.8, 1.2)
+        item_consumption = item_consumption * daily_factors[day_positions]
 
         consumption_per_item[item.name] = item_consumption
         total_consumption = total_consumption + item_consumption

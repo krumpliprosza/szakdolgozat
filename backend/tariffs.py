@@ -1,11 +1,12 @@
 from typing import Dict
-from classes import DistributorType, TariffType, TariffPricing
+from classes import DistributorType, TariffType, TariffPricing, WizardData
 
 """
 Leiras: Az MVM lakossagi villamosenergia tarifainak leirasa.
 """
 
 maximum_energy_consumption_per_year = 2523.0
+export_price = 5.0
 
 # MVM Demasz Aramhalozati Kft.
 demasz_a1 = TariffPricing(
@@ -155,3 +156,13 @@ tariff_catalog: Dict[DistributorType, Dict[TariffType, TariffPricing]] = {
 def get_tariff_pricing(distributor: DistributorType, tariff_type: TariffType) -> TariffPricing:
     catalog = tariff_catalog[distributor]
     return catalog[tariff_type]
+
+# A napelemes (akkumulatoros) meresi pont tarifaja, ez alapjan szamolunk koltseget
+def get_solar_pricing(data: WizardData) -> TariffPricing:
+    for metering_point in data.meteringPoints:
+        if metering_point.hasSolarConnection:
+            try:
+                return get_tariff_pricing(data.distributor, metering_point.tariffType)
+            except KeyError:
+                continue
+    return get_tariff_pricing(data.distributor, 'a1')

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useWizardData } from '../../../steps/WizardDataContext'
-import { Box, Heading, Text, Carousel, IconButton } from '@chakra-ui/react'
+import { Box, Heading, Text, Carousel, IconButton, Table, Center, VStack, HStack, Progress } from '@chakra-ui/react'
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu"
 import { usePageTitle } from '../../../hooks/usePageTitle'
 import { AnimatedPage } from '../../../components/AnimatedPage'
@@ -18,76 +18,132 @@ interface WeatherData {
   wind_speed_10m: number
   is_day: number
 }
-
 interface SolarProductionData {
   date: string
   production_kWh: number
 }
-
 interface EnergyConsumptionData {
   date: string
   consumption_kWh: number
   household_items: Record<string, number>
 }
-
-interface StrategyTimeseriesRow {
-  date: string
-  soc_kWh: number
-  pv_to_load: number
-  pv_to_battery: number
-  pv_to_grid: number
-  battery_to_load: number
-  grid_to_load: number
+interface MonthlyStrategyCost {
+  month: string
+  grid_import_kWh: number
+  discounted_import_kWh: number
+  market_import_kWh: number
+  energy_cost_HUF: number
+  export_revenue_HUF: number
+  gross_cost_HUF: number
+  battery_cycles: number
 }
-
+interface StrategyCost {
+  energy_cost_HUF: number
+  export_revenue_HUF: number
+  gross_cost_HUF: number
+  monthlyData: MonthlyStrategyCost[]
+}
 interface StrategySummary {
   pv_to_load: number
   pv_to_battery: number
   pv_to_grid: number
   battery_to_load: number
   grid_to_load: number
+  grid_to_battery: number
   inverter_loss: number
   charge_loss: number
   discharge_loss: number
   item_from_inverter: Record<string, number>
   item_from_battery: Record<string, number>
+  battery_cycles: number
+  cost: StrategyCost
 }
-
 interface Strategy {
   title: string
-  timeseries: StrategyTimeseriesRow[]
   summary: StrategySummary
 }
 
+// Honap nevenek formazasa a havi felbontast/eves osszegzest tartalmazo tablazathoz
+const formatMonth = (monthInput: string): string => {
+  const [year, month] = monthInput.split('-')
+  const monthNames = ['január', 'február', 'március', 'április', 'május', 'június', 'július', 'augusztus', 'szeptember', 'október', 'november', 'december']
+  return `${year}. ${monthNames[parseInt(month) - 1]}`
+}
+
+// Havi megtakaritas az akkumulatormentes rendszerhez kepest
+const computeMonthlySavings = (summary: StrategySummary, baseline?: Strategy): { month: string; saving: number; baselineCost: number }[] => {
+  if (!baseline) return []
+  const baselineByMonth = new Map(baseline.summary.cost.monthlyData.map((m) => [m.month, m.gross_cost_HUF]))
+  return summary.cost.monthlyData.map((m) => {
+    const baselineCost = baselineByMonth.get(m.month) ?? 0
+    return { month: m.month, saving: baselineCost - m.gross_cost_HUF, baselineCost }
+  })
+}
+
+// Cimek a betoltesi oldalhoz
+const progressBarTitles = [
+  "Időjárási adatok lekérése...",
+  "Napelemrendszer termelésének szimulálása...",
+  "Háztartás fogyasztásának szimulálása...",
+  "Energiaelosztási stratégiák futtatása..."
+]
+
 export const SimulationResults = () => {
   usePageTitle("Statisztikák")
-
   const { data } = useWizardData()
-  if (!data.simulationStarted) {
-    return <Navigate to="/" replace />
-  }
   const [weatherData, setWeatherData] = useState<WeatherData[]>([])
   const [solarProduction, setSolarProduction] = useState<SolarProductionData[]>([])
   const [energyConsumption, setEnergyConsumption] = useState<EnergyConsumptionData[]>([])
   const [strategies, setStrategies] = useState<Strategy[]>([])
+  const [isPageLoading, setIsPageLoading] = useState(true)
+  const [progressBarIndex, setProgressBarIndex] = useState(0)
 
   // Szimulacio futtatasa, adatok lekerese
   useEffect(() => {
-    if (!data.location) return
+    if (!data.simulationStarted) return // Ha nincs meg minden szukseges bemeneti adat, ne fusson a szimulacio
+    // Egyebkent:
+    const progressBarStepDelay = 4000 * (Math.random() * 0.6 + 0.8)
+    const interval = setInterval(() => {
+      setProgressBarIndex((i) => (i < progressBarTitles.length - 1 ? i + 1 : i))
+    }, progressBarStepDelay)
+
     fetch('http://localhost:8000/run_simulation', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     })
-      .then(response => response.json())
-      .then(result => {
-        setWeatherData(result.weatherData)
-        setSolarProduction(result.solarProduction)
-        setEnergyConsumption(result.energyConsumption)
-        setStrategies(Object.values<Strategy | null>(result.strategies).filter((strategy) => strategy !== null))
-      })
-      .catch((error) => console.error('Nem sikerult a szimulacio futtatasa: ', error))
-  }, [data.location])
+    .then(response => response.json())
+    .then(result => {setWeatherData(result.weatherData), setSolarProduction(result.solarProduction), setEnergyConsumption(result.energyConsumption), setStrategies(result.strategies)})
+    .catch((error) => console.error('Nem sikerult a szimulacio futtatasa: ', error))
+    .finally(() => {
+      setIsPageLoading(false)
+      clearInterval(interval)
+    })
+
+  }, [data])
+  if (!data.simulationStarted) {return <Navigate to="/" replace />} // Ha nem futott le a szimulacio, menjen vissza a kezdolapra
+
+  if (isPageLoading) {
+    const progress = Math.round((progressBarIndex / (progressBarTitles.length - 1)) ** 0.85 * 80)
+    return (
+      <AnimatedPage p={{ base: 2, md: 4, lg: 8 }}>
+        <Center minH="60vh">
+          <VStack>
+            <Text fontSize="lg" color="fg.muted" m={2}>{progressBarTitles[progressBarIndex]}</Text>
+            <Progress.Root size="lg" w="full" variant="outline" colorPalette="purple" shape="full" value={progress} striped animated>
+              <HStack>
+                <Progress.Track flex="1">
+                  <Progress.Range />
+                </Progress.Track>
+                <Progress.Label />
+                <Progress.ValueText>{progress}%</Progress.ValueText>
+              </HStack>
+            </Progress.Root>
+          </VStack>
+        </Center>
+      </AnimatedPage>
+    )
+  }
 
   return (
     <AnimatedPage p={{ base: 2, md: 4, lg: 8 }}>
@@ -265,6 +321,11 @@ export const SimulationResults = () => {
           <Carousel.ItemGroup>
             {strategies.map(({ title, summary }, index) => {
               const itemNames = Object.keys(summary.item_from_inverter)
+
+              // Megtakaritas az akkumulatormentes strategiahoz kepest
+              const baselineCost = strategies[0]?.summary.cost?.gross_cost_HUF
+              const saving = index > 0 && baselineCost !== undefined ? baselineCost - summary.cost.gross_cost_HUF : undefined
+
               return (
               <Carousel.Item key={title} index={index}>
 
@@ -309,6 +370,7 @@ export const SimulationResults = () => {
                       ],
                       data: [
                         ['Hálózati bevitel', 'Inverter', summary.grid_to_load],
+                        ...((summary.grid_to_battery ?? 0) > 0 ? [['Hálózati bevitel', 'Akkumulátor', summary.grid_to_battery ?? 0]] : []),
                         ['Napelem', 'Inverter', summary.pv_to_load + summary.pv_to_grid + summary.inverter_loss],
                         ['Napelem', 'Akkumulátor', summary.pv_to_battery],
                         ['Inverter', 'Visszatáplálás a hálózatba', summary.pv_to_grid],
@@ -324,12 +386,93 @@ export const SimulationResults = () => {
                   }}
                 />
 
+                {/* Az adott strategia egyeb mutatoi */}
+                <Table.ScrollArea borderWidth="2px" borderRadius="md" borderColor="purple.tableHeader" mt={4}>
+                  <Table.Root
+                    size="sm"
+                    variant="outline"
+                    css={{
+                      '& thead tr': {bg: 'purple.tableHeader'},
+                      '& tbody tr:last-of-type td': {borderBottomWidth: 0, bg: 'purple.subtle'},
+                      '& tbody tr:hover': {bg: 'purple.subtle'}
+                    }}
+                    interactive
+                  >
+
+                    <Table.Header>
+                      <Table.Row>
+                        <Table.ColumnHeader color="#E9FFE9">Hónap</Table.ColumnHeader>
+                        <Table.ColumnHeader textAlign="end" color="#E9FFE9">Bruttó energiadíj</Table.ColumnHeader>
+                        <Table.ColumnHeader textAlign="end" color="#E9FFE9">Betáplálási bevétel</Table.ColumnHeader>
+                        <Table.ColumnHeader textAlign="end" color="#E9FFE9">Fizetendő összeg</Table.ColumnHeader>
+                        {index > 0 && <Table.ColumnHeader textAlign="end" color="#E9FFE9">Megtakarítás</Table.ColumnHeader>}
+                        {(summary.battery_cycles !== 0) && <Table.ColumnHeader textAlign="end" color="#E9FFE9">Akkumulátorciklusok száma</Table.ColumnHeader>}
+                      </Table.Row>
+                    </Table.Header>
+
+                    <Table.Body>
+                      {/* Havi felbontasu adatok */}
+                      {(() => {
+                        const monthlySavings = index > 0 ? computeMonthlySavings(summary, strategies[0]) : []
+                        return summary.cost.monthlyData.map((month, counter) => (
+                          <Table.Row key={month.month}>
+                            <Table.Cell fontWeight="semibold">
+                              {formatMonth(month.month)}
+                            </Table.Cell>
+                            <Table.Cell fontWeight="semibold" textAlign="end">
+                              {Math.round(month.energy_cost_HUF)} Ft
+                            </Table.Cell>
+                            <Table.Cell fontWeight="semibold" textAlign="end">
+                              {Math.round(month.export_revenue_HUF)} Ft
+                            </Table.Cell>
+                            <Table.Cell fontWeight="semibold" textAlign="end">
+                              {Math.round(month.gross_cost_HUF)} Ft
+                            </Table.Cell>
+                            {index > 0 && (
+                              <Table.Cell fontWeight="semibold" textAlign="end" color={monthlySavings[counter].saving > 0 ? 'green.fg' : undefined}>
+                                {Math.round(monthlySavings[counter].saving)} Ft ({baselineCost !== 0 ? -Math.round((monthlySavings[counter].saving / Math.abs(monthlySavings[counter].baselineCost)) * 10000) / 100 : 0}%)
+                              </Table.Cell>
+                            )}
+                            {(summary.battery_cycles !== 0) && (
+                              <Table.Cell fontWeight="semibold" textAlign="end">{month.battery_cycles}</Table.Cell>
+                            )}
+                          </Table.Row>
+                        ))
+                      })()}
+                      {/* Osszesites */}
+                      <Table.Row>
+                        <Table.Cell fontWeight="semibold">Összesítve</Table.Cell>
+                        <Table.Cell fontWeight="semibold" textAlign="end">
+                          {Math.round(summary.cost.energy_cost_HUF)} Ft
+                        </Table.Cell>
+                        <Table.Cell fontWeight="semibold" textAlign="end">
+                          {Math.round(summary.cost.export_revenue_HUF)} Ft
+                        </Table.Cell>
+                        <Table.Cell fontWeight="semibold" textAlign="end">
+                          {Math.round(summary.cost.gross_cost_HUF)} Ft
+                        </Table.Cell>
+                        {saving !== undefined && (
+                          <Table.Cell fontWeight="semibold" textAlign="end" color={saving > 0 ? 'green.fg' : undefined}>
+                            {Math.round(saving)} Ft ({baselineCost !== 0 ? -Math.round((saving / Math.abs(baselineCost)) * 10000) / 100 : 0}%)
+                          </Table.Cell>
+                        )}
+                        {(summary.battery_cycles !== 0) && (
+                          <Table.Cell fontWeight="semibold" textAlign="end">
+                            {summary.battery_cycles}
+                          </Table.Cell>
+                        )}
+                      </Table.Row>
+                    </Table.Body>
+
+                  </Table.Root>
+                </Table.ScrollArea>
+
               </Carousel.Item>
               )
             })}
           </Carousel.ItemGroup>
 
-          <Carousel.Control justifyContent="center" gap="4">
+          <Carousel.Control justifyContent="center" gap="4" mt={3}>
             <Carousel.PrevTrigger asChild>
               <IconButton size="xs" variant="outline" borderWidth="1px" borderColor="purple.border" color="purple.fg" _hover={{ bg: 'purple.subtle' }}>
                 <LuChevronLeft />
@@ -354,8 +497,7 @@ export const SimulationResults = () => {
         </Carousel.Root>
 
       </Box>
-      <br/>
-      <Text fontSize="xs" color="fg.muted" textAlign="center">Megjegyzés: a statisztikák elsősorban tájékoztató jellegűek, mivel a termelési és fogyasztási adatok mind modellek segítségével kerültek kiszámításra; ebből adódóan a valós termeléshez és fogyasztáshoz képest a kapott eredmények eltérhetnek. Az időjárási adatok szolgáltatását az <a href="https://open-meteo.com/">open-meteo.com biztosítja.</a></Text>
+      <Text fontSize="xs" color="fg.muted" textAlign="center">Megjegyzés: a statisztikák elsősorban tájékoztató jellegűek, mivel a termelési és fogyasztási adatok mind modellek segítségével kerültek kiszámításra; ebből adódóan a valós értékekhez képest a kapott eredmények eltérhetnek. Az időjárási adatok szolgáltatását az <a href="https://open-meteo.com/">open-meteo.com biztosítja.</a></Text>
       <ChangeColorModeButton></ChangeColorModeButton>
 
     </AnimatedPage>
