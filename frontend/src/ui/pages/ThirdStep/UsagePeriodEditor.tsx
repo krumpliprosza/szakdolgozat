@@ -174,7 +174,7 @@ export const UsagePeriodEditor = ({ period, onChange, onRemove }: UsagePeriodEdi
                     label="Küszöbérték"
                     info="Az a hőmérsékletérték, amelyhez viszonyítva értelmezendő a feltétel."
                     value={period.condition.threshold}
-                    onChange={(value) => value !== null && onChange({ condition: { ...period.condition!, threshold: value } })}
+                    onChange={(value) => value !== null && onChange({ condition: { ...(period.condition as TemperatureCondition), threshold: value } })}
                     min={settings.min} max={settings.max} step={1}
                     helperText={settings.unit}
                   />

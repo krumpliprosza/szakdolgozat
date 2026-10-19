@@ -37,7 +37,7 @@ export const PredefinedSystemMenu = ({ onBack, onSelect, selectedId, form }: Pre
       </Text>
 
       <Center>
-        <Stack direction={{ base: "column", md: "row" }} gap="10" align="stretch" w="full" maxW="1800px">
+        <Stack justify="center" direction={{ base: "column", md: "row" }} gap="10" align="stretch" w="full" maxW="1800px">
 
           {predefinedSystems.map((system) => {
             const isSelected = selectedId === system.id

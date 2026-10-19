@@ -107,7 +107,7 @@ export const SimulationResults = () => {
       setProgressBarIndex((i) => (i < progressBarTitles.length - 1 ? i + 1 : i))
     }, progressBarStepDelay)
 
-    fetch('http://localhost:8000/run_simulation', {
+    fetch(`${import.meta.env.VITE_API_URL}/run_simulation`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),

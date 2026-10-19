@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import Highcharts, { type Options } from 'highcharts'
 import 'highcharts/esm/modules/sankey'
 import 'highcharts/esm/modules/stock'
@@ -14,7 +15,9 @@ interface ChartProperties {
 
 export const Chart = ({ options, isStock = false }: ChartProperties) => {
   const { colorMode } = useColorMode()
-  baseChartOptions(colorMode)
+  useEffect(() => {
+    baseChartOptions(colorMode)
+  }, [colorMode])
 
   return (
     <HChartsReact.HighchartsReact key={colorMode} highcharts={Highcharts} constructorType={isStock ? 'stockChart' : 'chart'} options={options} />

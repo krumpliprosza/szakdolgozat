@@ -32,7 +32,7 @@ export const PredefinedProfileMenu = ({ onBack, onSelect, selectedId, form }: Pr
       </Text>
 
       <Center>
-        <Stack direction={{ base: "column", md: "row" }} gap="10" align="stretch" w="full" maxW="1800px">
+        <Stack justify="center" direction={{ base: "column", md: "row" }} gap="10" align="stretch" w="full" maxW="1800px">
 
           {predefinedProfiles.map((profile) => {
             const isSelected = selectedId === profile.id

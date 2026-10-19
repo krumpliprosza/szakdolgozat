@@ -24,8 +24,8 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Hűtőszekrény',
         count: 1,
-        consumption: 100,
-        dutyCycle: 0.3,
+        consumption: 110,
+        dutyCycle: 0.4,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -40,7 +40,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Villanybojler',
         count: 1,
-        consumption: 1200,
+        consumption: 1400,
         dutyCycle: 0.08,
         usagePeriods: [
           {
@@ -73,7 +73,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Televízió',
         count: 1,
-        consumption: 100,
+        consumption: 110,
         dutyCycle: 1,
         usagePeriods: [
           { 
@@ -89,7 +89,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Laptop',
         count: 1,
-        consumption: 60,
+        consumption: 100,
         dutyCycle: 1,
         usagePeriods: [
           { 
@@ -177,7 +177,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
         name: 'Hűtőszekrény',
         count: 1,
         consumption: 110,
-        dutyCycle: 0.3,
+        dutyCycle: 0.4,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -225,7 +225,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Televízió',
         count: 2,
-        consumption: 100,
+        consumption: 120,
         dutyCycle: 0.6,
         usagePeriods: [
           { 
@@ -241,7 +241,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'PC + monitor(ok)',
         count: 1,
-        consumption: 150,
+        consumption: 250,
         dutyCycle: 0.6,
         usagePeriods: [
           { 
@@ -249,7 +249,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
             startDate: minDate, 
             endDate: maxDate, 
             wholeDay: false, 
-            startTime: '16:00', 
+            startTime: '18:00', 
             endTime: '22:00' 
           },
         ],
@@ -290,7 +290,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
         name: 'Egyéb kisebb fogyasztók összesítve',
         count: 1,
         consumption: 350,
-        dutyCycle: 0.1,
+        dutyCycle: 0.15,
         usagePeriods: [
           { 
             wholeYear: true, 
@@ -469,7 +469,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'PC + monitor(ok)',
         count: 2,
-        consumption: 200,
+        consumption: 400,
         dutyCycle: 0.5,
         usagePeriods: [
           { 
@@ -477,7 +477,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
             startDate: minDate, 
             endDate: maxDate, 
             wholeDay: false, 
-            startTime: '16:00', 
+            startTime: '19:00', 
             endTime: '22:00' 
           },
         ],
@@ -485,7 +485,7 @@ export const predefinedProfiles: PredefinedProfile[] = [
       {
         name: 'Játékkonzol',
         count: 2,
-        consumption: 150,
+        consumption: 200,
         dutyCycle: 0.3,
         usagePeriods: [
           { 

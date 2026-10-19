@@ -8,7 +8,7 @@ import { SimulationResults } from './ui/pages/SimulationResults'
 import { WizardDataProvider } from './steps/WizardDataContext'
 import { WizardLayout } from './ui/layouts/WizardLayout'
 
-/* TODO lista
+/* Fejlesztesi lehetosegek:
 
   SecondStep:
   - NREL SAM adatbazisbol modulok es inverterek betoltese?

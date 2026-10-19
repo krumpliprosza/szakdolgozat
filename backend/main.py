@@ -1,17 +1,15 @@
+import os
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from run_simulation import router as run_simulation
 
-""" TODO lista
-- fastapi deploy atnezese
-"""
+load_dotenv()
 
 app = FastAPI()
 
 origins = [
-    "http://localhost",
-    "http://localhost:5173",
-    "http://localhost:8000",
+    origin.strip() for origin in os.environ.get("ORIGINS").split(",") if origin.strip()
 ]
 
 app.add_middleware(

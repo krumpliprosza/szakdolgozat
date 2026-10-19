@@ -50,7 +50,7 @@ export const baseChartOptions = (colorMode: ColorMode): void => {
         },
         chart: {
             backgroundColor: 'transparent',
-            height: '65%',
+            height: '50%',
             style: {
                 fontFamily: 'inherit',
             },

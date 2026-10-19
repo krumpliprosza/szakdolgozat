@@ -108,7 +108,7 @@ export function useConsumptionProfileForm(initial?: HouseholdItem[] | null, defa
 
   // Tetel hozzaadasa
   const addItem = () => {
-    setItems((prev) => [...prev, createEmptyItem(prev, defaultMeteringPointId ?? '')])
+    setItems((prev) => [createEmptyItem(prev, defaultMeteringPointId ?? ''), ...prev])
   }
 
   // Tetel adatainak frissitese
