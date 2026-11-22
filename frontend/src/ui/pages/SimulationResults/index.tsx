@@ -36,6 +36,7 @@ interface MonthlyStrategyCost {
   export_revenue_HUF: number
   gross_cost_HUF: number
   battery_cycles: number
+  self_consumption_percent: number
 }
 interface StrategyCost {
   energy_cost_HUF: number
@@ -56,6 +57,7 @@ interface StrategySummary {
   item_from_inverter: Record<string, number>
   item_from_battery: Record<string, number>
   battery_cycles: number
+  self_consumption_percent: number
   cost: StrategyCost
 }
 interface Strategy {
@@ -406,6 +408,7 @@ export const SimulationResults = () => {
                         <Table.ColumnHeader textAlign="end" color="#E9FFE9">Betáplálási bevétel</Table.ColumnHeader>
                         <Table.ColumnHeader textAlign="end" color="#E9FFE9">Fizetendő összeg</Table.ColumnHeader>
                         {index > 0 && <Table.ColumnHeader textAlign="end" color="#E9FFE9">Megtakarítás</Table.ColumnHeader>}
+                        <Table.ColumnHeader textAlign="end" color="#E9FFE9">Önfogyasztási arány</Table.ColumnHeader>
                         {(summary.battery_cycles !== 0) && <Table.ColumnHeader textAlign="end" color="#E9FFE9">Akkumulátorciklusok száma</Table.ColumnHeader>}
                       </Table.Row>
                     </Table.Header>
@@ -433,6 +436,9 @@ export const SimulationResults = () => {
                                 {Math.round(monthlySavings[counter].saving)} Ft ({baselineCost !== 0 ? -Math.round((monthlySavings[counter].saving / Math.abs(monthlySavings[counter].baselineCost)) * 10000) / 100 : 0}%)
                               </Table.Cell>
                             )}
+                            <Table.Cell fontWeight="semibold" textAlign="end">
+                              {Math.round(month.self_consumption_percent * 100) / 100}%
+                            </Table.Cell>
                             {(summary.battery_cycles !== 0) && (
                               <Table.Cell fontWeight="semibold" textAlign="end">{month.battery_cycles}</Table.Cell>
                             )}
@@ -456,6 +462,9 @@ export const SimulationResults = () => {
                             {Math.round(saving)} Ft ({baselineCost !== 0 ? -Math.round((saving / Math.abs(baselineCost)) * 10000) / 100 : 0}%)
                           </Table.Cell>
                         )}
+                        <Table.Cell fontWeight="semibold" textAlign="end">
+                          {Math.round(summary.self_consumption_percent * 100) / 100}%
+                        </Table.Cell>
                         {(summary.battery_cycles !== 0) && (
                           <Table.Cell fontWeight="semibold" textAlign="end">
                             {summary.battery_cycles}

@@ -105,7 +105,7 @@ def calculate_energy_cost(timeseries: List[Dict[str, Any]], pricing: TariffPrici
             "market_import_kWh": round(value["market_import_kWh"], 4),
             "energy_cost_HUF": round(value["energy_cost_HUF"], 2),
             "export_revenue_HUF": round(value["export_revenue_HUF"], 2),
-            "gross_cost_HUF": round(value["energy_cost_HUF"] - value["export_revenue_HUF"], 2),
+            "gross_cost_HUF": round(value["energy_cost_HUF"] - value["export_revenue_HUF"] + pricing.baseFee, 2),
         }
         for month, value in sorted(monthlyData.items())
     ]
@@ -117,7 +117,7 @@ def calculate_energy_cost(timeseries: List[Dict[str, Any]], pricing: TariffPrici
         "market_import_kWh": round(market_import, 4),
         "energy_cost_HUF": round(energy_cost, 2),
         "export_revenue_HUF": round(export_revenue, 2),
-        "gross_cost_HUF": round(energy_cost - export_revenue, 2),
+        "gross_cost_HUF": round(energy_cost - export_revenue + pricing.baseFee * len(monthlyData), 2),
         "monthlyData": monthly_list,
     }
 
@@ -130,6 +130,28 @@ def add_metrics(result: Dict[str, Any], battery: Battery, pricing: TariffPricing
     # Osszesitett koltsegek kiszamitasa
     summary = result["summary"]
     summary["cost"] = calculate_energy_cost(result["timeseries"], pricing, export_price)
+
+    # Napelemes onfogyasztas hozzaadasa
+    monthly_pv: Dict[str, Dict[str, float]] = {}
+    for row in result["timeseries"]:
+        month_key = row["date"][:7]
+        values = monthly_pv.setdefault(month_key, {"used": 0.0, "exported": 0.0})
+        values["used"] += row.get("pv_to_load", 0.0) + row.get("pv_to_battery", 0.0)
+        values["exported"] += row.get("pv_to_grid", 0.0)
+
+    def self_consumption(values: Dict[str, float]) -> Dict[str, float]:
+        used = values["used"]
+        total = used + values["exported"]
+        return {
+            "self_consumption_percent": round(100.0 * used / total, 2) if total > 0 else 0.0,
+        }
+
+    summary.update(self_consumption({
+        "used": sum(v["used"] for v in monthly_pv.values()),
+        "exported": sum(v["exported"] for v in monthly_pv.values()),
+    }))
+    for month_cost in summary["cost"]["monthlyData"]:
+        month_cost.update(self_consumption(monthly_pv.get(month_cost["month"], {"used": 0.0, "exported": 0.0})))
 
     # Akkumulator ciklusszamanak meghatarozasa
     usable_capacity = (battery.socMax - battery.socMin) * battery.capacity
@@ -192,10 +214,13 @@ def bau_strategy(solar_production: List[Dict[str, Any]], energy_consumption: Lis
             pv_to_load = load
 
             # A maradek energia az akkumulatorba kerul
-            free_space = soc_max - soc
-            max_soc_increase = max(0.0, min(free_space, charge_limit))
-            if max_soc_increase > 0 and battery.etaCharge > 0:
-                chargeable_input = min(surplus, max_soc_increase / battery.etaCharge)
+            free_space = max(0.0, soc_max - soc)
+            if free_space > 0 and battery.etaCharge > 0:
+                chargeable_input = min(
+                    surplus,
+                    charge_limit,
+                    free_space / battery.etaCharge
+                )
                 pv_to_battery = chargeable_input
                 soc += chargeable_input * battery.etaCharge
 
@@ -301,14 +326,14 @@ def lp_matrices(h: int, eta_charge: float, eta_discharge: float):
         return lp_matrix_cache[key]
 
     k = np.arange(h)
-    # Segedfuggveny: egy adott attributumtipus (sor) osszes ertekenek indexeit adja vissza:
-    # 0. sor eseten pv_to_load
-    # 1. sor eseten pv_to_battery
-    # 2. sor eseten pv_to_grid
-    # 3. sor eseten battery_to_load
-    # 4. sor eseten grid_to_load
-    # 5. sor eseten grid_to_battery
-    # 6. sor eseten SoC
+    # Segedfuggveny: egy adott valtozoblokk oszlopindexeit adja vissza
+    # 0. blokk eseten pv_to_load
+    # 1. blokk eseten pv_to_battery
+    # 2. blokk eseten pv_to_grid
+    # 3. blokk eseten battery_to_load
+    # 4. blokk eseten grid_to_load
+    # 5. blokk eseten grid_to_battery
+    # 6. blokk eseten SoC
     def get_column(block, index=k):
         return block * h + index
 
@@ -334,11 +359,10 @@ def lp_matrices(h: int, eta_charge: float, eta_discharge: float):
     add(2 * h + k, get_column(3), 1.0 / eta_discharge)
     a_eq = coo_matrix((np.concatenate(values), (np.concatenate(rows), np.concatenate(cols))), shape=(3 * h, 7 * h)).tocsr()
 
-    # A toltesi teljesitmeny nem lepheti tul a toltesi korlatot
-    # eta_charge * (pv_to_battery + grid_to_battery) <= toltesi korlat (b_ub)
-    r2 = np.concatenate([k, k])
-    c2 = np.concatenate([get_column(1), get_column(5)])
-    v2 = np.full(2 * h, eta_charge)
+    # Kozos idokihasznalasi korlat a toltesre es a kisutesre
+    r2 = np.concatenate([k, k, k])
+    c2 = np.concatenate([get_column(1), get_column(5), get_column(3)])
+    v2 = np.ones(3 * h)
     a_ub = coo_matrix((v2, (r2, c2)), shape=(h, 7 * h)).tocsr()
 
     # A kiszamolt matrixokat elmentjuk
@@ -362,7 +386,22 @@ def solve_window(pv: np.ndarray, load: np.ndarray, soc_start: float, import_pric
     b_eq = np.concatenate([pv, load, np.zeros(h)])
     b_eq[2 * h] = soc_start # A legelso SoC ertek az soc_start
     # Az egyenlotlensegek jobb oldala
-    b_ub = np.full(h, charge_limit) # Minden idopontra a charge_limit lesz a korlat
+    # Kozos idokihasznalasi korlat
+    # A toltessel es kisutessel toltott ido osszege legfeljebb 15 perc
+    # charge + (charge_limit / discharge_limit) * discharge <= charge_limit
+    a_ub = a_ub.tolil()
+
+    if charge_limit > 0 and discharge_limit > 0:
+        a_ub[:, 3*h:4*h] *= charge_limit / discharge_limit
+        b_ub = np.full(h, charge_limit)
+    elif charge_limit == 0:
+        # A toltes nem engedelyezett, a kisutes lehetseges
+        a_ub[:, 3*h:4*h] = 0.0
+        b_ub = np.zeros(h)
+    else:
+        # A kisutes nem engedelyezett, a toltes lehetseges
+        a_ub[:, 3*h:4*h] = 0.0
+        b_ub = np.full(h, charge_limit)
 
     # Celfuggveny osszeallitasa (koltseg minimalizalasa)
     ref_price = float(np.mean(import_price))
@@ -378,7 +417,7 @@ def solve_window(pv: np.ndarray, load: np.ndarray, soc_start: float, import_pric
     c[7 * h - 1] -= terminal_factor * eta_d * ref_price
 
     # Korlatozasok megadasa
-    max_input = charge_limit / eta_c if eta_c > 0 else 0.0
+    max_input = charge_limit
     lower = np.zeros(7 * h)
     upper = np.full(7 * h, np.inf)
     upper[0:h] = np.minimum(pv, load) # pv_to_load (nem lehet tobb, mint a pv es load minimuma)
@@ -389,6 +428,7 @@ def solve_window(pv: np.ndarray, load: np.ndarray, soc_start: float, import_pric
     upper[6 * h:7 * h] = soc_max # SoC felso korlatja
 
     # A linearis programozási feladat megoldása
+    a_ub = a_ub.tocsr()
     result = linprog(c, A_ub=a_ub, b_ub=b_ub, A_eq=a_eq, b_eq=b_eq, bounds=np.column_stack([lower, upper]))
     if result.status != 0:
         raise RuntimeError(f"Az optimalizalo nem talalt megoldast: {result.message}")
