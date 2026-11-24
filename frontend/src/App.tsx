@@ -8,17 +8,6 @@ import { SimulationResults } from './ui/pages/SimulationResults'
 import { WizardDataProvider } from './steps/WizardDataContext'
 import { WizardLayout } from './ui/layouts/WizardLayout'
 
-/* Fejlesztesi lehetosegek:
-
-  SecondStep:
-  - NREL SAM adatbazisbol modulok es inverterek betoltese?
-  ThirdStep:
-  - Fogyasztasi modell atalakitasa?
-  SetupComplete:
-  - Szimulacios parameterek megosztasa (lzString + QR kod)?
-
-*/
-
 // Leiras: Az utvonalakat definialja, semmi mas logikat nem tartalmaz.
 
 function App() {

@@ -1,8 +1,8 @@
 import { Center, Heading, Text, Button } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
-import { usePageTitle } from '../../hooks/usePageTitle'
-import { AnimatedPage } from '../../components/AnimatedPage'
+import { usePageTitle } from '../../../hooks/usePageTitle'
+import { AnimatedPage } from '../../../components/AnimatedPage'
 
 // Leiras: A kezdolap: cim, leiras, gomb az elso lepesre navigalashoz.
 
