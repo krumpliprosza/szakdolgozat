@@ -412,7 +412,7 @@ def solve_window(pv: np.ndarray, load: np.ndarray, soc_start: float, import_pric
     c[2 * h:3 * h] = -export_price_vector # pv_to_grid (a visszataplalt energia ara, negativ koltsegu)
     c[3 * h:4 * h] = cycle_penalty # battery_to_load (egyenlo koltsegek eseten ennek koszonhetoen a kisebb ciklusszamu lepest valasztja majd az optimalizalo fuggveny)
     c[4 * h:5 * h] = import_price # grid_to_load (a halozatbol vett energia ara)
-    c[5 * h:6 * h] = import_price # grid_to_battery (a halozatbol vett energia ara)
+    c[5 * h:6 * h] = import_price + cycle_penalty # grid_to_battery (a halozatbol vett energia ara)
     # c[6h:7h] az akkumulatorhoz  tartozik, a c[7h - 1] pedig batoritja arra az optimalizalo fuggvenyt, hogy az idoablak vegen minel tobb energiat hagyjon az akkumulatorban
     c[7 * h - 1] -= terminal_factor * eta_d * ref_price
 
